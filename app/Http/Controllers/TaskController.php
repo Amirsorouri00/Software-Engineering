@@ -6,8 +6,15 @@ use Illuminate\Http\Request;
 
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
+use Carbon;
 
 use App\Task;
+use App\Basket;
+use App\Randomnumber;
+use App\Studentinfo;
+use App\Classindividual;
+use App\Exam;
+
 use App\Repositories\TaskRepository;
 
 class TaskController extends Controller
@@ -60,7 +67,6 @@ class TaskController extends Controller
         $request->user()->tasks()->create([
             'name' => $request->name,
         ]);
-
         return redirect('/tasks');
     }
 
@@ -71,12 +77,14 @@ class TaskController extends Controller
      * @param  Task  $task
      * @return Response
      */
+
     public function destroy(Request $request, Task $task)
     {
         $this->authorize('destroy', $task);
-
         $task->delete();
-
         return redirect('/tasks');
     }
+
+    
+
 }
