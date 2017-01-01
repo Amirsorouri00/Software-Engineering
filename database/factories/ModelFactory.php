@@ -21,9 +21,14 @@ $factory->define(App\User::class, function (Faker\Generator $faker) {
 });
 
 
-$factory->define(App\Task::class, function (Faker\Generator $faker) {
+$factory->define(App\Studentinfo::class, function (Faker\Generator $faker) {
     return [
-        'name' => str_random(10),
+        'participantID' => str_random(7),
+        'examID' => str_random(7),
+        'roundNumber' => $faker->randomDigit,
+        'individualStatus' => $faker->randomElement([1,0]),
+        'finalScore' => $faker->randomFloat(null,0,20),
+
     ];
 });
 
