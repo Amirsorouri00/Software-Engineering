@@ -14,4 +14,9 @@ class Studentinfo extends Model
     public function exam(){
       return $this->belongsTo(Exam::class, 'examID', 'examID');
     }
+  public  function  reduceGrade($grade)
+  {
+    dd($grade);
+    return self::all()->where('roundNumber',2);
+  }
 }
