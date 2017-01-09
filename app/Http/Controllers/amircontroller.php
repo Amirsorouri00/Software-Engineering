@@ -74,6 +74,9 @@ $student->save();
                           ->select(DB::raw('*'))
                           ->whereRaw('roundNumber%2 = 1')
                           ->get();
+        $res=Studentinfo::where('roundNumber',1);
+       $res= Studentinfo::folan();
+        dd($res);
         $questioners = DB::table('studentinfos')
                           ->select(DB::raw('*'))
                           ->whereRaw('roundNumber%2 = 0')

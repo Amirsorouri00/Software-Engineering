@@ -28,10 +28,15 @@ Route::group(['middleware' => ['web']], function () {
         return view('welcome');
     })->middleware('guest');
 
+
+    Route::get('/Judge','api@Judge');
     Route::get('/tasks', 'TaskController@index');
-    Route::post('/task', 'TaskController@store');
     Route::delete('/task/{task}', 'TaskController@destroy');
     Route::get('/data', 'amircontroller@test');
     Route::get('/cycling', 'amircontroller@cycle');
     Route::auth();
+
 });
+Route::post('/EnterAndExit','api@EnterAndExit');
+Route::post('/task', 'TaskController@store');
+Route::post('/volunteer','api@volunteer');

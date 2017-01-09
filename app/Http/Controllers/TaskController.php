@@ -85,6 +85,11 @@ class TaskController extends Controller
         return redirect('/tasks');
     }
 
+    public function storre (Request $request)
+    {
+         $basket = JSON.parse($request -> basket);
+    }
+
     
 
 }

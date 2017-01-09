@@ -22,7 +22,7 @@ class CreateExamsTable extends Migration
             $table->foreign('instructorID')
               ->references('personalID')->on('classindividuals')
               ->onDelete('cascade');
-            $tabl e->integer('average');
+            $table->integer('average');
             $table->integer('studentNumbers');
             //sizeof varchar has been changed
             //since it may be more than 30 character
