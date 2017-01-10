@@ -64,7 +64,6 @@ class amircontroller extends Controller
         $student->save();
         //participant id must be unique
         */
-
     }
 
     public function cycle(Request $request)
@@ -82,13 +81,8 @@ class amircontroller extends Controller
                 ->select(DB::raw('*'))
                 ->whereRaw('roundNumber%2 = 0')
                 ->get();
-//        dd($responders);
-//        dd($questioners);
-        } else {
-            # code...
         }
     }
-
 
     public function matchwithrandom()
     {
@@ -111,6 +105,10 @@ class amircontroller extends Controller
 
     public function matchwithperiod()
     {
+
+            $user = User::all()->where('isfree', '1');
+            $questioner = $user->where('questioner', 1)->take(20);
+            $respondent = $user->where('questioner', 0)->take(20);
 
 
 
@@ -185,6 +183,7 @@ class amircontroller extends Controller
         return $res;
 
     }
+
     public function posttest(Request $request)
     {
         $redis = Redis::connection();
@@ -195,6 +194,13 @@ class amircontroller extends Controller
         $redis->publish('message',$request);
         return 'done';
     }
+
+
+    public function getVolunteerBasket(Request $request){
+
+    }
+
+
 }
 
 

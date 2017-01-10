@@ -29,10 +29,25 @@ Route::group(['middleware' => ['web']], function () {
     })->middleware('guest');
     Route::get('test','amircontroller@matchwithperiod');
     Route::get('/tasks', 'TaskController@index');
-    Route::post('/task', 'TaskController@store');
     Route::delete('/task/{task}', 'TaskController@destroy');
+
+
+    //amirsorouri00
     Route::get('/data', 'amircontroller@test');
     Route::get('/cycling', 'amircontroller@cycle');
+    Route::post('/volun', 'api@getVolunteersBasket');
+    Route::post('/entertogame', 'api@getEnteredPerson');
+    Route::post('/objection', 'api@getObjectedToScoreBasket');
+
+    //hossein
+    Route::post('/EnterAndExit','api@EnterAndExit');
+    Route::post('/task', 'TaskController@store');
+    Route::post('/volunteer','api@volunteer');
+    Route::get('/Judge','api@Judge');
+
     Route::auth();
+
 });
+
     Route::post('posttest','amircontroller@posttest');
+
