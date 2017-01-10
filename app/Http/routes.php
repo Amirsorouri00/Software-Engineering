@@ -32,6 +32,12 @@ Route::group(['middleware' => ['web']], function () {
     Route::delete('/task/{task}', 'TaskController@destroy');
 
 
+    //amirsorouri00
+    Route::get('/data', 'amircontroller@test');
+    Route::get('/cycling', 'amircontroller@cycle');
+    Route::post('/volun', 'api@getVolunteersBasket');
+    Route::post('/entertogame', 'api@getEnteredPerson');
+    Route::post('/objection', 'api@getObjectedToScoreBasket');
 
     //hossein
     Route::post('/EnterAndExit','api@EnterAndExit');
@@ -43,9 +49,3 @@ Route::group(['middleware' => ['web']], function () {
 
 });
 
-
-//amir
-Route::get('/data', 'amircontroller@test');
-Route::get('/cycling', 'amircontroller@cycle');
-Route::post('/volun', 'api@getVolunteersBasket');
-Route::post('/entertogame', 'api@getEnteredPerson');

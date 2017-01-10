@@ -103,8 +103,6 @@ class amircontroller extends Controller
 
     public function matchwithperiod()
     {
-
-
             $user = User::all()->where('isfree', '1');
             $questioner = $user->where('questioner', 1)->take(20);
             $respondent = $user->where('questioner', 0)->take(20);

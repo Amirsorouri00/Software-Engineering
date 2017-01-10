@@ -16,22 +16,26 @@ use App\Http\Controllers\amircontroller;
 use App\Studentinfo;
 use App\User;
 use App\Basket;
+use Exception;
 use Symfony\Component\HttpFoundation\ParameterBag;
-
 use Illuminate\Http\Request;
 use App\Http\Requests;
 //use Illuminate\Support\Facades\Request;
+
 class api extends Controller
 {
     // <!-- Amir Hossein -->
-
     public function getVolunteersBasket(Request $request){
         $volunteerRequest = collect(['data' => ['basketsArray' => [['basket' => '9NdHh6W',"respondentlist"=> ['F7h1fKc','t8jGhxy','1LIntOW']]
                                         ,['basket' => 'tUefAHC',"respondentlist"=> ['pUKhuzB','GzjheJm','ONOtLqF']]
                                         ,['basket' => '05ZhVH6',"respondentlist"=> ['f7YiyhT','8wkY9HX','SqrIY3M']]],
                                         "ticket" => "volunteerRespondUserTicket"]])->toJson();
-        //return $volunteerRequest;
+        $decode = json_decode($request, true);
+        //return $request;
+        //return $decode;
         $volunteerBaskets = $request['data']['basketsArray'];
+        //return $volunteerBaskets;
+        $resultBaskets = collect();
         foreach($volunteerBaskets as $vBasket){
             //return $vBasket;
             try {
@@ -67,33 +71,42 @@ class api extends Controller
                     $volunteer->Rbasket()->save($basket);
                     $volunteerInfo->individualStatus = false;
                     $volunteerInfo->save();
+                    $resultBaskets->push($basket);
                 }
             }
             $basketOriginal->basketStatus = 'deActive';
             $basketOriginal->save();
         }
+        $requestToQuestionPart = collect(['data' => ['basket' => $resultBaskets]])->toJson();
+        return $requestToQuestionPart;
         //...
         //Ready to send to quesion part
     }
 
     public function getObjectedToScoreBasket(Request $request){
         $objectionRequest = collect(['data' => [['basket' => '9NdHh6W'], "ticket" => "volunteerRespondUserTicket"]])->toJson();
+        //return $objectionRequest;
+        //return $request['data']['basket'];
         try {
-            $basketOriginal = Basket::where('basketID', '=', $request['basket'])->firstOrFail();
-            $exam = Exam::where('examID', '=', $basketOriginal->examID)->firstOrFail();
+            $basketOriginal = Basket::where('basketID', '=', $request['data']['basket'])->firstOrFail();
+            //$exam = Exam::where('examID', '=', $basketOriginal->examID)->firstOrFail();
+            //return $basketOriginal;
             $objector = Studentinfo::where('participantID', '=', $basketOriginal->responderedID)->firstOrFail();
+            return $objector;
             $objectorPerson = $objector->individuals();
             //Do stuff when user exists.
-        } catch (ErrorException $e) {
-            return null;
+        } catch (\Exception $e) {
+            return 1;
             //Do stuff if it doesn't exist.
         }
         if($basketOriginal->basketStatus == 'deActive' || $objectorPerson->isPresent == 0){
             //continue;
+            return 11;
         }else{
             $objector->finalScore -= $exam->questionScore;
             $basketOriginal->basketScore +=$exam->questionScore;
             $objector->save();
+            return 12;
         }
         //...
         //Ready to send to objection system
@@ -103,8 +116,8 @@ class api extends Controller
         $objectionRequest = collect(['data' => [['basket' => '9NdHh6W'], "Judge" => "accepted", "desc" => "Description",
                                         "ticket" => "volunteerRespondUserTicket"]])->toJson();
         try {
-            $basketOriginal = Basket::where('basketID', '=', $request['basket'])->firstOrFail();
-            $exam = Exam::where('examID', '=', $basketOriginal->examID)->firstOrFail();
+            $basketOriginal = Basket::where('basketID', '=', $request['data']['basket'])->firstOrFail();
+            //$exam = Exam::where('examID', '=', $basketOriginal->examID)->firstOrFail();
             $objector = Studentinfo::where('participantID', '=', $basketOriginal->responderedID)->firstOrFail();
             $objectorPerson = $objector->individuals();
             //Do stuff when user exists.
