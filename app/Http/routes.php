@@ -28,15 +28,24 @@ Route::group(['middleware' => ['web']], function () {
         return view('welcome');
     })->middleware('guest');
 
-
-    Route::get('/Judge','api@Judge');
     Route::get('/tasks', 'TaskController@index');
     Route::delete('/task/{task}', 'TaskController@destroy');
-    Route::get('/data', 'amircontroller@test');
-    Route::get('/cycling', 'amircontroller@cycle');
+
+
+
+    //hossein
+    Route::post('/EnterAndExit','api@EnterAndExit');
+    Route::post('/task', 'TaskController@store');
+    Route::post('/volunteer','api@volunteer');
+    Route::get('/Judge','api@Judge');
+
     Route::auth();
 
 });
-Route::post('/EnterAndExit','api@EnterAndExit');
-Route::post('/task', 'TaskController@store');
-Route::post('/volunteer','api@volunteer');
+
+
+//amir
+Route::get('/data', 'amircontroller@test');
+Route::get('/cycling', 'amircontroller@cycle');
+Route::post('/volun', 'api@getVolunteersBasket');
+Route::post('/entertogame', 'api@getEnteredPerson');

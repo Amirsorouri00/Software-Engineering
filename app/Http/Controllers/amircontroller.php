@@ -62,10 +62,8 @@ class amircontroller extends Controller
         $student->save();
         //participant id must be unique
         */
-
     }
 
-<<<<<<< HEAD
     public function cycle(Request $request)
     {
         $freeStdNum = Studentinfo::where('individualStatus', '=', 'false')->count();
@@ -81,32 +79,8 @@ class amircontroller extends Controller
                 ->select(DB::raw('*'))
                 ->whereRaw('roundNumber%2 = 0')
                 ->get();
-=======
-    public function cycle(Request $request){
-      $freeStdNum = Studentinfo::where('individualStatus', '=', 'false')->count();
-      //dd($freeStd);
-      if($freeStdNum <= 10){
-        $freeStd = Studentinfo::where('individualStatus', '=', 'false')->get();
-
-        $responders = DB::table('studentinfos')
-                          ->select(DB::raw('*'))
-                          ->whereRaw('roundNumber%2 = 1')
-                          ->get();
-        $res=Studentinfo::where('roundNumber',1);
-       $res= Studentinfo::folan();
-        dd($res);
-        $questioners = DB::table('studentinfos')
-                          ->select(DB::raw('*'))
-                          ->whereRaw('roundNumber%2 = 0')
-                          ->get();
->>>>>>> origin/Hossein
-//        dd($responders);
-//        dd($questioners);
-        } else {
-            # code...
         }
     }
-
 
     public function matchwithrandom()
     {
