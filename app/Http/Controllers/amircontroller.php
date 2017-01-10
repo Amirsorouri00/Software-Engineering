@@ -14,6 +14,8 @@ use App\Exam;
 use App\Classindividual;
 use App\Classexam;
 use App\Repositories\TaskRepository;
+use Illuminate\Support\Facades\Redis;
+use Illuminate\Support\Facades\Storage;
 
 class amircontroller extends Controller
 {
@@ -110,25 +112,42 @@ class amircontroller extends Controller
     public function matchwithperiod()
     {
 
-        /*
-            $user = User::all()->where('isfree', '1');
-            $questioner = $user->where('questioner', 1)->take(20);
-            $respondent = $user->where('questioner', 0)->take(20);
 
-            $sorted = $questioner->sortBy(function ($product, $key) {
-              return $product['ceiling'] - $product['floor'];
+
+        $user = Studentinfo::all()->where('individualStatus', 0);//get free student
+        $Qsize=$user->where('QorR', 1)->count();
+        $Rsize = $user->where('QorR', 0)->count();
+
+
+
+        if($Qsize>$Rsize)
+        {
+
+            $questioner = $user->where('QorR', 1)->take($Rsize);
+            $respondent = $user->where('QorR', 0)->take($Rsize);
+        }else
+        {
+            $questioner = $user->where('QorR', 1)->take($Qsize);
+            $respondent = $user->where('QorR', 0)->take($Qsize);
+        }
+        $questioner = $questioner->shuffle();
+        $respondent = $respondent->shuffle();
+        $sorted = $questioner->sortBy(function ($product, $key) {
+              return $product['gradeH'] - $product['gradeL'];
             });
-        */
+
+
         $res = collect();
         $sorted = $sorted->values();
+
         foreach ($sorted as $q) {
-            $f = $q['floor'];
-            $c = $q['ceiling'];
+            $f = $q['gradeL'];
+            $c = $q['gradeH'];
 
             foreach ($respondent as $r) {
-                if ($r['grade'] < $c && $r['grade'] > $f) {
+                if ($r['finalScore'] < $c && $r['finalScore'] > $f) {
                     $resp = $respondent->pull($respondent->search($r));
-                    //dd($resp);
+
                     $temp = collect(['questioner' => $q, 'respondent' => $resp]);
                     $res->push($temp);
                     $sorted->pull($sorted->search($q));
@@ -137,14 +156,15 @@ class amircontroller extends Controller
 
             }
         }
+
         foreach ($sorted as $s) {
-            $f = $s['floor'];
-            $c = $s['ceiling'];
+            $f = $q['gradeL'];
+            $c = $q['gradeH'];
             $min = 100;
 
             foreach ($respondent as $r) {
 
-                $rGrade = $r['grade'];
+                $rGrade = $r['finalScore'];
                 $diff = abs($f - $rGrade);
                 $difc = abs($c - $rGrade);
                 if ($difc < $min) {
@@ -161,9 +181,19 @@ class amircontroller extends Controller
             $res->push($temp);
             $sorted->pull($sorted->search($s));
         }
-        // dd($sorted);
+
         return $res;
 
+    }
+    public function posttest(Request $request)
+    {
+        $redis = Redis::connection();
+        Redis::set('name', 'Taylor');
+
+        $redis->set('asd','dsfs');
+        //  $redis->publish('message2', "sdfsdf");
+        $redis->publish('message',$request);
+        return 'done';
     }
 }
 

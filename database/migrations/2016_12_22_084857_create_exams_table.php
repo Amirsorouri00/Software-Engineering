@@ -28,6 +28,7 @@ class CreateExamsTable extends Migration
             //since it may be more than 30 character
             $table->string('location', 50);
             $table->integer('questionScore')->default(1);
+            $table->dateTime('lastRound_time');
         });
     }
 
