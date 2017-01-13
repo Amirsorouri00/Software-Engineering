@@ -23,13 +23,14 @@ class Cycling
         $user = Studentinfo::all()->where('individualStatus', 0);//get free student
         $Qsize=$user->where('QorR', 1)->count();
         $Rsize = $user->where('QorR', 0)->count();
-    /*  if(min($Qsize,$Rsize)>20)
+      if(min($Qsize,$Rsize)>20)
         {
-            //fire start round
+
+           Event::fire(new \App\Events\Cycling());
             return $next($request);
         }
 
-*/
+
 
 $lastROundTime= Exam::firstorfail()->lastRound_time;
 
@@ -44,9 +45,10 @@ $lastROundTime= Exam::firstorfail()->lastRound_time;
 
        if ($carbonlast->diffInMinutes($carbonnow)>=5)
        {
+
            Event::fire(new \App\Events\Cycling());
 
-           return 1;
+
            return $next($request);
        }
 

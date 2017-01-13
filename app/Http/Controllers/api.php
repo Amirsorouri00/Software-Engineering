@@ -20,23 +20,25 @@ use Exception;
 use Symfony\Component\HttpFoundation\ParameterBag;
 use Illuminate\Http\Request;
 use App\Http\Requests;
+
 //use Illuminate\Support\Facades\Request;
 
 class api extends Controller
 {
     // <!-- Amir Hossein -->
-    public function getVolunteersBasket(Request $request){
-        $volunteerRequest = collect(['data' => ['basketsArray' => [['basket' => '9NdHh6W',"respondentlist"=> ['F7h1fKc','t8jGhxy','1LIntOW']]
-                                        ,['basket' => 'tUefAHC',"respondentlist"=> ['pUKhuzB','GzjheJm','ONOtLqF']]
-                                        ,['basket' => '05ZhVH6',"respondentlist"=> ['f7YiyhT','8wkY9HX','SqrIY3M']]],
-                                        "ticket" => "volunteerRespondUserTicket"]])->toJson();
+    public function getVolunteersBasket(Request $request)
+    {
+        $volunteerRequest = collect(['data' => ['basketsArray' => [['basket' => '9NdHh6W', "respondentlist" => ['F7h1fKc', 't8jGhxy', '1LIntOW']]
+            , ['basket' => 'tUefAHC', "respondentlist" => ['pUKhuzB', 'GzjheJm', 'ONOtLqF']]
+            , ['basket' => '05ZhVH6', "respondentlist" => ['f7YiyhT', '8wkY9HX', 'SqrIY3M']]],
+            "ticket" => "volunteerRespondUserTicket"]])->toJson();
         $decode = json_decode($request, true);
         //return $request;
         //return $decode;
         $volunteerBaskets = $request['data']['basketsArray'];
         //return $volunteerBaskets;
         $resultBaskets = collect();
-        foreach($volunteerBaskets as $vBasket){
+        foreach ($volunteerBaskets as $vBasket) {
             //return $vBasket;
             try {
                 $basketOriginal = Basket::where('basketID', '=', $vBasket['basket'])->firstOrFail();
@@ -45,11 +47,11 @@ class api extends Controller
                 continue;
                 //Do stuff if it doesn't exist.
             }
-            if($basketOriginal->basketStatus == 'deActive'){
+            if ($basketOriginal->basketStatus == 'deActive') {
                 //continue;
             }
             $volunteers = $vBasket['respondentlist'];
-            foreach($volunteers as $volunteer){
+            foreach ($volunteers as $volunteer) {
                 try {
                     $volunteerInfo = Studentinfo::where('participantID', '=', $volunteer)->firstOrFail();
                     $volunteer = $volunteerInfo->individuals();
@@ -58,7 +60,7 @@ class api extends Controller
                     continue;
                     //Do stuff if it doesn't exist.
                 }
-                if($volunteer->isPresent == 1 && $volunteerInfo->individualStatus){
+                if ($volunteer->isPresent == 1 && $volunteerInfo->individualStatus) {
                     //$exam = Exam::where('examID', '=', $basketOriginal->examID)->firstOrFail();
                     $basket = new Basket();
                     $basket->basketID = str_random(7);
@@ -83,7 +85,8 @@ class api extends Controller
         //Ready to send to quesion part
     }
 
-    public function getObjectedToScoreBasket(Request $request){
+    public function getObjectedToScoreBasket(Request $request)
+    {
         $objectionRequest = collect(['data' => [['basket' => '9NdHh6W'], "ticket" => "volunteerRespondUserTicket"]])->toJson();
         //return $objectionRequest;
         //return $request['data']['basket'];
@@ -99,12 +102,12 @@ class api extends Controller
             return 1;
             //Do stuff if it doesn't exist.
         }
-        if($basketOriginal->basketStatus == 'deActive' || $objectorPerson->isPresent == 0){
+        if ($basketOriginal->basketStatus == 'deActive' || $objectorPerson->isPresent == 0) {
             //continue;
             return 11;
-        }else{
+        } else {
             $objector->finalScore -= $exam->questionScore;
-            $basketOriginal->basketScore +=$exam->questionScore;
+            $basketOriginal->basketScore += $exam->questionScore;
             $objector->save();
             return 12;
         }
@@ -112,9 +115,10 @@ class api extends Controller
         //Ready to send to objection system
     }
 
-    public function getObjectedToScoreBasketResult(Request $request){
+    public function getObjectedToScoreBasketResult(Request $request)
+    {
         $objectionRequest = collect(['data' => [['basket' => '9NdHh6W'], "Judge" => "accepted", "desc" => "Description",
-                                        "ticket" => "volunteerRespondUserTicket"]])->toJson();
+            "ticket" => "volunteerRespondUserTicket"]])->toJson();
         try {
             $basketOriginal = Basket::where('basketID', '=', $request['data']['basket'])->firstOrFail();
             //$exam = Exam::where('examID', '=', $basketOriginal->examID)->firstOrFail();
@@ -125,10 +129,9 @@ class api extends Controller
             return null;
             //Do stuff if it doesn't exist.
         }
-        if($basketOriginal->basketStatus == 'deActive' || $objectorPerson->isPresent == 0) {
+        if ($basketOriginal->basketStatus == 'deActive' || $objectorPerson->isPresent == 0) {
             //continue;
-        }
-        else{
+        } else {
             $objector->finalScore += $basketOriginal->basketScore;
             $objector->save();
             $basketOriginal->basketStatus = 'Volunteer';
@@ -137,9 +140,10 @@ class api extends Controller
         //Ready to send the volunteery basketID to volunteer system
     }
 
-    public function getEnteredPerson(Request $request){
+    public function getEnteredPerson(Request $request)
+    {
         $enteredPersonRequest = collect(['data' => [['person' => ['personalID' => '1234567', 'classID' => '1234567']],
-                                            "ticket" => "volunteerRespondUserTicket"]])->toJson();
+            "ticket" => "volunteerRespondUserTicket"]])->toJson();
         //return $request;
         try {
             //return $request['data']['person']['classID'];
@@ -154,10 +158,9 @@ class api extends Controller
         //$person->classID = $enteredPersonRequest['data']['person']['classID'];
         $person->isPresent = 1;
         $person->isActive = 1;
-        if(Classexam::where('instructorID', '=', $request['data']['person']['personalID'])->exists()){
+        if (Classexam::where('instructorID', '=', $request['data']['person']['personalID'])->exists()) {
             $person->accessibility = 1;
-        }
-        else{
+        } else {
             $person->accessibility = 0;
         }
         $person->save();
@@ -170,30 +173,33 @@ class api extends Controller
         $person->person()->save($student);
     }
 
-    public function volunteerExitRequest(Request $request){
+    public function volunteerExitRequest(Request $request)
+    {
         $user = $request->user();
         $classExam = $user->classes();
         $enteredPersonRequest = collect(['data' => [['person' => ['personalID' => $user->personalID, 'classID' => $classExam->classID]],
-                                            "ticket" => "volunteerRespondUserTicket"]])->toJson();
+            "ticket" => "volunteerRespondUserTicket"]])->toJson();
         //ready for sending to enter and exit
     }
 
-    public function volunteerExitResult(Request $request){
+    public function volunteerExitResult(Request $request)
+    {
         $enteredPersonRequest = collect(['data' => [['person' => ['personalID' => '1234567', 'classID' => '1234567']],
-                                            "ticket" => "volunteerRespondUserTicket"]])->toJson();
-        if(Classindividual::where('personalID', '=', $request['data']['person']['personalID'])->exists()){
+            "ticket" => "volunteerRespondUserTicket"]])->toJson();
+        if (Classindividual::where('personalID', '=', $request['data']['person']['personalID'])->exists()) {
             $user = Classindividual::where('personalID', '=', $request['data']['person']['personalID'])->firstOrFail();
             $user->isPresent = 0;
             $user->save();
         }
     }
 
-    public function userForceExit(Request $request, Classindividual $person){
+    public function userForceExit(Request $request, Classindividual $person)
+    {
         $classExam = $person->classes();
         $person->isPresent = 0;
         $person->save();
         $userForceExitRequest = collect(['data' => [['person' => ['personalID' => $person->personalID, 'classID' => $classExam->classID]],
-                                            "ticket" => "volunteerRespondUserTicket"]])->toJson();
+            "ticket" => "volunteerRespondUserTicket"]])->toJson();
         //ready for sending to enter and exit system
     }
 
@@ -201,18 +207,18 @@ class api extends Controller
 
     public function volunteer(Request $request)
     {
-        $jj=json_decode($request);
+        $jj = json_decode($request);
 
         $rr = $request->json();
         $basket = new Basket();
-        $basket-> basketID = $rr-> all()['data']['basket']['basketID'];
-        $basket-> examID = $rr-> all()['data']['basket']['examID'];
-        $basket-> questionerID= $rr-> all()['data']['basket']['questionerID'];
-        $basket-> responderedID= $rr-> all()['data']['basket']['responderedID'];
-        $basket-> basketScore= $rr-> all()['data']['basket']['basketScore'];
+        $basket->basketID = $rr->all()['data']['basket']['basketID'];
+        $basket->examID = $rr->all()['data']['basket']['examID'];
+        $basket->questionerID = $rr->all()['data']['basket']['questionerID'];
+        $basket->responderedID = $rr->all()['data']['basket']['responderedID'];
+        $basket->basketScore = $rr->all()['data']['basket']['basketScore'];
         //$basket-> participantID = $rr-> all()['data']['person']['participantID'];
-        $basket-> save();
-        dd( $jj);
+        $basket->save();
+        dd($jj);
 
         /*
          * post to volunteer server
@@ -231,17 +237,17 @@ class api extends Controller
          * send unSolved basket to volunteer server
          * send to questioner server !!!
          */
-        $volunteerSendBasketsWithUsers = collect(['data' => ['basketsArray' => [['basket' => 'bjson'],['basket' => 'bjson']]] , 'ticket' => 'volunteerSendBasketsWithUsersTicket']);
+        $volunteerSendBasketsWithUsers = collect(['data' => ['basketsArray' => [['basket' => 'bjson'], ['basket' => 'bjson']]], 'ticket' => 'volunteerSendBasketsWithUsersTicket']);
 
 
         /*
          * post to volunteer server
          * send basket that unSolved to volunteer server
          */
-        $volunteerSendUnSolvedBasket = collect(['data' => ['unResolvedBasket' =>'bJson'],'ticket' => 'volunteerSendUnSolvedBasketTicket']);
+        $volunteerSendUnSolvedBasket = collect(['data' => ['unResolvedBasket' => 'bJson'], 'ticket' => 'volunteerSendUnSolvedBasketTicket']);
 
         return response()->json($volunteerRespondUser);
-        return $volunteerSendUnSolvedBasket ->toJson();
+        return $volunteerSendUnSolvedBasket->toJson();
         //  $baskets = json_decode($request->baskets);
         $f = Studentinfo::find(1);
         $f->reduceGrade(2);
@@ -255,70 +261,72 @@ class api extends Controller
         }
     }
 
-    public function Judge(){
+    public function Judge()
+    {
 
         /*
          * post to judge server
          * send basket to judge
          */
-        $sendToJudge = collect(['data' =>['basket' =>'bJson'],'thicket' => 'sendToObjectedTicket']);
+        $sendToJudge = collect(['data' => ['basket' => 'bJson'], 'thicket' => 'sendToObjectedTicket']);
 
         /*
          * api for get result of judging
          */
-        $getAnswerFromJudge = collect(['data' => ['basket' =>'bJson','Judge'=>'accepted','desc'=>'Description']]);
+        $getAnswerFromJudge = collect(['data' => ['basket' => 'bJson', 'Judge' => 'accepted', 'desc' => 'Description']]);
 
-        return $getAnswerFromJudge ->toJson();
+        return $getAnswerFromJudge->toJson();
     }
 
-    public function EnterAndExit(Request $request){
-    //   $rr= $request->json();
-      //  dd($rr->all()['data']['basketsArray'][0]['basket']);
-       // $request = Request::instance()->getContent();
+    public function EnterAndExit(Request $request)
+    {
+        //   $rr= $request->json();
+        //  dd($rr->all()['data']['basketsArray'][0]['basket']);
+        // $request = Request::instance()->getContent();
         //dd($request);
 //        return $request;
-        if ($request->isjson())
-        {
-           return 1;
+        if ($request->isjson()) {
+            return 1;
         }
-       $jj=json_decode($request);
+        $jj = json_decode($request);
 
-        $rr= $request->json();
+        $rr = $request->json();
         $user = new Studentinfo();
-        $user -> examID = $rr-> all()['data']['person']['examID'];
-        $user -> participantID = $rr-> all()['data']['person']['participantID'];
-        $user -> save();
+        $user->examID = $rr->all()['data']['person']['examID'];
+        $user->participantID = $rr->all()['data']['person']['participantID'];
+        $user->save();
 
-        dd( $jj);
+        dd($jj);
 
         return $request->json()->all()[data];
         return $jj->data;
-        return response() ->json($request);
+        return response()->json($request);
 
-        return response()->json($request );
+        return response()->json($request);
         $h = new User();
 
         /*
          * api for get student to Start Exam Game
          */
-        $getEnterStudent = collect(['data' => ['person' =>'SJson'],'ticket' =>'EnterUserTicket']);
+        $getEnterStudent = collect(['data' => ['person' => 'SJson'], 'ticket' => 'EnterUserTicket']);
 
 
         /*
          * api for get Student to Exit From Game
          */
 
-        $getExitStudent = collect (['data' => ['person' =>'SJson'] , 'ticket' => 'ExitUserTicket']);
+        $getExitStudent = collect(['data' => ['person' => 'SJson'], 'ticket' => 'ExitUserTicket']);
 
         /*
          *send users for force exit
          */
-        $sendForceExitStudentToEnterAndExitPart = collect(['data' => ['persons' =>['person' => 'SJson']] , 'ticket' => 'ForceExitTicket']);
+        $sendForceExitStudentToEnterAndExitPart = collect(['data' => ['persons' => ['person' => 'SJson']], 'ticket' => 'ForceExitTicket']);
 
-        return $sendForceExitStudentToEnterAndExitPart -> toJson();
+        return $sendForceExitStudentToEnterAndExitPart->toJson();
     }
 
-    public function questionPlatform(){
+    public function questionPlatform()
+    {
 
     }
 }

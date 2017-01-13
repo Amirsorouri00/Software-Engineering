@@ -12,16 +12,17 @@
                     <!-- Display Validation Errors -->
                     @include('common.errors')
 
-                    <!-- New Task Form -->
+                            <!-- New Task Form -->
                     <form action="{{ url('task') }}" method="POST" class="form-horizontal">
                         {{ csrf_field() }}
 
-                        <!-- Task Name -->
+                                <!-- Task Name -->
                         <div class="form-group">
                             <label for="task-name" class="col-sm-3 control-label">Task</label>
 
                             <div class="col-sm-6">
-                                <input type="text" name="name" id="task-name" class="form-control" value="{{ old('task') }}">
+                                <input type="text" name="name" id="task-name" class="form-control"
+                                       value="{{ old('task') }}">
                             </div>
                         </div>
 
@@ -47,27 +48,30 @@
                     <div class="panel-body">
                         <table class="table table-striped task-table">
                             <thead>
-                                <th>Task</th>
-                                <th>&nbsp;</th>
+                            <th>Task</th>
+                            <th>&nbsp;</th>
                             </thead>
                             <tbody>
-                                @foreach ($tasks as $task)
-                                    <tr>
-                                        <td class="table-text"><div>{{ $task->name }}</div></td>
+                            @foreach ($tasks as $task)
+                                <tr>
+                                    <td class="table-text">
+                                        <div>{{ $task->name }}</div>
+                                    </td>
 
-                                        <!-- Task Delete Button -->
-                                        <td>
-                                            <form action="{{url('task/' . $task->id)}}" method="POST">
-                                                {{ csrf_field() }}
-                                                {{ method_field('DELETE') }}
+                                    <!-- Task Delete Button -->
+                                    <td>
+                                        <form action="{{url('task/' . $task->id)}}" method="POST">
+                                            {{ csrf_field() }}
+                                            {{ method_field('DELETE') }}
 
-                                                <button type="submit" id="delete-task-{{ $task->id }}" class="btn btn-danger">
-                                                    <i class="fa fa-btn fa-trash"></i>Delete
-                                                </button>
-                                            </form>
-                                        </td>
-                                    </tr>
-                                @endforeach
+                                            <button type="submit" id="delete-task-{{ $task->id }}"
+                                                    class="btn btn-danger">
+                                                <i class="fa fa-btn fa-trash"></i>Delete
+                                            </button>
+                                        </form>
+                                    </td>
+                                </tr>
+                            @endforeach
                             </tbody>
                         </table>
                     </div>
@@ -75,4 +79,25 @@
             @endif
         </div>
     </div>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2">
+                <div id="messages"></div>
+            </div>
+        </div>
+    </div>
 @endsection
+<script src="//code.jquery.com/jquery-1.11.2.min.js"></script>
+<script src="//code.jquery.com/jquery-migrate-1.2.1.min.js"></script>
+<script src="https://cdn.socket.io/socket.io-1.3.4.js"></script>
+<script>
+    var c = io.connect('http://localhost:158', {query: "username=" + "{{ Auth::user()->name}}"});
+    //var socket = io.connect('http://localhost:0158');
+
+    c.on('folan', function (data) {
+
+        $("#messages").append("<p>" + data + "</p>");
+
+    });
+</script>
+

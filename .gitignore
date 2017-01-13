@@ -3,6 +3,8 @@
 /public/storage
 Homestead.yaml
 Homestead.json
+/cache
+/semantic
 .env
 /.idea
 
