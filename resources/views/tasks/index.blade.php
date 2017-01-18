@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
-    <div class="container">
+    <div class="container" xmlns:v-on="http://www.w3.org/1999/xhtml">
         <div class="col-sm-offset-2 col-sm-8">
             <div class="panel panel-default">
                 <div class="panel-heading">
@@ -86,18 +86,40 @@
             </div>
         </div>
     </div>
+
+    <div id="messages" ></div>
+
+    <div id="app-5">
+        <p>@{{ message }}</p>
+        <button v-on:click="reverseMessage">Reverse Message</button>
+        <button v-on:click= "close">sdfsdfs</button>
+    </div>
+
+
+    <div id="aap" class="ui modal">
+        <div class="header">Header</div>
+        <div class="content">
+            <p></p>
+        </div>
+        <div class="actions">
+            <div class="ui approve button">Approve</div>
+            <div class="ui button">Neutral</div>
+            <div v-on:click="close" class="ui cancel button">Cancel</div>
+        </div>
+    </div>
+
+
+    <script src="{{ asset('js/app.js') }}"></script>
+    <link rel="stylesheet" type="text/css" href="{{ asset('semantic/dist/semantic.min.css') }}">
 @endsection
-<script src="//code.jquery.com/jquery-1.11.2.min.js"></script>
-<script src="//code.jquery.com/jquery-migrate-1.2.1.min.js"></script>
-<script src="https://cdn.socket.io/socket.io-1.3.4.js"></script>
+
+
 <script>
-    var c = io.connect('http://localhost:158', {query: "username=" + "{{ Auth::user()->name}}"});
-    //var socket = io.connect('http://localhost:0158');
 
-    c.on('folan', function (data) {
 
-        $("#messages").append("<p>" + data + "</p>");
 
-    });
+
+
+
 </script>
 

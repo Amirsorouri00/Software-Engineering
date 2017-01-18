@@ -22,6 +22,8 @@
 |
 */
 
+use App\User;
+
 Route::group(['middleware' => ['web']], function () {
 
     Route::get('/', function () {
@@ -52,15 +54,31 @@ Route::group(['middleware' => ['web']], function () {
     Route::get('teacherlogin', 'Teachercontroller@login');
     Route::post('basketupdate/{basket}', 'Teachercontroller@basketupdate');
 
+
+    // test semantic
+    Route::get('template', function () {
+        return view('main');
+    });
+
+    Route::post('Ajtest',function(Request $req){
+        $list = collect(['users' => [['username' => 'hossein', 'operation' => 1], ['username' => 'mohsen', 'operation' => 0]]]);
+
+        return User::all()->first() ;
+    });
+////?!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+    Route::get('semantic', function () {
+        return 2;
+    });
+    ////?!!!!!!!!!!!!!!!!!!!!!!!!!!
     //test socket
     Route::get(/**
      * @return string
      */
         'sockettest', function () {
         $redis = Redis::connection();
-$list=collect(['users' => [['username' => 'hossein' , 'operation'=> 1],['username' => 'mohsen' , 'operation'=> 0]]]);
-     //    $list = collect(['usernames' => ['mohsen', 'ali', 'amir']]);
-        $redis->publish('message',$list);
+        $list = collect(['users' => [['username' => 'hossein', 'operation' => 1], ['username' => 'mohsen', 'operation' => 0]]]);
+        //    $list = collect(['usernames' => ['mohsen', 'ali', 'amir']]);
+        $redis->publish('message', $list);
         return $list->toJson();
 
     });

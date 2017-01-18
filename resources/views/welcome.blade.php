@@ -14,8 +14,12 @@
         </div>
     </div>
 </div>
+<p id="demo">سیبسب</p>
 @endsection
 <script>
+
+    var x = 10;
+    document.getElementById("demo").innerHTML = x;
 
 
 

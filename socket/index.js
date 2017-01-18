@@ -17,7 +17,7 @@ io.use(function (socket, next) {
 server.listen(158);
 io.on('connection', function (socket) {
   //  console.log("new client connected");
-    //  console.log(socket.id);
+      console.log(socket.id);
     var username = visitorsData[socket.id];
 
     var redisClient = redis.createClient();
@@ -27,7 +27,7 @@ io.on('connection', function (socket) {
         console.log("message2 is", message2);
         message = JSON.parse(message2);
 
-
+        socket.emit('folan', '1');
       //  console.log(typeof (message));
        // console.log(message.mohsen);
       //  console.log("message.name is", message.ali);

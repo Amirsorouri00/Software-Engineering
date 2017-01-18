@@ -5,6 +5,7 @@ Homestead.yaml
 Homestead.json
 /cache
 /semantic
+/public/semantic
 .env
 /.idea
 
