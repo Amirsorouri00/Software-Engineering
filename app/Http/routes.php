@@ -31,13 +31,38 @@ Route::group(['middleware' => ['web']], function () {
     Route::get('/tasks', 'TaskController@index');
     Route::delete('/task/{task}', 'TaskController@destroy');
 
-
     //amirsorouri00
     Route::get('/data', 'amircontroller@test');
     Route::get('/cycling', 'amircontroller@cycle');
     Route::post('/volun', 'api@getVolunteersBasket');
     Route::post('/entertogame', 'api@getEnteredPerson');
     Route::post('/objection', 'api@getObjectedToScoreBasket');
+    Route::post('/objectres', 'api@getObjectedToScoreBasketResult');
+    Route::post('/qresult', 'api@questionPartResult');
+    //Route::get('/client', ['stdID' => 'stdID']);
+    Route::get('/client/{stdID}', ['as' => 'client',function(Request $request,$stdID ){
+        //dd($request->stdID);
+        return $stdID;
+        return view('client', ['stdID' => $request->stdID]);
+    }]);
+
+    Route::get('fire', function () {
+        // this fires the event
+        event(new App\Events\socketio());
+        return "event fired";
+    });
+
+    Route::get('/test', function () {
+        // this checks for the event
+        return view('test');
+    });
+
+    Route::post('l', function(){
+       $basket = App\Basket::where('basketID', '4VeF64t')->firstOrFail();
+       $basket->basketStatus = 'amir';
+       $basket->save();
+       return view('test');
+    });
 
     //hossein
     Route::post('/EnterAndExit','api@EnterAndExit');

@@ -19,7 +19,7 @@ class Exam extends Model
       return $this->hasMany(Studentinfo::class, 'examID', 'examID');
     }
 
-    public function instructor(){
-      return $this->hasOne(Classindividual::class, 'personalID', 'instructorID');
+    public function lessonclass(){
+      return $this->belongsTo(Classexam::class, 'classID', 'classID');
     }
 }

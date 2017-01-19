@@ -19,6 +19,10 @@ class Classindividual extends Model
     return $this->belongsTo(Classexam::class, 'classID', 'classID');
   }
 
+  public function ins(){
+      return $this->hasOne(Classexam::class, 'instructorID', 'personalID');
+  }
+
   public function person(){
     return $this->hasOne(Studentinfo::class, 'participantID', 'personalID');
   }

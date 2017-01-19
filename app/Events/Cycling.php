@@ -25,6 +25,7 @@ class Cycling extends Event
     {
         $QRarray= $this->matchwithperiod();
         $this->list= $this->listofbasket($QRarray);
+        return redirect('test');
     }
 
 
@@ -34,7 +35,6 @@ class Cycling extends Event
      */
     public function matchwithperiod()
     {
-
         $user = Studentinfo::all()->where('individualStatus', 0);//get free student
         $Qsize=$user->where('QorR', 1)->count();
         $Rsize = $user->where('QorR', 0)->count();
@@ -71,7 +71,6 @@ class Cycling extends Event
                     $sorted->pull($sorted->search($q));
                     break;
                 }
-
             }
         }
 
@@ -99,9 +98,7 @@ class Cycling extends Event
             $res->push($temp);
             $sorted->pull($sorted->search($s));
         }
-
         return $res;
-
     }
 
     /**
@@ -113,25 +110,24 @@ class Cycling extends Event
         $list=collect();
         foreach($QRarray as $tem)
         {
-
             $ClassIidQ= $tem['questioner']->participantID;
             $ClassIQ= Classindividual::where('personalID',$ClassIidQ)->first();
 
             //dd($ClassIQ);
             // dd ($tem['questioner']->participants()->first());//whyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyy
-            $ClassIR= $tem['respondent']->participantID;
-            $ClassIR= Classindividual::where('personalID',$ClassIR)->first();
+            $ClassIR = $tem['respondent']->participantID;
+            $ClassIR = Classindividual::where('personalID',$ClassIR)->first();
 
             // dd($ClassIR);
-            $basket= new Basket;
+            $basket = new Basket;
             $basket->basketID=str_random(7);
             $basket->save();
             $ClassIQ->Qbasket()->save($basket);
             $ClassIR->Rbasket()->save($basket);
             $list->push($basket);
-
         }
-return $list;
+        //return redirect('/test');
+        return $list;
 
     }
     /**

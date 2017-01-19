@@ -10,7 +10,7 @@ class ExampleTest extends TestCase
 {
     use DatabaseTransactions;
 
-
+/*
     public function test_i_am_redirect_to_login_if_i_try_to_view_task_lists_without_logging_in()
     {
         $this->visit('/tasks')->see('Login');
@@ -88,5 +88,5 @@ class ExampleTest extends TestCase
         $this->actingAs($userOne)
              ->delete('/task/'.$taskTwo->id)
              ->assertResponseStatus(403);
-    }
+    }*/
 }

@@ -110,8 +110,6 @@ class amircontroller extends Controller
             $questioner = $user->where('questioner', 1)->take(20);
             $respondent = $user->where('questioner', 0)->take(20);
 
-
-
         $user = Studentinfo::all()->where('individualStatus', 0);//get free student
         $Qsize=$user->where('QorR', 1)->count();
         $Rsize = $user->where('QorR', 0)->count();
@@ -188,7 +186,6 @@ class amircontroller extends Controller
     {
         $redis = Redis::connection();
         Redis::set('name', 'Taylor');
-
         $redis->set('asd','dsfs');
         //  $redis->publish('message2', "sdfsdf");
         $redis->publish('message',$request);
@@ -199,7 +196,6 @@ class amircontroller extends Controller
     public function getVolunteerBasket(Request $request){
 
     }
-
 
 }
 

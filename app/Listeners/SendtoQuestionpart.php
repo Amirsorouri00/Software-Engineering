@@ -4,7 +4,8 @@ namespace App\Listeners;
 
 use Illuminate\Support\Facades\Redis;
 use Illuminate\Support\Facades\Storage;
-use GuzzleHttp\Client;
+use illuminate\Events\Dispatcher;
+use GuzzleHttp\client;
 class SendtoQuestionpart
 {
     /**
@@ -15,9 +16,9 @@ class SendtoQuestionpart
      //   dd($event->list);
     $client = new Client();
 
-        $response = $client->post('http://bit.com:8585/posttest', [
+       /* $response = $client->post('http://bit.com:8585/posttest', [
             'json' => ['foo' => 'bar']
-        ]);
+        ]);*/
        // dd($response);
         /*
         $redis = Redis::connection();
@@ -26,22 +27,21 @@ class SendtoQuestionpart
         $redis->set('asd','dsfs');
         //  $redis->publish('message2', "sdfsdf");
         $redis->publish('message',"startRound");
-
 */
-
     }
 
     /**
      * Handle volunteer part in send to question part.
      */
     public function handelvolunteer($event) {
-        $redis = Redis::connection();
+
+        /*$redis = Redis::connection();
         Redis::set('name', 'Taylor');
 
         $redis->set('asd','dsfs');
         //  $redis->publish('message2', "sdfsdf");
         $redis->publish('message',"handelvolunteer");
-
+*/
 
 
     }
@@ -62,6 +62,9 @@ class SendtoQuestionpart
             'App\Events\volunteerToQusteinpart',
             'App\Listeners\SendtoQuestionpart@handelvolunteer'
         );
+
+        $events->listen('App\Events\socketio',
+        'App\Listeners\eventlistener@handle');
     }
 
 }

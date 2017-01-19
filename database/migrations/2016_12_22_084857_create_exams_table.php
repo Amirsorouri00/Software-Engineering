@@ -18,9 +18,9 @@ class CreateExamsTable extends Migration
             $table->char('examID', 7)->unique();
             $table->string('lessonGroup', 20);
             // Foreign Key
-            $table->char('instructorID', 7);
-            $table->foreign('instructorID')
-              ->references('personalID')->on('classindividuals')
+            $table->char('classID', 7);
+            $table->foreign('classID')
+              ->references('classID')->on('classexams')
               ->onDelete('cascade');
             $table->integer('average');
             $table->integer('studentNumbers');
