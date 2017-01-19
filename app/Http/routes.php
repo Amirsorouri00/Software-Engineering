@@ -22,12 +22,14 @@
 |
 */
 
+use App\User;
+
 Route::group(['middleware' => ['web']], function () {
 
     Route::get('/', function () {
         return view('welcome');
     })->middleware('guest');
-    Route::get('test','amircontroller@matchwithperiod');
+    Route::get('test', 'amircontroller@matchwithperiod');
     Route::get('/tasks', 'TaskController@index');
     Route::delete('/task/{task}', 'TaskController@destroy');
 
@@ -65,14 +67,51 @@ Route::group(['middleware' => ['web']], function () {
     });
 
     //hossein
-    Route::post('/EnterAndExit','api@EnterAndExit');
+    Route::post('/EnterAndExit', 'api@EnterAndExit');
     Route::post('/task', 'TaskController@store');
-    Route::post('/volunteer','api@volunteer');
-    Route::get('/Judge','api@Judge');
+    Route::post('/volunteer', 'api@volunteer');
+    Route::get('/Judge', 'api@Judge');
+
+    //Teacher part //Mohsen
+    Route::get('baskets', 'Teachercontroller@getbasketsview');
+    Route::get('enterround', 'Teachercontroller@enterround');
+    Route::get('basket/{basket}', 'Teachercontroller@getbasket');
+    Route::get('teacherlogin', 'Teachercontroller@login');
+    Route::post('basketupdate/{basket}', 'Teachercontroller@basketupdate');
+
+
+    // test semantic
+    Route::get('template', function () {
+        return view('main');
+    });
+
+    Route::post('Ajtest',function(Request $req){
+        $list = collect(['users' => [['username' => 'hossein', 'operation' => 1], ['username' => 'mohsen', 'operation' => 0]]]);
+
+        return User::all()->first() ;
+    });
+////?!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+    Route::get('semantic', function () {
+        return 2;
+    });
+    ////?!!!!!!!!!!!!!!!!!!!!!!!!!!
+    //test socket
+    Route::get(/**
+     * @return string
+     */
+        'sockettest', function () {
+        $redis = Redis::connection();
+        $list = collect(['users' => [['username' => 'hossein', 'operation' => 1], ['username' => 'mohsen', 'operation' => 0]]]);
+        //    $list = collect(['usernames' => ['mohsen', 'ali', 'amir']]);
+        $redis->publish('message', $list);
+        return $list->toJson();
+
+    });
+
 
     Route::auth();
 
 });
 
-    Route::post('posttest','amircontroller@posttest');
+//Route::post('posttest', 'amircontroller@posttest');
 
