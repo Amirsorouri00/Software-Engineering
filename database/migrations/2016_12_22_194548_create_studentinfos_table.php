@@ -15,7 +15,7 @@ class CreateStudentinfosTable extends Migration
         Schema::create('studentinfos', function (Blueprint $table) {
             $table->increments('id');
             // foreign key
-            $table->char('participantID',7);
+            $table->char('participantID', 7);
             $table->foreign('participantID')
                 ->references('personalID')->on('classindividuals')
                 ->onDelete('cascade');
@@ -25,6 +25,8 @@ class CreateStudentinfosTable extends Migration
                 ->references('examID')->on('exams')
                 ->onDelete('cascade');
             $table->integer('roundNumber');
+            $table->integer('roundNumberInd');
+
             $table->boolean('QorR');
             $table->integer('gradeH');
             $table->integer('gradeL');

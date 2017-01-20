@@ -21,8 +21,10 @@ class Cycling extends Event
      */
 
     public $list;
-    public function __construct()
+    public $roundnimber;
+    public function __construct($num)
     {
+        $this->roundnimber=$num;
         $QRarray= $this->matchwithperiod();
         $this->list= $this->listofbasket($QRarray);
         return redirect('test');
@@ -35,7 +37,7 @@ class Cycling extends Event
      */
     public function matchwithperiod()
     {
-        $user = Studentinfo::all()->where('individualStatus', 0);//get free student
+        $user = Studentinfo::all()->where('individualStatus', 0)->where('roundnumber',$this->roundnimber);//get free student
         $Qsize=$user->where('QorR', 1)->count();
         $Rsize = $user->where('QorR', 0)->count();
 

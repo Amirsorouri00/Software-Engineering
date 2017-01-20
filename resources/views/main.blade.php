@@ -21,7 +21,8 @@
                 <div class="thirteen wide column centered row ">
                     <div class=" ui grid centered">
                         <div class="eight wide column centered">
-                            <button v-on:click="close" class="ui inverted massive fluid red button">خروج از بازی<</button>
+                            <button v-on:click="close" class="ui inverted massive fluid red button">خروج از بازی<
+                            </button>
 
                         </div>
                         <div class="eight wide column centered">
@@ -58,27 +59,26 @@
                 <div class=" content">
 
                     <div class="ui   input">
-                        <div class="right floated  ui grid">
 
-                            <div class="right floated  four wide column"><input type="number" min="0" max="20"
-                                                                                oninvalid="this.setCustomValidity('بازه نمره میبایست بین 0 تا 20 باشد')">
-                            </div>
-                            <div class="right floated  one wide column">تا</div>
-                            <div class="right floated  four wide column"><input type="number" min="0" max="20"
-                                                                                oninvalid="this.setCustomValidity('بازه نمره میبایست بین 0 تا 20 باشد')">
-                            </div>
-                            <div class="right floated  one wide column">از</div>
-
-
+                        <div class="right floated  four wide column">
+                            <input v-model="num2"  type="number" min="0" max="20"
+                                   oninvalid="this.setCustomValidity('بازه نمره میبایست بین 0 تا 20 باشد')">
                         </div>
+                        <div class="right floated  one wide column">تا</div>
+                        <div class="right floated  four wide column">
+                            <input v-model="num1"  type="number" min="0" max="20"
+                                   oninvalid="this.setCustomValidity('بازه نمره میبایست بین 0 تا 20 باشد')">
+                        </div>
+                        <div class="right floated  one wide column">از</div>
 
 
                     </div>
 
 
                 </div>
+                <p  > @{{ errormessage }} </p>
                 <div class="actions">
-                    <button class="ui button" type="submit">تایید</button>
+                    <button type="button" v-on:click="submit" class="ui button">تایید</button>
                     {{--<div class="ui black deny button">--}}
                     {{--Nope--}}
                     {{--</div>--}}

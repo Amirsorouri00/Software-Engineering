@@ -6,65 +6,74 @@ var redis = require('redis');
 console.log("hi");
 
 var visitorsData = {};
+var userinfo = {};
 
 io.use(function (socket, next) {
+    console.log('new user')
     var handshakeData = socket.request;
-    visitorsData[socket.id] = handshakeData._query['username']
-    console.log("middleware:", handshakeData._query['username']);
+    newuserid = handshakeData._query['username']
+    if (userinfo[newuserid]) {
+if(io.sockets.connected[userinfo[newuserid]['socketid']])
+        {
+            io.sockets.connected[userinfo[newuserid]['socketid']].disconnect();
+        }
+        delete visitorsData[userinfo[newuserid]['socketid']]
+    }
+    var tmp = {};
+    tmp['socketid'] = socket.id;
+    tmp['state'] = 0;
+    userinfo[newuserid] = tmp
+    visitorsData[socket.id] = newuserid
+    // console.log(userinfo)
+    //  console.log(visitorsData)
+    //console.log("middleware:", handshakeData._query['username']);
     next();
 });
 
-server.listen(158);
+server.listen(0158);
 io.on('connection', function (socket) {
-  //  console.log("new client connected");
-      console.log(socket.id);
-    var username = visitorsData[socket.id];
 
+    var userid = visitorsData[socket.id];
+    console.log(userid);
     var redisClient = redis.createClient();
     redisClient.subscribe('message');
-    // redisClient.suscribe('message2');
+
     redisClient.on("message", function (channel, message2) {
-        console.log("message2 is", message2);
+        //  console.log("message2 is", message2);
         message = JSON.parse(message2);
 
-        socket.emit('folan', '1');
-      //  console.log(typeof (message));
-       // console.log(message.mohsen);
-      //  console.log("message.name is", message.ali);
-       // console.log("username is", visitorsData[socket.id]);
+        //     socket.emit('folan', '1');
+        //  console.log(typeof (message));
+        // console.log(message.mohsen);
+        //  console.log("message.name is", message.ali);
+        // console.log("userid is", visitorsData[socket.id]);
         message = message.users;
-      //  console.log("After Array : ",message)
-        for ( var v in message ) {
-            console.log(message[v].username)
-            console.log(username)
-            if(message[v].username==username)
-            {
+        //  console.log('users', message);
+        //  console.log("After Array : ",message)
+        for (var v in message) {
+            console.log(message[v].userid)
+            console.log(message[v].roundnumber);
+            if (message[v].userid == userid) {
                 console.log('yes')
-                console.log(username)
-                socket.emit('folan', '1');
+                console.log(userid)
+
+                socket.emit('updateroundnumber', message[v].roundnumber);
+                socket.emit('showmodal', 1);
+                console.log(socket.id)
+                console.log(userinfo[message[v].userid]['socketid'])
                 break;
             }
-          //  console.log("V = ",v)
-           //   console.log("Username = ", message[v].username , "Age = ", message[v].Age);
+            //  console.log("V = ",v)
+            //   console.log("Username = ", message[v].userid , "Age = ", message[v].Age);
         }
 
-       /* message.usernames.forEach(function(item)
-        {
-
-        });*/
-
-        //    console.log("channel:"+ channel);
-        //if channel set true and in redis set this socket has operation the emit
 
     });
-    /*  redisClient.on("message2", function(channel, message) {
-     //   message=JSON.parse(message);
-     console.log("mew message in queue "+ message + "channel");
-     socket.emit(channel,message);
-     });*/
+
     socket.on('disconnect', function () {
         console.log("this user has exit", visitorsData[socket.id]);
         redisClient.quit();
+        delete visitorsData[socket.id];
     });
 
 });

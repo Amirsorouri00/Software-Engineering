@@ -21,7 +21,7 @@
 | kernel and includes session state, CSRF protection, and more.
 |
 */
-
+use Illuminate\Http\Request;
 use App\User;
 
 Route::group(['middleware' => ['web']], function () {
@@ -86,9 +86,25 @@ Route::group(['middleware' => ['web']], function () {
     });
 
     Route::post('Ajtest',function(Request $req){
-        $list = collect(['users' => [['username' => 'hossein', 'operation' => 1], ['username' => 'mohsen', 'operation' => 0]]]);
+     $user=  \App\Studentinfo::all()->where('participantID',$req->studentid)->first();
+       $user->gradeH=$req->num2;
+       $user->gradeL=$req->num1;
 
-        return User::all()->first() ;
+        $user->roundNumber=$req->roundnumber;
+        $user->save();
+        //
+        $allusersRound=\App\Studentinfo::all()->where('roundnumber',$req->roundnumber);
+        foreach($allusersRound as $u)
+        {
+            if($u->gradeH==-1 || $u->gradeL==-1)
+            {
+                return 1;//
+            }
+        }
+        //fire to continue cycling
+         Event::fire(new \App\Events\Cycling($req->roundnumber));
+
+        return $req;
     });
 ////?!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     Route::get('semantic', function () {

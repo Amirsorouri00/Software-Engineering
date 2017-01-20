@@ -78,6 +78,7 @@ $factory->define(App\Studentinfo::class, function (Faker\Generator $faker) {
         //'participantID' => App\Classindividual::all()->random()->personalID,
         //'examID' => str_random(7),
         'roundNumber' => $faker->randomDigit,
+        'roundNumberInd' => $faker->randomDigit,
         'individualStatus' => $faker->randomElement([0,1]),
         'finalScore' => $faker->randomFloat(null,0,20),
         'QorR'=> $faker->boolean(),
