@@ -48,6 +48,6 @@ class checkRoundListen
         //dd($flist->all());
         $redis = Redis::connection();
         $redis->publish('message', $flist);
-        dd(1);
+      //  dd(1);
     }
 }

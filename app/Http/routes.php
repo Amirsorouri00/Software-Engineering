@@ -21,6 +21,8 @@
 | kernel and includes session state, CSRF protection, and more.
 |
 */
+use Carbon\Carbon;
+use GuzzleHttp\Client;
 use Illuminate\Http\Request;
 use App\User;
 
@@ -42,7 +44,7 @@ Route::group(['middleware' => ['web']], function () {
     Route::post('/objectres', 'api@getObjectedToScoreBasketResult');
     Route::post('/qresult', 'api@questionPartResult');
     //Route::get('/client', ['stdID' => 'stdID']);
-    Route::get('/client/{stdID}', ['as' => 'client',function(Request $request,$stdID ){
+    Route::get('/client/{stdID}', ['as' => 'client', function (Request $request, $stdID) {
         //dd($request->stdID);
         return $stdID;
         return view('client', ['stdID' => $request->stdID]);
@@ -59,11 +61,11 @@ Route::group(['middleware' => ['web']], function () {
         return view('test');
     });
 
-    Route::post('l', function(){
-       $basket = App\Basket::where('basketID', '4VeF64t')->firstOrFail();
-       $basket->basketStatus = 'amir';
-       $basket->save();
-       return view('test');
+    Route::post('l', function () {
+        $basket = App\Basket::where('basketID', '4VeF64t')->firstOrFail();
+        $basket->basketStatus = 'amir';
+        $basket->save();
+        return view('test');
     });
 
     //hossein
@@ -80,31 +82,67 @@ Route::group(['middleware' => ['web']], function () {
     Route::post('basketupdate/{basket}', 'Teachercontroller@basketupdate');
 
 
-    // test semantic
+    // test
+    Route::get(
+        'redistime', function () {
+        $r = Redis::connection();
+        $l = collect();
+        $l->put('roundnumber', 1);
+        $ttt = Carbon::now();
+        $l->put('time', $ttt);
+        $r->sadd('round', json_encode($l));
+        $l = collect();
+        $l->put('roundnumber', 2);
+        $l->put('time', $ttt);
+        $carbonnow = Carbon::now();
+        $r->sadd('round', json_encode($l));
+        Redis::set('time', $carbonnow);
+        return 1;
+    });
     Route::get('template', function () {
         return view('main');
     });
 
-    Route::post('Ajtest',function(Request $req){
-     $user=  \App\Studentinfo::all()->where('participantID',$req->studentid)->first();
-       $user->gradeH=$req->num2;
-       $user->gradeL=$req->num1;
-
-        $user->roundNumber=$req->roundnumber;
+    Route::post('Ajtest', function (Request $req) {
+        $user = \App\Studentinfo::all()->where('participantID', $req->studentid)->first();
+        $user->gradeH = $req->num2;
+        $user->gradeL = $req->num1;//31523
+        $user->roundNumber = $req->roundnumber;
         $user->save();
-        //
-        $allusersRound=\App\Studentinfo::all()->where('roundnumber',$req->roundnumber);
-        foreach($allusersRound as $u)
-        {
-            if($u->gradeH==-1 || $u->gradeL==-1)
-            {
+
+        $allusersRound = \App\Studentinfo::all()->where('roundnumber', $req->roundnumber);
+        foreach ($allusersRound as $u) {
+            if ($u->gradeH == -1 || $u->gradeL == -1) {
                 return 1;//
             }
         }
         //fire to continue cycling
-         Event::fire(new \App\Events\Cycling($req->roundnumber));
+        Event::fire(new \App\Events\Cycling($req->roundnumber));
 
         return $req;
+    });
+
+    Route::get('mostafa', function () {
+        $client = new Client();
+        $response = $client->post('http://bit.com:8585/', [
+            'json' => ['foo' => 'bar']
+        ]);
+
+        return $response;
+    });
+    Route::get('startcycling', function () {
+
+        Event::fire(new \App\Events\startCycling());
+
+
+    });
+    Route::get('startround/{num}', function ($num) {
+
+
+        Event::fire(new \App\Events\Cycling($num));
+
+
+        return $num;
     });
 ////?!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     Route::get('semantic', function () {
@@ -112,19 +150,26 @@ Route::group(['middleware' => ['web']], function () {
     });
     ////?!!!!!!!!!!!!!!!!!!!!!!!!!!
     //test socket
-    Route::get(/**
-     * @return string
-     */
-        'sockettest', function () {
-        $redis = Redis::connection();
-        $list = collect(['users' => [['username' => 'hossein', 'operation' => 1], ['username' => 'mohsen', 'operation' => 0]]]);
-        //    $list = collect(['usernames' => ['mohsen', 'ali', 'amir']]);
-        $redis->publish('message', $list);
-        return $list->toJson();
+    Route::get('sockettest', function () {
+        /*  $redis = Redis::connection();
+          $list = collect(['users' => [['username' => 'hossein', 'operation' => 1], ['username' => 'mohsen', 'operation' => 0]]]);
+          //    $list = collect(['usernames' => ['mohsen', 'ali', 'amir']]);
+          $redis->publish('message', $list);
+          return $list->toJson();*/
 
+        $redis = Redis::connection();
+        $redis->publish('goToquestionpart', 'MetR2I7');
+        return 1;
     });
 
+    Route::post('telegraRange', function (Request $request) {
 
+        $reqdecode = $request->json();
+        $user = \App\Studentinfo::all()->where('participantID', $req->studentid)->first();
+
+        //Todo save and cheack
+
+    });
     Route::auth();
 
 });

@@ -18,6 +18,12 @@ class EventServiceProvider extends ServiceProvider
             'App\Listeners\eventlistener',],
         'App\Events\checkRound' => [
             'App\Listeners\checkRoundListen'
+        ],
+        'App\Events\prestartCycling' => [
+            'App\Listeners\prestartCyclinglistener'
+        ],
+        'App\Events\startCycling' => [
+            'App\Listeners\startCyclinglistener'
         ]
     ];
 

@@ -21,8 +21,6 @@ class Cycling
      */
     public function handle($request, Closure $next)
     {
-
-
         /*
          * check number of fre user
          *
@@ -35,6 +33,8 @@ class Cycling
          * check time of last round
          */
         $lastROundTime = Exam::firstorfail()->lastRound_time;
+        $redisc=Redis::connection();
+        $redisc.set('lastroundtime',$lastROundTime);
         $carbonlast = new Carbon($lastROundTime);
         $carbonnow = Carbon::now();
 
@@ -53,18 +53,27 @@ class Cycling
                 //    $quser->individualStatus = 1; Todo
 
             }
+
+            $r = Redis::connection();
+            $l = collect();
+            $l->put('roundnumber', $nextRoundNum);
+            $ttt = Carbon::now();
+            $l->put('time', $ttt);
+            $r->sadd('round', json_encode($l));
+
+
             foreach ($Rusers as $ruser) {
 
                 $ruser->roundNumber = $nextRoundNum;
                 $ruser->save();
-             //   $ruser->individualStatus = 1;Todo
+                //   $ruser->individualStatus = 1;Todo
             }
 
             Event::fire(new \App\Events\checkRound($nextRoundNum));
             // Event::fire(new \App\Events\Cycling());
             return $next($request);
         }
-        return 0;
+
         /* whyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyy??????????????????????
          $carbonlast = new Carbon($lastROundTime);
      $carbonnow= Carbon::now('Asia/Tehran');

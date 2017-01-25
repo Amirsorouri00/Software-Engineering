@@ -13,15 +13,24 @@ var app5 = new Vue({
         roundnum: 0,
         num1: 0,
         num2: 20,
+        startroundtime: 0,
         cansend: true,
         errormessage: '',
-        studentid:''
+        studentid: ''
     },
     watch: {
         num1: {
             handler: function (val, oldval) {
-                if (val > this.num2 || val > 20 || val < 0) {
+
+                console.log(val)
+                if (isNaN(val)) {
+                    console.log('hear')
+                    this.num1 = oldval
+                }
+                if (val > 20 || val < 0) {
                     console.log(val)
+                    this.num1 = oldval
+
                     this.errormessage = "بازه نمره به درسستی وارد نشده است"
                     this.cansend = false;
                 }
@@ -32,8 +41,12 @@ var app5 = new Vue({
             }
         }, num2: {
             handler: function (val, oldval) {
-                if (val < this.num1 || val > 20 || val < 0) {
+                if (isNaN(val)) {
+                    this.num2 = oldval
+                }
+                if (val > 20 || val < 0) {
                     console.log(val)
+                    this.num2 = oldval
                     this.errormessage = "بازه نمره به درسستی وارد نشده است"
                     this.cansend = false;
                 }
@@ -57,8 +70,19 @@ var app5 = new Vue({
         }
     },
     methods: {
+        sendtest:function(){
+
+            this.$http.get('http://www.google.com').then(function (s) {
+                console.log('OKKKKKKKKKKK')
+            }, function (er) {
+                console.log(er)
+
+            });
+
+        },
         gameover: function () {
             clearInterval(interval);
+            this.timeR = 120
             $('.ui.modal')
                 .modal('hide')
             ;
@@ -69,10 +93,21 @@ var app5 = new Vue({
             ;
         },
         submit: function () {
+            if (!this.num1) {
+                this.num1 = 0
+            }
+            else if (!this.num2) {
+                this.num2 = 0;
+            }
+            console.log(this.num1)
             this.gameover();
-            var data={'num1':this.num1,'num2':this.num2,'roundnumber':this.roundnumber,'studentid':this.studentid};
+            var data = {
+                'num1': this.num1,
+                'num2': this.num2,
+                'roundnumber': this.roundnumber,
+                'studentid': this.studentid
+            };
             this.$http.post('/Ajtest', data).then(function (res) {
-
                 console.log(res)
             }, function (err) {
 
@@ -139,15 +174,37 @@ c.on('updateroundnumber', function (data) {
 
 
     app5.$data.message = data;
+    app5.$data.roundnum = data;
 
 });
+c.on('setstartroundtime', function (data) {
 
+    app5.$data.startroundtime = data;
+
+})
+c.on('gotoquestionpart', function (data) {
+    console.log('heeeeeeeeeeeeeee')
+    var sendv = new Vue();
+    //  window.location = "http://www.google.com";
+   app5.sendtest();
+
+
+})
 c.on('showmodal', function (data) {
     console.log('im hear');
     if (data == 1) {
         $('.ui.modal')
             .modal('show')
         ;
+
+        interval = setInterval(this.fnm, 1000);
+
+        /* // Todo if state is not starter time then update the start time round and update remaind time
+         var zaman= new Date(app5.$data.startroundtime)
+         var now=Date.now()
+         var elapsed = end - date
+         app5.$data.timeR=120-(elapsed/1000)
+         */
     }
     /*
      $('#dmm').dimmer({

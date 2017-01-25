@@ -15,10 +15,11 @@ class SendtoQuestionpart
 
      //   dd($event->list);
     $client = new Client();
-
-       /* $response = $client->post('http://bit.com:8585/posttest', [
+/*
+        $response = $client->post('http://bit.com:8585/posttest', [
             'json' => ['foo' => 'bar']
-        ]);*/
+        ]);
+  */
        // dd($response);
         /*
         $redis = Redis::connection();
