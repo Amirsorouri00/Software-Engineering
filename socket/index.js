@@ -2,8 +2,70 @@ var app = require('express')();
 var server = require('http').Server(app);
 var io = require('socket.io')(server);
 var redis = require('redis');
+var request = require('request');
 
-console.log("hi");
+var http = require("http");
+/*
+
+ */
+var r;
+var redisround = redis.createClient();
+var socketsmap = new Map()
+setInterval(function () {
+
+   lasttime= redisround.get('lastroundtime')
+
+    var date = new Date(lasttime)
+    var end = Date.now();
+    var elapsed = end - date
+    if ((elapsed / 60000) > 5) {
+        redisround.srem('round',reply[i])
+        request('http://bit.com:8585/startcycling/', function (error, response, body) {
+            // console.log(error)
+            if (response.statusCode == 200) {
+                console.log(body); // Show the HTML for the Modulus homepage.
+            }
+        });
+        // console.log('hear')
+        //post to route that te round number of ( round['roundnumber'])
+    }
+
+    console.log('sdfdfsf')
+    redisround.smembers('round', function (err, reply) {
+
+
+        for (var i in reply) {
+            var round = JSON.parse(reply[i]);
+
+            var cv = round['time']
+            //console.log(cv['date'])
+
+            // var decodtime=JSON.parse(cv)
+            //  var tii=decodtime['data']
+            //console.log(tii)
+            var date = new Date(cv['date'])
+            var end = Date.now();
+            // r=round['time']
+            var elapsed = end - date
+            //  console.log(elapsed)
+            if ((elapsed / 60000) > 2) {
+                // redisround.srem('round',reply[i]) Todo uncomment and post this nimber to server that must send basket
+                request('http://bit.com:8585/startround/'+round['roundnumber'], function (error, response, body) {
+                    // console.log(error)
+                    if (response.statusCode == 200) {
+                        console.log(body); // Show the HTML for the Modulus homepage.
+                    }
+                });
+                // console.log('hear')
+                //post to route that te round number of ( round['roundnumber'])
+            }
+        }
+
+
+    });
+
+}, 1000);
+
 
 var visitorsData = {};
 var userinfo = {};
@@ -13,15 +75,19 @@ io.use(function (socket, next) {
     var handshakeData = socket.request;
     newuserid = handshakeData._query['username']
     if (userinfo[newuserid]) {
-if(io.sockets.connected[userinfo[newuserid]['socketid']])
-        {
+        if (io.sockets.connected[userinfo[newuserid]['socketid']]) {
             io.sockets.connected[userinfo[newuserid]['socketid']].disconnect();
         }
         delete visitorsData[userinfo[newuserid]['socketid']]
+        visitorsData[socket.id] = newuserid
+        userinfo[newuserid]['socketid'] = socket.id
+        //Todo reload history
+        //Todo next
     }
     var tmp = {};
     tmp['socketid'] = socket.id;
     tmp['state'] = 0;
+    tmp['startroundtime'] = 0;
     userinfo[newuserid] = tmp
     visitorsData[socket.id] = newuserid
     // console.log(userinfo)
@@ -37,6 +103,16 @@ io.on('connection', function (socket) {
     console.log(userid);
     var redisClient = redis.createClient();
     redisClient.subscribe('message');
+    var redisGet = redis.createClient();
+    redisGet.subscribe('goToquestionpart');
+    socketsmap.set(userid, socket);
+    redisGet.on('message', function (channel, mes) {
+
+        if (mes == userid)
+            socket.emit('gotoquestionpart')
+
+
+    })
 
     redisClient.on("message", function (channel, message2) {
         //  console.log("message2 is", message2);
@@ -58,16 +134,28 @@ io.on('connection', function (socket) {
                 console.log(userid)
 
                 socket.emit('updateroundnumber', message[v].roundnumber);
+
+                redisround.smembers('round', function (err, reply) {
+
+
+                    for (var i in reply) {
+                        var round = JSON.parse(reply[i]);
+                        if (round['roundnumber'] == message[v].roundnumber) {
+                            socket.emit('setstartroundtime', round['time'])
+                            userinfo[userid]['startroundtime'] = round['time']
+                        }
+
+                    }
+                });
                 socket.emit('showmodal', 1);
                 console.log(socket.id)
                 console.log(userinfo[message[v].userid]['socketid'])
                 break;
             }
             //  console.log("V = ",v)
+            //  console.log("V = ",v)
             //   console.log("Username = ", message[v].userid , "Age = ", message[v].Age);
         }
-
-
     });
 
     socket.on('disconnect', function () {
