@@ -98,7 +98,7 @@ Route::group(['middleware' => ['web']], function () {
         return 1;
     });
     Route::get('template', function () {
-        return view('main');
+        return view('main')->with(['err'=>'sfsdfsdfsf']);
     });
 
     Route::post('Ajtest', function (Request $req) {
