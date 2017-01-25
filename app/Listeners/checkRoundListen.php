@@ -30,7 +30,7 @@ class checkRoundListen
     {
         $user = Studentinfo::all()->where('roundNumber', $event->roundnumber);
 
-        $Qusers = $user->where('QorR', 1);
+        $Qusers = $user->where('QorR', 1);//Todo wherer client must web
         $userscollect = collect();
 
         $e = 0;
@@ -48,6 +48,25 @@ class checkRoundListen
         //dd($flist->all());
         $redis = Redis::connection();
         $redis->publish('message', $flist);
-      //  dd(1);
+/// telegram send
+        $Qusers = $user->where('QorR', 1);//Todo where is telegram user
+        $userscollect = collect();
+
+        $e = 0;
+        foreach ($Qusers as $user) {
+            $personalid=$user->participants()->personalID;
+            $tmp = collect();
+            $tmp->put('username', $personalid);
+
+            $userscollect->push($tmp);
+
+        }
+        $flist = collect();
+        $flist->put('roundnumber',$event->roundnumber);
+
+        $flist->put('users', $userscollect);
+        //Todo send to telegram flist
+
+        //  dd(1);
     }
 }

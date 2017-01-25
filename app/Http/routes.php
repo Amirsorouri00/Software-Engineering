@@ -165,7 +165,23 @@ Route::group(['middleware' => ['web']], function () {
     Route::post('telegraRange', function (Request $request) {
 
         $reqdecode = $request->json();
-        $user = \App\Studentinfo::all()->where('participantID', $req->studentid)->first();
+        $studentnumber= $reqdecode->all()['username'];
+        $userid = \App\Classindividual::all()->where('personalID',$studentnumber);
+        $user = \App\Studentinfo::all()->where('participantID', $userid);
+        $user->gradeH =  $reqdecode->all()['range']['max'];
+        $user->gradeL =$reqdecode->all()['range']['min'];//31523
+        $user->save();
+
+        $allusersRound = \App\Studentinfo::all()->where('roundnumber', $reqdecode->all()['round_number']);
+        foreach ($allusersRound as $u) {
+            if ($u->gradeH == -1 || $u->gradeL == -1) {
+                return 1;//
+            }
+        }
+        //fire to continue cycling
+        Event::fire(new \App\Events\Cycling($reqdecode->all()['round_number']));
+
+        return 1;
 
         //Todo save and cheack
 
