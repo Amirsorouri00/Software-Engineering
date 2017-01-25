@@ -12,7 +12,8 @@
         "guzzlehttp/guzzle": "^6.2",
         "doctrine/dbal": "^2.5",
         "predis/predis": "^1.1",
-        "fabpot/goutte": "^3.2"
+        "fabpot/goutte": "^3.2",
+        "symfony/event-dispatcher": "^3.2"
     },
     "require-dev": {
         "fzaninotto/faker": "~1.4",	
