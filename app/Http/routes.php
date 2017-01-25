@@ -41,6 +41,10 @@ Route::group(['middleware' => ['web']], function () {
     Route::post('/objection', 'api@getObjectedToScoreBasket');
     Route::post('/objectres', 'api@getObjectedToScoreBasketResult');
     Route::post('/qresult', 'api@questionPartResult');
+    Route::post('volunres', 'api@volunteerResult');
+    Route::post('posttest',function(){
+       return 'amirposttest';
+    });
     //Route::get('/client', ['stdID' => 'stdID']);
     Route::get('/client/{stdID}', ['as' => 'client',function(Request $request,$stdID ){
         //dd($request->stdID);
@@ -65,12 +69,6 @@ Route::group(['middleware' => ['web']], function () {
        $basket->save();
        return view('test');
     });
-
-    //hossein
-    Route::post('/EnterAndExit', 'api@EnterAndExit');
-    Route::post('/task', 'TaskController@store');
-    Route::post('/volunteer', 'api@volunteer');
-    Route::get('/Judge', 'api@Judge');
 
     //Teacher part //Mohsen
     Route::get('baskets', 'Teachercontroller@getbasketsview');
