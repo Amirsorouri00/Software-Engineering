@@ -303,7 +303,6 @@ class api extends Controller
                 $basketOriginal->save();
                 $volunteerRequest = collect(['data' => ['basket' => $basketOriginal, 'ticket' => 'volunteerRespondUserTicket']])->toJson();
                 echo 'saved7';
-
                 //todo free qestioner and responder
 
                 $client = new client();
