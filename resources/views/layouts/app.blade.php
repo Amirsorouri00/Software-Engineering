@@ -1,10 +1,14 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" >
+
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-
+<meta property="og:title" content="Title" />
+<meta property="og:site_name" content="Site name"/>
+<meta property="og:description" content="Description" />
+<meta property="og:image" content="Link to your logo" />
     <title>Laravel Quickstart - Intermediate</title>
 
     <!-- Fonts -->

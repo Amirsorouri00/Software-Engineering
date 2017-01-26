@@ -21,10 +21,12 @@ class Cycling
      */
     public function handle($request, Closure $next)
     {
+        return view('splash');
         /*
          * check number of fre user
          *
          */
+        /*
         $user = Studentinfo::all()->where('individualStatus', 0);//get free student
         $Qsize = $user->where('QorR', 1)->count();
         $Rsize = $user->where('QorR', 0)->count();
@@ -73,7 +75,7 @@ class Cycling
             // Event::fire(new \App\Events\Cycling());
             return $next($request);
         }
-
+/*
         /* whyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyy??????????????????????
          $carbonlast = new Carbon($lastROundTime);
      $carbonnow= Carbon::now('Asia/Tehran');

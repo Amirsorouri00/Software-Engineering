@@ -154,10 +154,18 @@ Route::group(['middleware' => ['web']], function () {
           //    $list = collect(['usernames' => ['mohsen', 'ali', 'amir']]);
           $redis->publish('message', $list);
           return $list->toJson();*/
-
+/*
         $redis = Redis::connection();
         $redis->publish('goToquestionpart', 'MetR2I7');
-        return 1;
+  
+
+  */
+
+$redis = Redis::connection();
+$zaman= Carbon::now();
+Redis::set('lastroundtime',$zaman);
+
+        return dd($zaman);
     });
 
     Route::post('telegraRange', function (Request $request) {

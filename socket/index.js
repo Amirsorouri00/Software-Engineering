@@ -18,6 +18,7 @@ setInterval(function () {
     var date = new Date(lasttime)
     var end = Date.now();
     var elapsed = end - date
+    console.log(date)
     if ((elapsed / 60000) > 5) {
         redisround.srem('round',reply[i])
         request('http://bit.com:8585/startcycling/', function (error, response, body) {
