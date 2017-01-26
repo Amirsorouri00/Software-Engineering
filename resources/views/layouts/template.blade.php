@@ -9,7 +9,7 @@
     {{--src="https://code.jquery.com/jquery-3.1.1.min.js"--}}
     {{--integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8="--}}
     {{--crossorigin="anonymous"></script>--}}
-
+    <link rel="shortcut icon" href="{{ asset('favicon-16x16.png') }}" >
     <script src="{{asset('js/jqueryA.min.js')}}"></script>
     <script src="{{ asset('semantic/dist/semantic.min.js') }}"></script>
     {{--<script src="{{ asset('js/bootstrap.js') }}"></script>--}}

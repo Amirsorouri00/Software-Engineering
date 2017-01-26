@@ -184,6 +184,10 @@ Route::group(['middleware' => ['web']], function () {
         //Todo save and cheack
 
     });
+    Route::get('splash',function()
+    {
+        return view('splash');
+    });
     Route::auth();
 
 });
