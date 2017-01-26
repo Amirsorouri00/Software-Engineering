@@ -26,7 +26,7 @@ class CreateStudentinfosTable extends Migration
                 ->onDelete('cascade');
             $table->integer('roundNumber');
             $table->integer('roundNumberInd');
-
+            $table->char('platform', 10);
             $table->boolean('QorR');
             $table->integer('gradeH');
             $table->integer('gradeL');

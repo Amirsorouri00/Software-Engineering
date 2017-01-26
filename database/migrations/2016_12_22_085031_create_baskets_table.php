@@ -32,6 +32,8 @@ class CreateBasketsTable extends Migration
                 ->references('personalID')->on('classIndividuals')
                 ->onDelete('cascade');
             // bit changed to boolean
+            $table->char('qPlatform', 10);
+            $table->char('rPlatform', 10);
             $table->boolean('correctness');
             // given from the questionBank service
             $table->char('questionID', 7);
