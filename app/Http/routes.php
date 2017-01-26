@@ -38,12 +38,23 @@ Route::group(['middleware' => ['web']], function () {
     //amirsorouri00
     Route::get('/data', 'amircontroller@test');
     Route::get('/cycling', 'amircontroller@cycle');
-    Route::post('/volun', 'api@getVolunteersBasket');
+
     Route::post('/entertogame', 'api@getEnteredPerson');
-    Route::post('/objection', 'api@getObjectedToScoreBasket');
-    Route::post('/objectres', 'api@getObjectedToScoreBasketResult');
-    Route::post('/qresult', 'api@questionPartResult');
-    Route::post('volunres', 'api@volunteerResult');
+
+    Route::post('forceExit', 'api@userForceExit');
+
+    Route::post('volunteerExit', 'api@volunteerExitRequest');
+
+    Route::post('/getVolunteers', 'api@getVolunteersBasket');
+
+    Route::post('/getObjectedBasket', 'api@getObjectedToScoreBasket');
+
+    Route::post('/getObjectionResult', 'api@getObjectedToScoreBasketResult');
+
+    Route::post('/questionPartResult', 'api@questionPartResult');
+
+    Route::post('volunteerResult', 'api@volunteerResult');
+
     Route::post('posttest',function(){
        return 'amirposttest';
     });
@@ -98,7 +109,7 @@ Route::group(['middleware' => ['web']], function () {
         return 1;
     });
     Route::get('template', function () {
-        return view('main');
+        return view('main')->with(['err'=>'sfsdfsdfsf']);
     });
 
     Route::post('Ajtest', function (Request $req) {
@@ -191,6 +202,10 @@ Redis::set('lastroundtime',$zaman);
 
         //Todo save and cheack
 
+    });
+    Route::get('splash',function()
+    {
+        return view('splash');
     });
     Route::auth();
 

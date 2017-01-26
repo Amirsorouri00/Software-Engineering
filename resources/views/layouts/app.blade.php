@@ -10,7 +10,7 @@
 <meta property="og:description" content="Description" />
 <meta property="og:image" content="Link to your logo" />
     <title>Laravel Quickstart - Intermediate</title>
-
+    <meta property="og:image" content="https://i.ytimg.com/vi/D983crV0-6A/maxresdefault.jpg" />
     <!-- Fonts -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.4.0/css/font-awesome.min.css" rel='stylesheet' type='text/css'>
     <link href="https://fonts.googleapis.com/css?family=Lato:100,300,400,700" rel='stylesheet' type='text/css'>

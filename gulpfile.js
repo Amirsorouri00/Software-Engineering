@@ -15,6 +15,7 @@ require('laravel-elixir-webpack');
 elixir(function(mix) {
     mix.sass('app.scss');
     mix.webpack('app.js');
+    mix.webpack('back.js');
     mix.browserify('main.js');
     mix.browserify('../../../node_modules/bootstrap-sass/assets/javascripts/bootstrap.js');
     mix.webpack('../../../node_modules/jquery/dist/jquery.min.js');

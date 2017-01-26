@@ -61,12 +61,12 @@
                     <div class="ui   input">
 
                         <div class="right floated  four wide column">
-                            <input  v-model="num2"   min="0" max="20"
+                            <input v-model="num2" min="0" max="20"
                                    oninvalid="this.setCustomValidity('بازه نمره میبایست بین 0 تا 20 باشد')">
                         </div>
                         <div class="right floated  one wide column">تا</div>
                         <div class="right floated  four wide column">
-                            <input v-model="num1"  min="0" max="20"
+                            <input v-model="num1" min="0" max="20"
                                    oninvalid="this.setCustomValidity('بازه نمره میبایست بین 0 تا 20 باشد')">
                         </div>
                         <div class="right floated  one wide column">از</div>
@@ -76,7 +76,7 @@
 
 
                 </div>
-                <p  > @{{ errormessage }} </p>
+                <p> @{{ errormessage }} </p>
                 <div class="actions">
                     <button type="button" v-on:click="submit" class="ui button">تایید</button>
                     {{--<div class="ui black deny button">--}}
@@ -93,6 +93,19 @@
 
 
     </div>
-    <script src="{{ asset('js/app.js') }}"></script>
+
+
+
+
+    <script>
+        $('.message .close')
+                .on('click', function () {
+                    $(this)
+                            .closest('.message')
+                            .transition('fade')
+                    ;
+                })
+        ;
+    </script>
 
 @endsection
