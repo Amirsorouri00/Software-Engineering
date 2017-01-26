@@ -141,7 +141,8 @@ Route::group(['middleware' => ['web']], function () {
     });
     Route::get('startcycling', function () {
 
-        Event::fire(new \App\Events\startCycling());
+return 2;
+       //Event::fire(new \App\Events\startCycling());
 
 
     });
@@ -165,12 +166,12 @@ Route::group(['middleware' => ['web']], function () {
           //    $list = collect(['usernames' => ['mohsen', 'ali', 'amir']]);
           $redis->publish('message', $list);
           return $list->toJson();*/
-/*
+
         $redis = Redis::connection();
         $redis->publish('goToquestionpart', 'MetR2I7');
   
 
-  */
+  
 
 $redis = Redis::connection();
 $zaman= Carbon::now();
@@ -208,6 +209,14 @@ Redis::set('lastroundtime',$zaman);
         return view('splash');
     });
     Route::auth();
+    Route::get('cheackSet',function(){
+        $r = Redis::connection();
+ $l = collect();
+        $l->put('roundnumber', 1);
+        $l->put('time', 0);
+        $r->sadd('round', json_encode($l));
+
+    });
 
 });
 

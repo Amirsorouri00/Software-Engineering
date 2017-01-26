@@ -16,6 +16,14 @@ class SendtoQuestionpart
      //   dd($event->list);
     $client = new Client();
 
+    foreach ($event->list as $sabad) {
+
+$response = $client->post('http://bit.com:8585/posttest', [
+            'json' => ['foo' => 'bar']
+        ]);
+    }
+        # code...
+    }
 /*
         $response = $client->post('http://bit.com:8585/posttest', [
             'json' => ['foo' => 'bar']

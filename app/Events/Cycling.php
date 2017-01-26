@@ -27,7 +27,7 @@ class Cycling extends Event
         $this->roundnimber=$num;
         $QRarray= $this->matchwithperiod();
         $this->list= $this->listofbasket($QRarray);
-        return redirect('test');
+       // return redirect('test');
     }
 
 
@@ -37,7 +37,7 @@ class Cycling extends Event
      */
     public function matchwithperiod()
     {
-        $user = Studentinfo::all()->where('individualStatus', 0)->where('roundnumber',$this->roundnimber);//get free student
+        $user = Studentinfo::all()->where('roundnumber',$this->roundnimber);//get free student
         $Qsize=$user->where('QorR', 1)->count();
         $Rsize = $user->where('QorR', 0)->count();
 
@@ -49,6 +49,16 @@ class Cycling extends Event
         {
             $questioner = $user->where('QorR', 1)->take($Qsize);
             $respondent = $user->where('QorR', 0)->take($Qsize);
+        }
+        foreach ($questioner as $qr {
+$qr->QorR=0;
+$qr->save();
+
+        }
+        foreach ($respondent as $qr {
+$qr->QorR=1;
+$qr->save();
+
         }
         $questioner = $questioner->shuffle();
         $respondent = $respondent->shuffle();
@@ -77,8 +87,8 @@ class Cycling extends Event
         }
 
         foreach ($sorted as $s) {
-            $f = $q['gradeL'];
-            $c = $q['gradeH'];
+            $f = $s['gradeL'];
+            $c = $s['gradeH'];
             $min = 100;
 
             foreach ($respondent as $r) {
@@ -94,6 +104,8 @@ class Cycling extends Event
                     $resres = $r;
                 }
             }
+ 
+
             $resp = $respondent->pull($respondent->search($resres));
             //dd($resp);
             $temp = collect(['questioner' => $s, 'respondent' => $resp]);
