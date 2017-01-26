@@ -33,8 +33,12 @@ class api extends Controller
      * @param Request $request
      * @return \Illuminate\Http\RedirectResponse
      */
+    /*
+     * Tested OK => Hossein
+     */
     public function getEnteredPerson(Request $request)
     {
+
         $enteredPersonRequest = collect(['data' => ['person' => ['personalID' => '1274568', 'classID' => '1111111'],
                                     "ticket" => "volunteerRespondUserTicket"]])->toJson();
         $client = new Client();
@@ -45,14 +49,17 @@ class api extends Controller
             //Todo classsexam must be fix
             //$class = Classexam::where('classID', '=', $request['data']['person']['classID'])->firstOrFail();
             $class = Classexam::where('classID', '=', '1111111')->firstOrFail();
+
             $exam = $class->exam()->get();
             $person = new Classindividual();
             $person->personalID = $request['data']['person']['personID'];
             //$person->classID = $request['data']['person']['classID'];
             $person->isPresent = 1;
             $person->isActive = 1;
+
             /*
             if (Classexam::where('instructorID', '=', $request['data']['person']['personalID'])->exists()) {
+
                 $person->accessibility = 1;
             } else {
                 $person->accessibility = 0;
@@ -65,7 +72,9 @@ class api extends Controller
                 $person->accessibility = 0;
             }
             $person->save();
+
             //echo $request['data']['person']['personalID'];
+
             //$class->member()->save($person);
             $student = new Studentinfo();
             $student->roundNumber = 0;
@@ -307,14 +316,16 @@ class api extends Controller
         //...
     }
 
+    /*
+     * Tested OK => Hossein
+     * Just Send To Soal O Javab Not OK
+     */
     public function getVolunteersBasket(Request $request)
     {
-        $b = Basket::where('basketID', 'T1cuEH0')->firstOrFail();
-        /*$volunteerRequest = collect(['data' => ['basketsArray' => [[['basket' => $b], "respondentlist" => ['S8rb5pB', '7WNyPMm', 'hsuZxXJ']]
-            , [['basket' => $b], "respondentlist" => ['K3ruTLY', 'HCkfF41', 'y5d1jSs']]
-            , [['basket' => $b], "respondentlist" => ['a6cwGz0', '7rYlioA', 'SRuph0i']]]]
-            , "ticket" => "volunteerRespondUserTicket"])->toJson();*/
+
         $volunteerBaskets = $request['data']['basketsArray'];
+        $resultBaskets = collect();
+        $counter = 0;
         foreach ($volunteerBaskets as $vBasket) {
             try {
                 $basketOriginal = Basket::where('basketID', '=', $vBasket['basket']['basketID'])->firstOrFail();
@@ -330,21 +341,28 @@ class api extends Controller
                         $volunteer = $volunteerInfo->individuals();
                         $questionerInfo = Studentinfo::where('participantID', '=', $basketOriginal->questionerID)->firstOrFail();
                         $questioner = $questionerInfo->individuals();
-                        if ($volunteer->isPresent == 1 && $volunteerInfo->individualStatus == 0) {
+
+                        if ($volunteer->isPresent == 1 && $volunteerInfo->individualStatus  == 0) {
                             try {
-                                //$exam = Exam::where('examID', '=', $basketOriginal->examID)->firstOrFail();
-                                $exam = Exam::all()->take(1)[0];
+                                print_r("oomad toosh");
+                                $exam = Exam::where('examID', '=', $basketOriginal->examID)->firstOrFail();
                                 $volunteerInfo->individualStatus = 1;
-                                $questioner->isActive = 0;
                                 $volunteerInfo->finalScore -= $exam->questionScore;
                                 $volunteerInfo->save();
+
+                                //todo isfree and individual status must mean busy basket status deactive
                                 //todo check whether the client must be redirected from volunteer system
                                 //todo on their own or we must redirect them
                             } catch (\Exception $s) {
-                                echo 'exam';
+                                print_r('nayoomad toosh');
                                 continue;
                                 //Do continue if it doesn't exist.
                             }
+                        }
+                        else
+                        {
+                            print_r( "ELSE");
+                            echo "else";
                         }
                         //Do stuff when user exists.
                     } catch (\Exception $e) {
@@ -363,17 +381,28 @@ class api extends Controller
             $basketOriginal->basketStatus = 'volunteer';
             $basketOriginal->save();
         }
+
+//        $b = Basket::where('basketID', $request)->firstOrFail();
+//        $volunteerRequest = collect(['data' => ['basketsArray' => [[['basket' => $b], "respondentlist" => ['S8rb5pB', '7WNyPMm', 'hsuZxXJ']]
+//            , [['basket' => $b], "respondentlist" => ['K3ruTLY', 'HCkfF41', 'y5d1jSs']]
+//            , [['basket' => $b], "respondentlist" => ['a6cwGz0', '7rYlioA', 'SRuph0i']]]]
+//            , "ticket" => "volunteerRespondUserTicket"])->toJson();
         $requestToQuestionPart = collect(['data' => $request])->toJson();
-        echo $requestToQuestionPart;
+//        echo $request;
         $client = new client();
         try {
-            $response = $client->post('http://software:81/l', ['json' => $request]);//todo must add question part url in order to post them
+            /*
+             * Soal O Javab URL
+             */
+            $response = $client->post('http://bit.com/testPost', ['json' => $request]);
         } catch (\GuzzleHttp\Exception\ClientException $e) {
             echo 'Caught response: ' . $e->getResponse()->getStatusCode();
         }
         //Ready to send to quesion part
     }
-
+    /*
+     * Not Tested
+     */
     public function volunteerExitRequest(Request $request)
     {
         //todo we must check on our own how to pass student id from the page to controller
@@ -390,8 +419,10 @@ class api extends Controller
         }
         //ready for sending to enter and exit
     }
-
-    /*public function volunteerExitResult(Request $request)
+    /*
+     * Not Tested
+     */
+     /*public function volunteerExitResult(Request $request)
     {
         $enteredPersonRequest = collect(['data' => [['person' => ['personalID' => '1234567', 'classID' => '1234567']],
             "ticket" => "volunteerRespondUserTicket"]])->toJson();
@@ -408,6 +439,9 @@ class api extends Controller
         }
     }*/
 
+    /*
+     * Not Tested
+     */
     public function userForceExit(Request $request, Classindividual $person)
     {
         //todo must write code for sending user into this function and redirect him to exit
