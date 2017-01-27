@@ -96,6 +96,8 @@
 </head>
 <body style="background-image: url(../img/back.jpg)">
 
+
+<body id="app-layout">
 {{--<nav class="navbar navbar-fixed-top navbar-default">--}}
 {{--<div class="container-fluidr">--}}
 {{--<div style="float: right" class="navbar-header">--}}
