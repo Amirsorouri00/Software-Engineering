@@ -1,111 +1,41 @@
-<!DOCTYPE html>
-<html>
-    <head>
-        <meta name="robots" content="noindex,nofollow" />
-        <style>
-            /* Copyright (c) 2010, Yahoo! Inc. All rights reserved. Code licensed under the BSD License: http://developer.yahoo.com/yui/license.html */
-            html{color:#000;background:#FFF;}body,div,dl,dt,dd,ul,ol,li,h1,h2,h3,h4,h5,h6,pre,code,form,fieldset,legend,input,textarea,p,blockquote,th,td{margin:0;padding:0;}table{border-collapse:collapse;border-spacing:0;}fieldset,img{border:0;}address,caption,cite,code,dfn,em,strong,th,var{font-style:normal;font-weight:normal;}li{list-style:none;}caption,th{text-align:left;}h1,h2,h3,h4,h5,h6{font-size:100%;font-weight:normal;}q:before,q:after{content:'';}abbr,acronym{border:0;font-variant:normal;}sup{vertical-align:text-top;}sub{vertical-align:text-bottom;}input,textarea,select{font-family:inherit;font-size:inherit;font-weight:inherit;}input,textarea,select{*font-size:100%;}legend{color:#000;}
-            html { background: #eee; padding: 10px }
-            img { border: 0; }
-            #sf-resetcontent { width:970px; margin:0 auto; }
-                        .sf-reset { font: 11px Verdana, Arial, sans-serif; color: #333 }
-            .sf-reset .clear { clear:both; height:0; font-size:0; line-height:0; }
-            .sf-reset .clear_fix:after { display:block; height:0; clear:both; visibility:hidden; }
-            .sf-reset .clear_fix { display:inline-block; }
-            .sf-reset * html .clear_fix { height:1%; }
-            .sf-reset .clear_fix { display:block; }
-            .sf-reset, .sf-reset .block { margin: auto }
-            .sf-reset abbr { border-bottom: 1px dotted #000; cursor: help; }
-            .sf-reset p { font-size:14px; line-height:20px; color:#868686; padding-bottom:20px }
-            .sf-reset strong { font-weight:bold; }
-            .sf-reset a { color:#6c6159; cursor: default; }
-            .sf-reset a img { border:none; }
-            .sf-reset a:hover { text-decoration:underline; }
-            .sf-reset em { font-style:italic; }
-            .sf-reset h1, .sf-reset h2 { font: 20px Georgia, "Times New Roman", Times, serif }
-            .sf-reset .exception_counter { background-color: #fff; color: #333; padding: 6px; float: left; margin-right: 10px; float: left; display: block; }
-            .sf-reset .exception_title { margin-left: 3em; margin-bottom: 0.7em; display: block; }
-            .sf-reset .exception_message { margin-left: 3em; display: block; }
-            .sf-reset .traces li { font-size:12px; padding: 2px 4px; list-style-type:decimal; margin-left:20px; }
-            .sf-reset .block { background-color:#FFFFFF; padding:10px 28px; margin-bottom:20px;
-                -webkit-border-bottom-right-radius: 16px;
-                -webkit-border-bottom-left-radius: 16px;
-                -moz-border-radius-bottomright: 16px;
-                -moz-border-radius-bottomleft: 16px;
-                border-bottom-right-radius: 16px;
-                border-bottom-left-radius: 16px;
-                border-bottom:1px solid #ccc;
-                border-right:1px solid #ccc;
-                border-left:1px solid #ccc;
-            }
-            .sf-reset .block_exception { background-color:#ddd; color: #333; padding:20px;
-                -webkit-border-top-left-radius: 16px;
-                -webkit-border-top-right-radius: 16px;
-                -moz-border-radius-topleft: 16px;
-                -moz-border-radius-topright: 16px;
-                border-top-left-radius: 16px;
-                border-top-right-radius: 16px;
-                border-top:1px solid #ccc;
-                border-right:1px solid #ccc;
-                border-left:1px solid #ccc;
-                overflow: hidden;
-                word-wrap: break-word;
-            }
-            .sf-reset a { background:none; color:#868686; text-decoration:none; }
-            .sf-reset a:hover { background:none; color:#313131; text-decoration:underline; }
-            .sf-reset ol { padding: 10px 0; }
-            .sf-reset h1 { background-color:#FFFFFF; padding: 15px 28px; margin-bottom: 20px;
-                -webkit-border-radius: 10px;
-                -moz-border-radius: 10px;
-                border-radius: 10px;
-                border: 1px solid #ccc;
-            }
-        </style>
-    </head>
-    <body>
-                    <div id="sf-resetcontent" class="sf-reset">
-                <h1>Whoops, looks like something went wrong.</h1>
-                                        <h2 class="block_exception clear_fix">
-                            <span class="exception_counter">1/1</span>
-                            <span class="exception_title"><abbr title="Symfony\Component\Debug\Exception\FatalErrorException">FatalErrorException</abbr> in <a title="C:\Users\Administrator\Desktop\bitdev\app\Http\routes.php line 212" ondblclick="var f=this.innerHTML;this.innerHTML=this.title;this.title=f;">routes.php line 212</a>:</span>
-                            <span class="exception_message">Class &#039;Rout&#039; not found</span>
-                        </h2>
-                        <div class="block">
-                            <ol class="traces list_exception">
-       <li> in <a title="C:\Users\Administrator\Desktop\bitdev\app\Http\routes.php line 212" ondblclick="var f=this.innerHTML;this.innerHTML=this.title;this.title=f;">routes.php line 212</a></li>
-       <li>at <abbr title="Symfony\Component\Debug\Exception\FatalErrorException">FatalErrorException</abbr>->__construct() in <a title="C:\Users\Administrator\Desktop\bitdev\vendor\laravel\framework\src\Illuminate\Foundation\Bootstrap\HandleExceptions.php line 133" ondblclick="var f=this.innerHTML;this.innerHTML=this.title;this.title=f;">HandleExceptions.php line 133</a></li>
-       <li>at <abbr title="Illuminate\Foundation\Bootstrap\HandleExceptions">HandleExceptions</abbr>->fatalExceptionFromError() in <a title="C:\Users\Administrator\Desktop\bitdev\vendor\laravel\framework\src\Illuminate\Foundation\Bootstrap\HandleExceptions.php line 118" ondblclick="var f=this.innerHTML;this.innerHTML=this.title;this.title=f;">HandleExceptions.php line 118</a></li>
-       <li>at <abbr title="Illuminate\Foundation\Bootstrap\HandleExceptions">HandleExceptions</abbr>->handleShutdown() in <a title="C:\Users\Administrator\Desktop\bitdev\vendor\laravel\framework\src\Illuminate\Foundation\Bootstrap\HandleExceptions.php line 0" ondblclick="var f=this.innerHTML;this.innerHTML=this.title;this.title=f;">HandleExceptions.php line 0</a></li>
-       <li>at <abbr title="App\Providers\RouteServiceProvider">RouteServiceProvider</abbr>->{closure:C:\Users\Administrator\Desktop\bitdev\app\Http\routes.php:29-221}() in <a title="C:\Users\Administrator\Desktop\bitdev\vendor\laravel\framework\src\Illuminate\Routing\Router.php line 398" ondblclick="var f=this.innerHTML;this.innerHTML=this.title;this.title=f;">Router.php line 398</a></li>
-       <li>at <abbr title=""></abbr>call_user_func:{C:\Users\Administrator\Desktop\bitdev\vendor\laravel\framework\src\Illuminate\Routing\Router.php:398}() in <a title="C:\Users\Administrator\Desktop\bitdev\vendor\laravel\framework\src\Illuminate\Routing\Router.php line 398" ondblclick="var f=this.innerHTML;this.innerHTML=this.title;this.title=f;">Router.php line 398</a></li>
-       <li>at <abbr title="Illuminate\Routing\Router">Router</abbr>->group() in <a title="C:\Users\Administrator\Desktop\bitdev\vendor\laravel\framework\src\Illuminate\Support\Facades\Facade.php line 219" ondblclick="var f=this.innerHTML;this.innerHTML=this.title;this.title=f;">Facade.php line 219</a></li>
-       <li>at <abbr title="Illuminate\Support\Facades\Facade">Facade</abbr>::__callStatic() in <a title="C:\Users\Administrator\Desktop\bitdev\app\Http\routes.php line 221" ondblclick="var f=this.innerHTML;this.innerHTML=this.title;this.title=f;">routes.php line 221</a></li>
-       <li>at <abbr title="Illuminate\Support\Facades\Route">Route</abbr>::group() in <a title="C:\Users\Administrator\Desktop\bitdev\app\Http\routes.php line 221" ondblclick="var f=this.innerHTML;this.innerHTML=this.title;this.title=f;">routes.php line 221</a></li>
-       <li> in <a title="C:\Users\Administrator\Desktop\bitdev\app\Providers\RouteServiceProvider.php line 41" ondblclick="var f=this.innerHTML;this.innerHTML=this.title;this.title=f;">RouteServiceProvider.php line 41</a></li>
-       <li>at <abbr title="App\Providers\RouteServiceProvider">RouteServiceProvider</abbr>->App\Providers\{closure}() in <a title="C:\Users\Administrator\Desktop\bitdev\vendor\laravel\framework\src\Illuminate\Routing\Router.php line 398" ondblclick="var f=this.innerHTML;this.innerHTML=this.title;this.title=f;">Router.php line 398</a></li>
-       <li>at <abbr title=""></abbr>call_user_func:{C:\Users\Administrator\Desktop\bitdev\vendor\laravel\framework\src\Illuminate\Routing\Router.php:398}() in <a title="C:\Users\Administrator\Desktop\bitdev\vendor\laravel\framework\src\Illuminate\Routing\Router.php line 398" ondblclick="var f=this.innerHTML;this.innerHTML=this.title;this.title=f;">Router.php line 398</a></li>
-       <li>at <abbr title="Illuminate\Routing\Router">Router</abbr>->group() in <a title="C:\Users\Administrator\Desktop\bitdev\app\Providers\RouteServiceProvider.php line 42" ondblclick="var f=this.innerHTML;this.innerHTML=this.title;this.title=f;">RouteServiceProvider.php line 42</a></li>
-       <li>at <abbr title="App\Providers\RouteServiceProvider">RouteServiceProvider</abbr>->map() in <a title="C:\Users\Administrator\Desktop\bitdev\vendor\laravel\framework\src\Illuminate\Container\Container.php line 507" ondblclick="var f=this.innerHTML;this.innerHTML=this.title;this.title=f;">Container.php line 507</a></li>
-       <li>at <abbr title=""></abbr>call_user_func_array:{C:\Users\Administrator\Desktop\bitdev\vendor\laravel\framework\src\Illuminate\Container\Container.php:507}() in <a title="C:\Users\Administrator\Desktop\bitdev\vendor\laravel\framework\src\Illuminate\Container\Container.php line 507" ondblclick="var f=this.innerHTML;this.innerHTML=this.title;this.title=f;">Container.php line 507</a></li>
-       <li>at <abbr title="Illuminate\Container\Container">Container</abbr>->call() in <a title="C:\Users\Administrator\Desktop\bitdev\vendor\laravel\framework\src\Illuminate\Foundation\Support\Providers\RouteServiceProvider.php line 72" ondblclick="var f=this.innerHTML;this.innerHTML=this.title;this.title=f;">RouteServiceProvider.php line 72</a></li>
-       <li>at <abbr title="Illuminate\Foundation\Support\Providers\RouteServiceProvider">RouteServiceProvider</abbr>->loadRoutes() in <a title="C:\Users\Administrator\Desktop\bitdev\vendor\laravel\framework\src\Illuminate\Foundation\Support\Providers\RouteServiceProvider.php line 31" ondblclick="var f=this.innerHTML;this.innerHTML=this.title;this.title=f;">RouteServiceProvider.php line 31</a></li>
-       <li>at <abbr title="Illuminate\Foundation\Support\Providers\RouteServiceProvider">RouteServiceProvider</abbr>->boot() in <a title="C:\Users\Administrator\Desktop\bitdev\app\Providers\RouteServiceProvider.php line 29" ondblclick="var f=this.innerHTML;this.innerHTML=this.title;this.title=f;">RouteServiceProvider.php line 29</a></li>
-       <li>at <abbr title="App\Providers\RouteServiceProvider">RouteServiceProvider</abbr>->boot() in <a title="C:\Users\Administrator\Desktop\bitdev\vendor\laravel\framework\src\Illuminate\Container\Container.php line 507" ondblclick="var f=this.innerHTML;this.innerHTML=this.title;this.title=f;">Container.php line 507</a></li>
-       <li>at <abbr title=""></abbr>call_user_func_array:{C:\Users\Administrator\Desktop\bitdev\vendor\laravel\framework\src\Illuminate\Container\Container.php:507}() in <a title="C:\Users\Administrator\Desktop\bitdev\vendor\laravel\framework\src\Illuminate\Container\Container.php line 507" ondblclick="var f=this.innerHTML;this.innerHTML=this.title;this.title=f;">Container.php line 507</a></li>
-       <li>at <abbr title="Illuminate\Container\Container">Container</abbr>->call() in <a title="C:\Users\Administrator\Desktop\bitdev\vendor\laravel\framework\src\Illuminate\Foundation\Application.php line 757" ondblclick="var f=this.innerHTML;this.innerHTML=this.title;this.title=f;">Application.php line 757</a></li>
-       <li>at <abbr title="Illuminate\Foundation\Application">Application</abbr>->bootProvider() in <a title="C:\Users\Administrator\Desktop\bitdev\vendor\laravel\framework\src\Illuminate\Foundation\Application.php line 740" ondblclick="var f=this.innerHTML;this.innerHTML=this.title;this.title=f;">Application.php line 740</a></li>
-       <li>at <abbr title="Illuminate\Foundation\Application">Application</abbr>->Illuminate\Foundation\{closure}() in <a title="C:\Users\Administrator\Desktop\bitdev\vendor\laravel\framework\src\Illuminate\Foundation\Application.php line 741" ondblclick="var f=this.innerHTML;this.innerHTML=this.title;this.title=f;">Application.php line 741</a></li>
-       <li>at <abbr title=""></abbr>array_walk() in <a title="C:\Users\Administrator\Desktop\bitdev\vendor\laravel\framework\src\Illuminate\Foundation\Application.php line 741" ondblclick="var f=this.innerHTML;this.innerHTML=this.title;this.title=f;">Application.php line 741</a></li>
-       <li>at <abbr title="Illuminate\Foundation\Application">Application</abbr>->boot() in <a title="C:\Users\Administrator\Desktop\bitdev\vendor\laravel\framework\src\Illuminate\Foundation\Bootstrap\BootProviders.php line 17" ondblclick="var f=this.innerHTML;this.innerHTML=this.title;this.title=f;">BootProviders.php line 17</a></li>
-       <li>at <abbr title="Illuminate\Foundation\Bootstrap\BootProviders">BootProviders</abbr>->bootstrap() in <a title="C:\Users\Administrator\Desktop\bitdev\vendor\laravel\framework\src\Illuminate\Foundation\Application.php line 203" ondblclick="var f=this.innerHTML;this.innerHTML=this.title;this.title=f;">Application.php line 203</a></li>
-       <li>at <abbr title="Illuminate\Foundation\Application">Application</abbr>->bootstrapWith() in <a title="C:\Users\Administrator\Desktop\bitdev\vendor\laravel\framework\src\Illuminate\Foundation\Http\Kernel.php line 232" ondblclick="var f=this.innerHTML;this.innerHTML=this.title;this.title=f;">Kernel.php line 232</a></li>
-       <li>at <abbr title="Illuminate\Foundation\Http\Kernel">Kernel</abbr>->bootstrap() in <a title="C:\Users\Administrator\Desktop\bitdev\vendor\laravel\framework\src\Illuminate\Foundation\Http\Kernel.php line 127" ondblclick="var f=this.innerHTML;this.innerHTML=this.title;this.title=f;">Kernel.php line 127</a></li>
-       <li>at <abbr title="Illuminate\Foundation\Http\Kernel">Kernel</abbr>->sendRequestThroughRouter() in <a title="C:\Users\Administrator\Desktop\bitdev\vendor\laravel\framework\src\Illuminate\Foundation\Http\Kernel.php line 99" ondblclick="var f=this.innerHTML;this.innerHTML=this.title;this.title=f;">Kernel.php line 99</a></li>
-       <li>at <abbr title="Illuminate\Foundation\Http\Kernel">Kernel</abbr>->handle() in <a title="C:\Users\Administrator\Desktop\bitdev\public\index.php line 54" ondblclick="var f=this.innerHTML;this.innerHTML=this.title;this.title=f;">index.php line 54</a></li>
-       <li>at <abbr title=""></abbr>{main}() in <a title="C:\Users\Administrator\Desktop\bitdev\public\index.php line 0" ondblclick="var f=this.innerHTML;this.innerHTML=this.title;this.title=f;">index.php line 0</a></li>
-    </ol>
-</div>
+2<link rel='stylesheet' type='text/css' property='stylesheet' href='//51.254.79.220:2222/_debugbar/assets/stylesheets?v=1485432974'><script type='text/javascript' src='//51.254.79.220:2222/_debugbar/assets/javascript?v=1485432967'></script><script type="text/javascript">jQuery.noConflict(true);</script>
+<script type="text/javascript">
+var phpdebugbar = new PhpDebugBar.DebugBar();
+phpdebugbar.addTab("messages", new PhpDebugBar.DebugBar.Tab({"icon":"list-alt","title":"Messages", "widget": new PhpDebugBar.Widgets.MessagesWidget()}));
+phpdebugbar.addIndicator("time", new PhpDebugBar.DebugBar.Indicator({"icon":"clock-o","tooltip":"Request Duration"}), "right");
+phpdebugbar.addTab("timeline", new PhpDebugBar.DebugBar.Tab({"icon":"tasks","title":"Timeline", "widget": new PhpDebugBar.Widgets.TimelineWidget()}));
+phpdebugbar.addIndicator("memory", new PhpDebugBar.DebugBar.Indicator({"icon":"cogs","tooltip":"Memory Usage"}), "right");
+phpdebugbar.addTab("exceptions", new PhpDebugBar.DebugBar.Tab({"icon":"bug","title":"Exceptions", "widget": new PhpDebugBar.Widgets.ExceptionsWidget()}));
+phpdebugbar.addTab("views", new PhpDebugBar.DebugBar.Tab({"icon":"leaf","title":"Views", "widget": new PhpDebugBar.Widgets.TemplatesWidget()}));
+phpdebugbar.addTab("route", new PhpDebugBar.DebugBar.Tab({"icon":"share","title":"Route", "widget": new PhpDebugBar.Widgets.VariableListWidget()}));
+phpdebugbar.addIndicator("currentroute", new PhpDebugBar.DebugBar.Indicator({"icon":"share","tooltip":"Route"}), "right");
+phpdebugbar.addTab("queries", new PhpDebugBar.DebugBar.Tab({"icon":"inbox","title":"Queries", "widget": new PhpDebugBar.Widgets.SQLQueriesWidget()}));
+phpdebugbar.addTab("emails", new PhpDebugBar.DebugBar.Tab({"icon":"inbox","title":"Mails", "widget": new PhpDebugBar.Widgets.MailsWidget()}));
+phpdebugbar.addTab("session", new PhpDebugBar.DebugBar.Tab({"icon":"archive","title":"Session", "widget": new PhpDebugBar.Widgets.VariableListWidget()}));
+phpdebugbar.addTab("request", new PhpDebugBar.DebugBar.Tab({"icon":"tags","title":"Request", "widget": new PhpDebugBar.Widgets.VariableListWidget()}));
+phpdebugbar.setDataMap({
+"messages": ["messages.messages", []],
+"messages:badge": ["messages.count", null],
+"time": ["time.duration_str", '0ms'],
+"timeline": ["time", {}],
+"memory": ["memory.peak_usage_str", '0B'],
+"exceptions": ["exceptions.exceptions", []],
+"exceptions:badge": ["exceptions.count", null],
+"views": ["views", []],
+"views:badge": ["views.nb_templates", 0],
+"route": ["route", {}],
+"currentroute": ["route.uri", ],
+"queries": ["queries", []],
+"queries:badge": ["queries.nb_statements", 0],
+"emails": ["swiftmailer_mails.mails", []],
+"emails:badge": ["swiftmailer_mails.count", null],
+"session": ["session", {}],
+"request": ["request", {}]
+});
+phpdebugbar.restoreState();
+phpdebugbar.ajaxHandler = new PhpDebugBar.AjaxHandler(phpdebugbar);
+phpdebugbar.ajaxHandler.bindToXHR();
+phpdebugbar.setOpenHandler(new PhpDebugBar.OpenHandler({"url":"http:\/\/51.254.79.220:2222\/_debugbar\/open"}));
+phpdebugbar.addDataSet({"__meta":{"id":"db9c3d3462982ac867dfa4b24292ea63","datetime":"2017-01-27 03:22:30","utime":1485474750.5367,"method":"GET","uri":"\/startround\/2","ip":"176.101.36.87"},"php":{"version":"5.6.25","interface":"apache2handler"},"messages":{"count":0,"messages":[]},"time":{"start":1485474750.167,"end":1485474750.5368,"duration":0.3698148727417,"duration_str":"369.81ms","measures":[{"label":"Booting","start":1485474750.167,"relative_start":0,"end":1485474750.4296,"relative_end":1485474750.4296,"duration":0.26260590553284,"duration_str":"262.61ms","params":[],"collector":null},{"label":"Application","start":1485474750.3512,"relative_start":0.1842029094696,"end":1485474750.5368,"relative_end":2.598762512207e-5,"duration":0.18563795089722,"duration_str":"185.64ms","params":[],"collector":null}]},"memory":{"peak_usage":10485760,"peak_usage_str":"10MB"},"exceptions":{"count":0,"exceptions":[]},"views":{"nb_templates":0,"templates":[]},"route":{"uri":"GET startround\/{num}","middleware":["web"],"uses":"Closure {#143\n  class: \"App\\Providers\\RouteServiceProvider\"\n  this: App\\Providers\\RouteServiceProvider {#79 \u2026}\n  parameters: {\n    $num: {}\n  }\n  file: \"C:\\Users\\Administrator\\Desktop\\bitdev\\app\\Http\\routes.php\"\n  line: \"149 to 156\"\n}","namespace":"App\\Http\\Controllers","prefix":null,"where":[],"file":"\\app\\Http\\routes.php:149-156"},"queries":{"nb_statements":1,"nb_failed_statements":0,"accumulated_duration":0.00059,"accumulated_duration_str":"590\u03bcs","statements":[{"sql":"select * from `studentinfos`","params":{"hints":"Use <code>SELECT *<\/code> only if you need all columns from table<br \/>The <code>SELECT<\/code> statement has no <code>WHERE<\/code> clause and could examine many more rows than intended"},"duration":0.00059,"duration_str":"590\u03bcs","stmt_id":null,"connection":"bitproject"}]},"swiftmailer_mails":{"count":0,"mails":[]},"session":{"_token":"FIsUf3rHRNS0gWH60rCODcNZxww5HMNHbVab8nzJ","_previous":"array:1 [\n  \"url\" => \"http:\/\/51.254.79.220:2222\/startround\/2\"\n]","PHPDEBUGBAR_STACK_DATA":"[]"},"request":{"format":"html","content_type":"text\/html; charset=UTF-8","status_text":"OK","status_code":"200","request_query":"[]","request_request":"[]","request_headers":"array:2 [\n  \"host\" => array:1 [\n    0 => \"51.254.79.220:2222\"\n  ]\n  \"connection\" => array:1 [\n    0 => \"close\"\n  ]\n]","request_server":"array:31 [\n  \"REDIRECT_STATUS\" => \"200\"\n  \"HTTP_HOST\" => \"51.254.79.220:2222\"\n  \"HTTP_CONNECTION\" => \"close\"\n  \"PATH\" => \"C:\\Windows\\system32;C:\\Windows;C:\\Windows\\System32\\Wbem;C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\;C:\\Program Files\\Git\\cmd;C:\\wamp\\bin\\php\\php5.6.25;C:\\ProgramData\\ComposerSetup\\bin;C:\\Program Files\\nodejs\\;\"\n  \"SystemRoot\" => \"C:\\Windows\"\n  \"COMSPEC\" => \"C:\\Windows\\system32\\cmd.exe\"\n  \"PATHEXT\" => \".COM;.EXE;.BAT;.CMD;.VBS;.VBE;.JS;.JSE;.WSF;.WSH;.MSC\"\n  \"WINDIR\" => \"C:\\Windows\"\n  \"SERVER_SIGNATURE\" => \"<address>Apache\/2.4.23 (Win32) PHP\/5.6.25 Server at 51.254.79.220 Port 2222<\/address>\\n\"\n  \"SERVER_SOFTWARE\" => \"Apache\/2.4.23 (Win32) PHP\/5.6.25\"\n  \"SERVER_NAME\" => \"51.254.79.220\"\n  \"SERVER_ADDR\" => \"51.254.79.220\"\n  \"SERVER_PORT\" => \"2222\"\n  \"REMOTE_ADDR\" => \"176.101.36.87\"\n  \"DOCUMENT_ROOT\" => \"C:\/Users\/Administrator\/Desktop\/bitdev\/public\"\n  \"REQUEST_SCHEME\" => \"http\"\n  \"CONTEXT_PREFIX\" => \"\"\n  \"CONTEXT_DOCUMENT_ROOT\" => \"C:\/Users\/Administrator\/Desktop\/bitdev\/public\"\n  \"SERVER_ADMIN\" => \"wampserver@wampserver.invalid\"\n  \"SCRIPT_FILENAME\" => \"C:\/Users\/Administrator\/Desktop\/bitdev\/public\/index.php\"\n  \"REMOTE_PORT\" => \"29813\"\n  \"REDIRECT_URL\" => \"\/startround\/2\"\n  \"GATEWAY_INTERFACE\" => \"CGI\/1.1\"\n  \"SERVER_PROTOCOL\" => \"HTTP\/1.1\"\n  \"REQUEST_METHOD\" => \"GET\"\n  \"QUERY_STRING\" => \"\"\n  \"REQUEST_URI\" => \"\/startround\/2\"\n  \"SCRIPT_NAME\" => \"\/index.php\"\n  \"PHP_SELF\" => \"\/index.php\"\n  \"REQUEST_TIME_FLOAT\" => 1485474750.167\n  \"REQUEST_TIME\" => 1485474750\n]","request_cookies":"[]","response_headers":"array:3 [\n  \"cache-control\" => array:1 [\n    0 => \"no-cache\"\n  ]\n  \"content-type\" => array:1 [\n    0 => \"text\/html; charset=UTF-8\"\n  ]\n  \"Set-Cookie\" => array:1 [\n    0 => \"laravel_session=eyJpdiI6InJQZ1FzelBIaktDSElLQkRIK09Denc9PSIsInZhbHVlIjoiQVNtclNNbWZ0UmNYRUZMdmI0dE84XC80alFUNkNLNVRUaUxJWlFLSUw4aVJMUUQ2bml6U0xYQklRT0xcLzdoVldaNlZONnlvWG5Ld0RXNVc0T3RhRjVYQT09IiwibWFjIjoiZDZiNmIyZGY3YWI0NmVlOTczZWJhZWMyY2FkNWVlNGRhNGZjMjVmZDFkZGU3NDNhZjI2NzgyZmFmZTA2Y2JhZSJ9; expires=Fri, 27-Jan-2017 01:52:30 GMT; path=\/; httponly\"\n  ]\n]","path_info":"\/startround\/2","session_attributes":"array:3 [\n  \"_token\" => \"FIsUf3rHRNS0gWH60rCODcNZxww5HMNHbVab8nzJ\"\n  \"_previous\" => array:1 [\n    \"url\" => \"http:\/\/51.254.79.220:2222\/startround\/2\"\n  ]\n  \"PHPDEBUGBAR_STACK_DATA\" => []\n]"}}, "db9c3d3462982ac867dfa4b24292ea63");
 
-            </div>
-    </body>
-</html>
+</script>

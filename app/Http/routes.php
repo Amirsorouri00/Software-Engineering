@@ -55,8 +55,8 @@ Route::group(['middleware' => ['web']], function () {
 
     Route::post('volunteerResult', 'api@volunteerResult');
 
-    Route::post('posttest',function(){
-       return 'amirposttest';
+    Route::post('posttest', function () {
+        return 'amirposttest';
     });
     //Route::get('/client', ['stdID' => 'stdID']);
     Route::get('/client/{stdID}', ['as' => 'client', function (Request $request, $stdID) {
@@ -109,7 +109,7 @@ Route::group(['middleware' => ['web']], function () {
         return 1;
     });
     Route::get('template', function () {
-        return view('main')->with(['err'=>'sfsdfsdfsf']);
+        return view('main')->with(['err' => 'sfsdfsdfsf']);
     });
 
     Route::post('Ajtest', function (Request $req) {
@@ -141,8 +141,8 @@ Route::group(['middleware' => ['web']], function () {
     });
     Route::get('startcycling', function () {
 
-return 2;
-       //Event::fire(new \App\Events\startCycling());
+        return 2;
+        //Event::fire(new \App\Events\startCycling());
 
 
     });
@@ -169,13 +169,11 @@ return 2;
 
         $redis = Redis::connection();
         $redis->publish('goToquestionpart', 'MetR2I7');
-  
 
-  
 
-$redis = Redis::connection();
-$zaman= Carbon::now();
-Redis::set('lastroundtime',$zaman);
+        $redis = Redis::connection();
+        $zaman = Carbon::now();
+        Redis::set('lastroundtime', $zaman);
 
         return dd($zaman);
     });
@@ -183,11 +181,11 @@ Redis::set('lastroundtime',$zaman);
     Route::post('telegraRange', function (Request $request) {
 
         $reqdecode = $request->json();
-        $studentnumber= $reqdecode->all()['username'];
-        $userid = \App\Classindividual::all()->where('personalID',$studentnumber);
+        $studentnumber = $reqdecode->all()['username'];
+        $userid = \App\Classindividual::all()->where('personalID', $studentnumber);
         $user = \App\Studentinfo::all()->where('participantID', $userid);
-        $user->gradeH =  $reqdecode->all()['range']['max'];
-        $user->gradeL =$reqdecode->all()['range']['min'];//31523
+        $user->gradeH = $reqdecode->all()['range']['max'];
+        $user->gradeL = $reqdecode->all()['range']['min'];//31523
         $user->save();
 
         $allusersRound = \App\Studentinfo::all()->where('roundnumber', $reqdecode->all()['round_number']);
@@ -204,14 +202,100 @@ Redis::set('lastroundtime',$zaman);
         //Todo save and cheack
 
     });
-    Route::get('splash',function()
-    {
+    Route::get('splash', function () {
         return view('splash');
     });
     Route::auth();
-    Route::get('cheackSet',function(){
+    Route::get('parttest', function () {
+
+        $jsond = '{
+  "data": {
+    "basketsArray": [
+      {
+        "basket": {
+          "basketID" : 2,
+          "examID" : 8,
+          "questionerID" : 9330033,
+          "qPlatform" : "web",
+          "responderedID" : 9323613,
+          "rPlatform" : "web",
+          "basketScore" : 2
+
+        }
+      },
+      {
+        "basket": {
+          "basketID" : 2,
+          "examID" : 8,
+          "questionerID" : 9334433,
+          "qPlatform" : "telegram",
+          "responderedID" : 9323620,
+          "rPlatform" : "web",
+          "basketScore" : 2
+        }
+      },
+      {
+        "basket": {
+          "basketID" : 2,
+          "examID" : 8,
+          "questionerID" : 9334440,
+          "qPlatform" : "web",
+          "responderedID" : 9323622,
+          "rPlatform" : "telegram",
+          "basketScore" : 2
+        }
+      }
+    ]
+  },
+  "ticket": "volunteerRespondUserTicket"
+}';
+//        $client = new Client();
+//        $response = $client->request('POST','http://172.17.10.252:2000/getPartBaskets', [
+//            'json' =>  [$jsond]
+//        ]);
+        try {
+            $client = new Client();
+            $response = $client->request('POST', 'http://172.17.10.252:2000/getPartBaskets', [
+                'json' => [json_decode($jsond)]
+            ]);
+        } catch (Exception $e) {
+
+        }
+
+        // $client = new Client();
+
+//        $client = new Client([
+//            // Base URI is used with relative requests
+//            'base_uri' => 'http://httpbin.org',
+//            // You can set any number of default request options.
+//            'timeout' => 2.0,
+//        ]);
+//
+//  $response = $client->post('http://172.17.10.252:2000/getPartBaskets', [
+//            'json' => [$jsond]
+//        ]);
+
+        //$response = $client->get('http://172.17.10.252:2000/getPartBaskets');
+
+//        $request = $client->post('http://172.17.10.252:2000/getPartBaskets', array(
+//            'content-type' => 'application/json'
+//        ), array());
+//        $request->setBody($jsond); #set body!
+//        $response = $request->send();
+//        return $response;
+
+
+        //  $res=   $client->request('POST', '/dfg', ['json' => [$jsond]]);
+
+
+        return $response->getHeader();
+    });
+    Route::post('dfg', function (Request $request) {
+        return $request;
+    });
+    Route::get('cheackSet', function () {
         $r = Redis::connection();
- $l = collect();
+        $l = collect();
         $l->put('roundnumber', 1);
         $l->put('time', 0);
         $r->sadd('round', json_encode($l));

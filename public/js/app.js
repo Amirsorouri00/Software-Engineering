@@ -59,7 +59,7 @@
 	var sss = 12;
 	var interval
 	var app5 = new Vue({
-	    el: '#app-5',
+	    el: '#app2',
 	    data: {
 	        message: 'not defind',
 	        timeR: 10,

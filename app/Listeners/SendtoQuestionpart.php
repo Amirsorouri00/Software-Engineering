@@ -13,47 +13,39 @@ class SendtoQuestionpart
      */
     public function startRound($event) {
 
-     //   dd($event->list);
-    $client = new Client();
+        //   dd($event->list);
+        $client = new Client();
 
-    foreach ($event->list as $sabad) {
+        foreach ($event->list as $sabad) {
 
-$response = $client->post('http://bit.com:8585/posttest', [
-            'json' => ['foo' => 'bar']
-        ]);
-    }
+            $response = $client->post('http://bit.com:8585/posttest', [
+                'json' => ['foo' => 'bar']
+            ]);
+        }
         # code...
     }
-/*
-        $response = $client->post('http://bit.com:8585/posttest', [
-            'json' => ['foo' => 'bar']
-        ]);
-  */
+    /*
+            $response = $client->post('http://bit.com:8585/posttest', [
+                'json' => ['foo' => 'bar']
+            ]);
+      */
 
 
-       // dd($response);
-        /*
-        $redis = Redis::connection();
-        Redis::set('name', 'Taylor');
+    // dd($response);
+    /*
+    $redis = Redis::connection();
+    Redis::set('name', 'Taylor');
 
-        $redis->set('asd','dsfs');
-        //  $redis->publish('message2', "sdfsdf");
-        $redis->publish('message',"startRound");
+    $redis->set('asd','dsfs');
+    //  $redis->publish('message2', "sdfsdf");
+    $redis->publish('message',"startRound");
 */
-    }
+
 
     /**
      * Handle volunteer part in send to question part.
      */
-    public function handelvolunteer($event) {
-
-        /*$redis = Redis::connection();
-        Redis::set('name', 'Taylor');
-
-        $redis->set('asd','dsfs');
-        //  $redis->publish('message2', "sdfsdf");
-        $redis->publish('message',"handelvolunteer");
-*/
+    function handelvolunteer($event) {
 
 
     }
@@ -63,7 +55,7 @@ $response = $client->post('http://bit.com:8585/posttest', [
      *
      * @param  Illuminate\Events\Dispatcher  $events
      */
-    public function subscribe($events)
+    function subscribe($events)
     {
         $events->listen(
             'App\Events\Cycling',
@@ -76,7 +68,7 @@ $response = $client->post('http://bit.com:8585/posttest', [
         );
 
         $events->listen('App\Events\socketio',
-        'App\Listeners\eventlistener@handle');
+            'App\Listeners\eventlistener@handle');
     }
 
 }

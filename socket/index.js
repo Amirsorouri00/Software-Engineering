@@ -26,7 +26,7 @@ setInterval(function () {
 
     redisround.get('lastroundtime')
     lasttime = ''
-    console.log('hi')
+   // console.log('hi')
     redisround.get('lastroundtime', function (err, reply) {
 
 
@@ -38,7 +38,7 @@ setInterval(function () {
             else {
                 redisround.del('lastroundtime')
                 request('http://51.254.79.220:2222/startcycling/', function (error, response, body) {
-                    console.log(error); // console.log(error)
+                  //  console.log(error); // console.log(error)
                     if (error) {
                         // Show the HTML for the Modulus homepage.
                     }
@@ -85,29 +85,29 @@ setInterval(function () {
     console.log('sdfdfsf')
     redisround.smembers('round', function (err, reply) {
         for (var i in reply) {
-            console.log(reply)
+           // console.log(reply)
             var obj = JSON.parse(reply[i]);
-console.log(obj['time'])
+//console.log(obj['time'])
 
             if (obj['time'] < 200) {
                 redisround.srem('round',JSON.stringify(obj))
                 obj['time'] = obj['time'] + 1
                 redisround.sadd('round', JSON.stringify(obj));
-                console.log(obj['time'])
+               // console.log(obj['time'])
             }
             else {
                 redisround.srem('round',JSON.stringify(obj))
                 
                 request('http://51.254.79.220:2222/startround/'+obj['roundnumber'], function (error, response, body) {
-                    console.log(error); // console.log(error)
+                   // console.log(error); // console.log(error)
                     if (error) {
                         // Show the HTML for the Modulus homepage.
                     }
                     else {
 
                     }
-                    write(body)
-                });*/
+                  //  write(body)
+                });
 
             }
         }
