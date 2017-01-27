@@ -69,7 +69,7 @@
 	        startroundtime: 0,
 	        cansend: true,
 	        errormessage: '',
-	        studentid: ''
+	        studentid: document.getElementById('userid').textContent
 	    },
 	    watch: {
 	        num1: {
@@ -123,7 +123,7 @@
 	        }
 	    },
 	    methods: {
-	        sendtest:function(){
+	        sendtest: function () {
 	
 	            this.$http.get('http://www.google.com').then(function (s) {
 	                console.log('OKKKKKKKKKKK')
@@ -150,7 +150,7 @@
 	                this.num1 = 0
 	            }
 	            else if (!this.num2) {
-	                this.num2 = 0;
+	                this.num2 = 20;
 	            }
 	            console.log(this.num1)
 	            this.gameover();
@@ -220,7 +220,7 @@
 	})
 	
 	//var c = io.connect('http://localhost:158', {query: "username=" + "{{ Auth::user()->name}}"});
-	var c = io.connect('http://localhost:0158', {query: "username=" + "MetR2I7"});
+	var c = io.connect('http://localhost:0158', {query: "username=" + app5.$data.studentid });
 	//var socket = io.connect('http://localhost:0158');
 	
 	c.on('updateroundnumber', function (data) {
@@ -232,16 +232,30 @@
 	});
 	c.on('setstartroundtime', function (data) {
 	
-	    app5.$data.startroundtime = data;
+	    app5.$data.timeR = data;
 	
 	})
 	c.on('gotoquestionpart', function (data) {
 	    console.log('heeeeeeeeeeeeeee')
 	    var sendv = new Vue();
 	    //  window.location = "http://www.google.com";
-	   app5.sendtest();
+	    app5.sendtest();
 	
 	
+	})
+	c.on('redirect', function (data) {
+	
+	    if (data == 1) {
+	        window.location = "http://www.google.com";//Todo send to question part with user id
+	    }
+	
+	
+	})
+	c.on('loading', function (data) {
+	
+	    if (data == 1) {
+	        app5.gameover();
+	    }
 	})
 	c.on('showmodal', function (data) {
 	    console.log('im hear');

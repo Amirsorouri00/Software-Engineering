@@ -17,14 +17,10 @@
                                 <div class="ui blue segment">
                                     <div class="ui right aligned grid">
                                         <div class="center aligned two column row">
-                                            <div class="column right aligned">
-
-                                                Center محسن row
-
-                                            </div>
+                                            <div id="userid"  class="column right aligned">{{$userid}}</div>
                                             <div class="column left aligned">
 
-                                                Center aligned row
+
 
                                             </div>
                                         </div>

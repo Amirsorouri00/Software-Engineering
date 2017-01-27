@@ -3,6 +3,7 @@
 namespace App\Events;
 
 use App\Events\Event;
+use App\Studentinfo;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 
@@ -21,7 +22,8 @@ class prestartCycling extends Event
     public  $Rsize;
     public function __construct()
     {
-        $user = Studentinfo::all()->where('individualStatus', 0);//get free student
+        $user = Studentinfo::getFree();//get free student
+
         $this->Qsize = $user->where('QorR', 1)->count();
         $this->Rsize = $user->where('QorR', 0)->count();
 
