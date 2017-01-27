@@ -2,8 +2,8 @@
 
 @section('content')
 
-    <div id="app-5">
 
+    <div id="app2">
         <button v-on:click="Aj">Reverse Message</button>
         <div class="ui ">
             @{{ message }}

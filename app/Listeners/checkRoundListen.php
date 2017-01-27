@@ -54,7 +54,7 @@ class checkRoundListen
 
         $e = 0;
         foreach ($Qusers as $user) {
-            $personalid=$user->participants()->personalID;
+            $personalid=$user->participantID;
             $tmp = collect();
             $tmp->put('username', $personalid);
 

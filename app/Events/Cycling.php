@@ -22,12 +22,13 @@ class Cycling extends Event
 
     public $list;
     public $roundnimber;
+
     public function __construct($num)
     {
-        $this->roundnimber=$num;
-        $QRarray= $this->matchwithperiod();
-        $this->list= $this->listofbasket($QRarray);
-        return redirect('test');
+        $this->roundnimber = $num;
+        $QRarray = $this->matchwithperiod();
+        $this->list = $this->listofbasket($QRarray);
+        // return redirect('test');
     }
 
 
@@ -37,18 +38,26 @@ class Cycling extends Event
      */
     public function matchwithperiod()
     {
-        $user = Studentinfo::all()->where('individualStatus', 0)->where('roundnumber',$this->roundnimber);//get free student
-        $Qsize=$user->where('QorR', 1)->count();
+        $user = Studentinfo::all()->where('roundnumber', $this->roundnimber);//get free student
+        $Qsize = $user->where('QorR', 1)->count();
         $Rsize = $user->where('QorR', 0)->count();
 
-        if($Qsize>$Rsize)
-        {
+        if ($Qsize > $Rsize) {
             $questioner = $user->where('QorR', 1)->take($Rsize);
             $respondent = $user->where('QorR', 0)->take($Rsize);
-        }else
-        {
+        } else {
             $questioner = $user->where('QorR', 1)->take($Qsize);
             $respondent = $user->where('QorR', 0)->take($Qsize);
+        }
+        foreach ($questioner as $qr) {
+            $qr->QorR = 0;
+            $qr->save();
+
+        }
+        foreach ($respondent as $qr) {
+            $qr->QorR = 1;
+            $qr->save();
+
         }
         $questioner = $questioner->shuffle();
         $respondent = $respondent->shuffle();
@@ -77,8 +86,8 @@ class Cycling extends Event
         }
 
         foreach ($sorted as $s) {
-            $f = $q['gradeL'];
-            $c = $q['gradeH'];
+            $f = $s['gradeL'];
+            $c = $s['gradeH'];
             $min = 100;
 
             foreach ($respondent as $r) {
@@ -94,6 +103,8 @@ class Cycling extends Event
                     $resres = $r;
                 }
             }
+
+
             $resp = $respondent->pull($respondent->search($resres));
             //dd($resp);
             $temp = collect(['questioner' => $s, 'respondent' => $resp]);
@@ -109,20 +120,26 @@ class Cycling extends Event
     public function listofbasket($QRarray)
     {
 
-        $list=collect();
-        foreach($QRarray as $tem)
-        {
-            $ClassIidQ= $tem['questioner']->participantID;
-            $ClassIQ= Classindividual::where('personalID',$ClassIidQ)->first();
+        $list = collect();
+        foreach ($QRarray as $tem) {
+            $ClassIidQ = $tem['questioner']->participantID;
+            $ClassIQ = Classindividual::where('personalID', $ClassIidQ)->first();
 
             //dd($ClassIQ);
             // dd ($tem['questioner']->participants()->first());//whyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyy
             $ClassIR = $tem['respondent']->participantID;
-            $ClassIR = Classindividual::where('personalID',$ClassIR)->first();
+            $ClassIR = Classindividual::where('personalID', $ClassIR)->first();
 
             // dd($ClassIR);
             $basket = new Basket;
-            $basket->basketID=str_random(7);
+            $basket->basketID = str_random(7);
+            $basket->examID=2;
+            $basket->qPlatform=$tem['questioner']->platform;
+            $basket->rPlatform=$tem['respondent']->platform;
+            $basket->basketScore=2;
+            $basket->basketStatus='Active';
+            $basket->flag=1;
+
             $basket->save();
             $ClassIQ->Qbasket()->save($basket);
             $ClassIR->Rbasket()->save($basket);
@@ -131,7 +148,10 @@ class Cycling extends Event
         //return redirect('/test');
         return $list;
 
+
+
     }
+
     /**
      * Get the channels the event should be broadcast on.
      *

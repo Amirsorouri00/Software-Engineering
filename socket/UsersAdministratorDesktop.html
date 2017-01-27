@@ -1,0 +1,41 @@
+2<link rel='stylesheet' type='text/css' property='stylesheet' href='//51.254.79.220:2222/_debugbar/assets/stylesheets?v=1485432974'><script type='text/javascript' src='//51.254.79.220:2222/_debugbar/assets/javascript?v=1485432967'></script><script type="text/javascript">jQuery.noConflict(true);</script>
+<script type="text/javascript">
+var phpdebugbar = new PhpDebugBar.DebugBar();
+phpdebugbar.addTab("messages", new PhpDebugBar.DebugBar.Tab({"icon":"list-alt","title":"Messages", "widget": new PhpDebugBar.Widgets.MessagesWidget()}));
+phpdebugbar.addIndicator("time", new PhpDebugBar.DebugBar.Indicator({"icon":"clock-o","tooltip":"Request Duration"}), "right");
+phpdebugbar.addTab("timeline", new PhpDebugBar.DebugBar.Tab({"icon":"tasks","title":"Timeline", "widget": new PhpDebugBar.Widgets.TimelineWidget()}));
+phpdebugbar.addIndicator("memory", new PhpDebugBar.DebugBar.Indicator({"icon":"cogs","tooltip":"Memory Usage"}), "right");
+phpdebugbar.addTab("exceptions", new PhpDebugBar.DebugBar.Tab({"icon":"bug","title":"Exceptions", "widget": new PhpDebugBar.Widgets.ExceptionsWidget()}));
+phpdebugbar.addTab("views", new PhpDebugBar.DebugBar.Tab({"icon":"leaf","title":"Views", "widget": new PhpDebugBar.Widgets.TemplatesWidget()}));
+phpdebugbar.addTab("route", new PhpDebugBar.DebugBar.Tab({"icon":"share","title":"Route", "widget": new PhpDebugBar.Widgets.VariableListWidget()}));
+phpdebugbar.addIndicator("currentroute", new PhpDebugBar.DebugBar.Indicator({"icon":"share","tooltip":"Route"}), "right");
+phpdebugbar.addTab("queries", new PhpDebugBar.DebugBar.Tab({"icon":"inbox","title":"Queries", "widget": new PhpDebugBar.Widgets.SQLQueriesWidget()}));
+phpdebugbar.addTab("emails", new PhpDebugBar.DebugBar.Tab({"icon":"inbox","title":"Mails", "widget": new PhpDebugBar.Widgets.MailsWidget()}));
+phpdebugbar.addTab("session", new PhpDebugBar.DebugBar.Tab({"icon":"archive","title":"Session", "widget": new PhpDebugBar.Widgets.VariableListWidget()}));
+phpdebugbar.addTab("request", new PhpDebugBar.DebugBar.Tab({"icon":"tags","title":"Request", "widget": new PhpDebugBar.Widgets.VariableListWidget()}));
+phpdebugbar.setDataMap({
+"messages": ["messages.messages", []],
+"messages:badge": ["messages.count", null],
+"time": ["time.duration_str", '0ms'],
+"timeline": ["time", {}],
+"memory": ["memory.peak_usage_str", '0B'],
+"exceptions": ["exceptions.exceptions", []],
+"exceptions:badge": ["exceptions.count", null],
+"views": ["views", []],
+"views:badge": ["views.nb_templates", 0],
+"route": ["route", {}],
+"currentroute": ["route.uri", ],
+"queries": ["queries", []],
+"queries:badge": ["queries.nb_statements", 0],
+"emails": ["swiftmailer_mails.mails", []],
+"emails:badge": ["swiftmailer_mails.count", null],
+"session": ["session", {}],
+"request": ["request", {}]
+});
+phpdebugbar.restoreState();
+phpdebugbar.ajaxHandler = new PhpDebugBar.AjaxHandler(phpdebugbar);
+phpdebugbar.ajaxHandler.bindToXHR();
+phpdebugbar.setOpenHandler(new PhpDebugBar.OpenHandler({"url":"http:\/\/51.254.79.220:2222\/_debugbar\/open"}));
+phpdebugbar.addDataSet({"__meta":{"id":"db9c3d3462982ac867dfa4b24292ea63","datetime":"2017-01-27 03:22:30","utime":1485474750.5367,"method":"GET","uri":"\/startround\/2","ip":"176.101.36.87"},"php":{"version":"5.6.25","interface":"apache2handler"},"messages":{"count":0,"messages":[]},"time":{"start":1485474750.167,"end":1485474750.5368,"duration":0.3698148727417,"duration_str":"369.81ms","measures":[{"label":"Booting","start":1485474750.167,"relative_start":0,"end":1485474750.4296,"relative_end":1485474750.4296,"duration":0.26260590553284,"duration_str":"262.61ms","params":[],"collector":null},{"label":"Application","start":1485474750.3512,"relative_start":0.1842029094696,"end":1485474750.5368,"relative_end":2.598762512207e-5,"duration":0.18563795089722,"duration_str":"185.64ms","params":[],"collector":null}]},"memory":{"peak_usage":10485760,"peak_usage_str":"10MB"},"exceptions":{"count":0,"exceptions":[]},"views":{"nb_templates":0,"templates":[]},"route":{"uri":"GET startround\/{num}","middleware":["web"],"uses":"Closure {#143\n  class: \"App\\Providers\\RouteServiceProvider\"\n  this: App\\Providers\\RouteServiceProvider {#79 \u2026}\n  parameters: {\n    $num: {}\n  }\n  file: \"C:\\Users\\Administrator\\Desktop\\bitdev\\app\\Http\\routes.php\"\n  line: \"149 to 156\"\n}","namespace":"App\\Http\\Controllers","prefix":null,"where":[],"file":"\\app\\Http\\routes.php:149-156"},"queries":{"nb_statements":1,"nb_failed_statements":0,"accumulated_duration":0.00059,"accumulated_duration_str":"590\u03bcs","statements":[{"sql":"select * from `studentinfos`","params":{"hints":"Use <code>SELECT *<\/code> only if you need all columns from table<br \/>The <code>SELECT<\/code> statement has no <code>WHERE<\/code> clause and could examine many more rows than intended"},"duration":0.00059,"duration_str":"590\u03bcs","stmt_id":null,"connection":"bitproject"}]},"swiftmailer_mails":{"count":0,"mails":[]},"session":{"_token":"FIsUf3rHRNS0gWH60rCODcNZxww5HMNHbVab8nzJ","_previous":"array:1 [\n  \"url\" => \"http:\/\/51.254.79.220:2222\/startround\/2\"\n]","PHPDEBUGBAR_STACK_DATA":"[]"},"request":{"format":"html","content_type":"text\/html; charset=UTF-8","status_text":"OK","status_code":"200","request_query":"[]","request_request":"[]","request_headers":"array:2 [\n  \"host\" => array:1 [\n    0 => \"51.254.79.220:2222\"\n  ]\n  \"connection\" => array:1 [\n    0 => \"close\"\n  ]\n]","request_server":"array:31 [\n  \"REDIRECT_STATUS\" => \"200\"\n  \"HTTP_HOST\" => \"51.254.79.220:2222\"\n  \"HTTP_CONNECTION\" => \"close\"\n  \"PATH\" => \"C:\\Windows\\system32;C:\\Windows;C:\\Windows\\System32\\Wbem;C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\;C:\\Program Files\\Git\\cmd;C:\\wamp\\bin\\php\\php5.6.25;C:\\ProgramData\\ComposerSetup\\bin;C:\\Program Files\\nodejs\\;\"\n  \"SystemRoot\" => \"C:\\Windows\"\n  \"COMSPEC\" => \"C:\\Windows\\system32\\cmd.exe\"\n  \"PATHEXT\" => \".COM;.EXE;.BAT;.CMD;.VBS;.VBE;.JS;.JSE;.WSF;.WSH;.MSC\"\n  \"WINDIR\" => \"C:\\Windows\"\n  \"SERVER_SIGNATURE\" => \"<address>Apache\/2.4.23 (Win32) PHP\/5.6.25 Server at 51.254.79.220 Port 2222<\/address>\\n\"\n  \"SERVER_SOFTWARE\" => \"Apache\/2.4.23 (Win32) PHP\/5.6.25\"\n  \"SERVER_NAME\" => \"51.254.79.220\"\n  \"SERVER_ADDR\" => \"51.254.79.220\"\n  \"SERVER_PORT\" => \"2222\"\n  \"REMOTE_ADDR\" => \"176.101.36.87\"\n  \"DOCUMENT_ROOT\" => \"C:\/Users\/Administrator\/Desktop\/bitdev\/public\"\n  \"REQUEST_SCHEME\" => \"http\"\n  \"CONTEXT_PREFIX\" => \"\"\n  \"CONTEXT_DOCUMENT_ROOT\" => \"C:\/Users\/Administrator\/Desktop\/bitdev\/public\"\n  \"SERVER_ADMIN\" => \"wampserver@wampserver.invalid\"\n  \"SCRIPT_FILENAME\" => \"C:\/Users\/Administrator\/Desktop\/bitdev\/public\/index.php\"\n  \"REMOTE_PORT\" => \"29813\"\n  \"REDIRECT_URL\" => \"\/startround\/2\"\n  \"GATEWAY_INTERFACE\" => \"CGI\/1.1\"\n  \"SERVER_PROTOCOL\" => \"HTTP\/1.1\"\n  \"REQUEST_METHOD\" => \"GET\"\n  \"QUERY_STRING\" => \"\"\n  \"REQUEST_URI\" => \"\/startround\/2\"\n  \"SCRIPT_NAME\" => \"\/index.php\"\n  \"PHP_SELF\" => \"\/index.php\"\n  \"REQUEST_TIME_FLOAT\" => 1485474750.167\n  \"REQUEST_TIME\" => 1485474750\n]","request_cookies":"[]","response_headers":"array:3 [\n  \"cache-control\" => array:1 [\n    0 => \"no-cache\"\n  ]\n  \"content-type\" => array:1 [\n    0 => \"text\/html; charset=UTF-8\"\n  ]\n  \"Set-Cookie\" => array:1 [\n    0 => \"laravel_session=eyJpdiI6InJQZ1FzelBIaktDSElLQkRIK09Denc9PSIsInZhbHVlIjoiQVNtclNNbWZ0UmNYRUZMdmI0dE84XC80alFUNkNLNVRUaUxJWlFLSUw4aVJMUUQ2bml6U0xYQklRT0xcLzdoVldaNlZONnlvWG5Ld0RXNVc0T3RhRjVYQT09IiwibWFjIjoiZDZiNmIyZGY3YWI0NmVlOTczZWJhZWMyY2FkNWVlNGRhNGZjMjVmZDFkZGU3NDNhZjI2NzgyZmFmZTA2Y2JhZSJ9; expires=Fri, 27-Jan-2017 01:52:30 GMT; path=\/; httponly\"\n  ]\n]","path_info":"\/startround\/2","session_attributes":"array:3 [\n  \"_token\" => \"FIsUf3rHRNS0gWH60rCODcNZxww5HMNHbVab8nzJ\"\n  \"_previous\" => array:1 [\n    \"url\" => \"http:\/\/51.254.79.220:2222\/startround\/2\"\n  ]\n  \"PHPDEBUGBAR_STACK_DATA\" => []\n]"}}, "db9c3d3462982ac867dfa4b24292ea63");
+
+</script>

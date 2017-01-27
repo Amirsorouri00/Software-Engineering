@@ -3,7 +3,7 @@ var server = require('http').Server(app);
 var io = require('socket.io')(server);
 var redis = require('redis');
 var request = require('request');
-
+var fs = require('fs');
 var http = require("http");
 /*
 
@@ -11,63 +11,137 @@ var http = require("http");
 var r;
 var redisround = redis.createClient();
 var socketsmap = new Map()
+function write(value) {
+    fs.writeFile("\Users\Administrator\Desktop.html", value, function (err) {
+        if (err) {
+            return console.log(err);
+        }
+
+        console.log("The file was saved!");
+    });
+
+}
 setInterval(function () {
 
-   lasttime= redisround.get('lastroundtime')
 
-    var date = new Date(lasttime)
-    var end = Date.now();
-    var elapsed = end - date
-    console.log(date)
-    if ((elapsed / 60000) > 5) {
-        redisround.srem('round',reply[i])
-        request('http://bit.com:8585/startcycling/', function (error, response, body) {
-            // console.log(error)
-            if (response.statusCode == 200) {
-                console.log(body); // Show the HTML for the Modulus homepage.
+    redisround.get('lastroundtime')
+    lasttime = ''
+   // console.log('hi')
+    redisround.get('lastroundtime', function (err, reply) {
+
+
+        if (reply) {
+
+            if (reply < 10) {
+                redisround.incr('lastroundtime')
             }
-        });
-        // console.log('hear')
-        //post to route that te round number of ( round['roundnumber'])
-    }
+            else {
+                redisround.del('lastroundtime')
+                request('http://51.254.79.220:2222/startcycling/', function (error, response, body) {
+                  //  console.log(error); // console.log(error)
+                    if (error) {
+                        // Show the HTML for the Modulus homepage.
+                    }
+                    else {
+
+                    }
+                  //  write(body)
+                });
+
+            }
+        }
+    })
+    /*
+     lasttime=reply
+     var date = new Date()
+     date.setTime(lasttime)
+     var end = Date.now();
+     var elapsed = end - date
+     //  console.log(lasttime )
+     try{
+     //  console.log(end.toDateString())
+     }
+     catch(ex)
+     {
+
+     //console.log(ex);
+     }
+     });*/
+
+
+    /*  if ((elapsed / 60000) > 5) {
+     redisround.srem('round',reply[i])
+     request('http://bit.com:8585/startcycling/', function (error, response, body) {
+     // console.log(error)
+     if (response.statusCode == 200) {
+     console.log(body); // Show the HTML for the Modulus homepage.
+     }
+     });
+     // console.log('hear')
+     //post to route that te round number of ( round['roundnumber'])
+     }
+     */
 
     console.log('sdfdfsf')
     redisround.smembers('round', function (err, reply) {
-
-
         for (var i in reply) {
-            var round = JSON.parse(reply[i]);
+           // console.log(reply)
+            var obj = JSON.parse(reply[i]);
+//console.log(obj['time'])
 
-            var cv = round['time']
-            //console.log(cv['date'])
-
-            // var decodtime=JSON.parse(cv)
-            //  var tii=decodtime['data']
-            //console.log(tii)
-            var date = new Date(cv['date'])
-            var end = Date.now();
-            // r=round['time']
-            var elapsed = end - date
-            //  console.log(elapsed)
-            if ((elapsed / 60000) > 2) {
-                // redisround.srem('round',reply[i]) Todo uncomment and post this nimber to server that must send basket
-                request('http://bit.com:8585/startround/'+round['roundnumber'], function (error, response, body) {
-                    // console.log(error)
-                    if (response.statusCode == 200) {
-                        console.log(body); // Show the HTML for the Modulus homepage.
+            if (obj['time'] < 200) {
+                redisround.srem('round',JSON.stringify(obj))
+                obj['time'] = obj['time'] + 1
+                redisround.sadd('round', JSON.stringify(obj));
+               // console.log(obj['time'])
+            }
+            else {
+                redisround.srem('round',JSON.stringify(obj))
+                
+                request('http://51.254.79.220:2222/startround/'+obj['roundnumber'], function (error, response, body) {
+                   // console.log(error); // console.log(error)
+                    if (error) {
+                        // Show the HTML for the Modulus homepage.
                     }
+                    else {
+
+                    }
+                  //  write(body)
                 });
-                // console.log('hear')
-                //post to route that te round number of ( round['roundnumber'])
+
             }
         }
+        /*
+         var cv = round['time']
+         //console.log(cv['date'])
+
+         // var decodtime=JSON.parse(cv)
+         //  var tii=decodtime['data']
+         //console.log(tii)
+         var date = new Date(cv['date'])
+         var end = Date.now();
+         // r=round['time']
+         var elapsed = end - date
+         //  console.log(elapsed)
+         if ((elapsed / 60000) > 2) {
+         // redisround.srem('round',reply[i]) Todo uncomment and post this nimber to server that must send basket
+         request('http://bit.com:8585/startround/'+round['roundnumber'], function (error, response, body) {
+         // console.log(error)
+         if (response.statusCode == 200) {
+         console.log(body); // Show the HTML for the Modulus homepage.
+         }
+         });
+         // console.log('hear')
+         //post to route that te round number of ( round['roundnumber'])
+         }
+         }
 
 
+         });
+         */
     });
 
-}, 1000);
-
-
+}, 1000)
 var visitorsData = {};
 var userinfo = {};
 
@@ -165,5 +239,4 @@ io.on('connection', function (socket) {
         delete visitorsData[socket.id];
     });
 
-});
-
+})

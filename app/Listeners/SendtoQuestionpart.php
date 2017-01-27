@@ -13,39 +13,39 @@ class SendtoQuestionpart
      */
     public function startRound($event) {
 
-     //   dd($event->list);
-    $client = new Client();
+        //   dd($event->list);
+        $client = new Client();
 
-/*
-        $response = $client->post('http://bit.com:8585/posttest', [
-            'json' => ['foo' => 'bar']
-        ]);
-  */
+        foreach ($event->list as $sabad) {
 
-
-       // dd($response);
-        /*
-        $redis = Redis::connection();
-        Redis::set('name', 'Taylor');
-
-        $redis->set('asd','dsfs');
-        //  $redis->publish('message2', "sdfsdf");
-        $redis->publish('message',"startRound");
-*/
+            $response = $client->post('http://bit.com:8585/posttest', [
+                'json' => ['foo' => 'bar']
+            ]);
+        }
+        # code...
     }
+    /*
+            $response = $client->post('http://bit.com:8585/posttest', [
+                'json' => ['foo' => 'bar']
+            ]);
+      */
+
+
+    // dd($response);
+    /*
+    $redis = Redis::connection();
+    Redis::set('name', 'Taylor');
+
+    $redis->set('asd','dsfs');
+    //  $redis->publish('message2', "sdfsdf");
+    $redis->publish('message',"startRound");
+*/
+
 
     /**
      * Handle volunteer part in send to question part.
      */
-    public function handelvolunteer($event) {
-
-        /*$redis = Redis::connection();
-        Redis::set('name', 'Taylor');
-
-        $redis->set('asd','dsfs');
-        //  $redis->publish('message2', "sdfsdf");
-        $redis->publish('message',"handelvolunteer");
-*/
+    function handelvolunteer($event) {
 
 
     }
@@ -55,7 +55,7 @@ class SendtoQuestionpart
      *
      * @param  Illuminate\Events\Dispatcher  $events
      */
-    public function subscribe($events)
+    function subscribe($events)
     {
         $events->listen(
             'App\Events\Cycling',
@@ -68,7 +68,7 @@ class SendtoQuestionpart
         );
 
         $events->listen('App\Events\socketio',
-        'App\Listeners\eventlistener@handle');
+            'App\Listeners\eventlistener@handle');
     }
 
 }
