@@ -157,6 +157,10 @@ Route::group(['middleware' => ['web']], function () {
     Route::get('semantic', function () {
         return 2;
     });
+    Route::post('/testPost' , function(){
+
+        return '{"Hossein" : 1}'  ;
+    });
     ////?!!!!!!!!!!!!!!!!!!!!!!!!!!
     //test socket
     Route::get('sockettest', function () {
@@ -210,6 +214,8 @@ Redis::set('lastroundtime',$zaman);
     Route::auth();
 
 });
+
+
 
 //Route::post('posttest', 'amircontroller@posttest');
 
