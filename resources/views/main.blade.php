@@ -4,28 +4,94 @@
 
 
     <div id="app2">
-        <button v-on:click="Aj">Reverse Message</button>
-        <div class="ui ">
-            @{{ message }}
-            <div class="ui  centered grid">
+        {{--<button v-on:click="Aj">Reverse Message</button>--}}
 
-                <div class="thirteen wide column centered row ">
-                    <div class="column">
-                        <div class="ui column piled segment ">
-                            sdfsdf
+        {{--@{{ message }}--}}
+        <div class="ui  container">
+            <div class="ui two column centered grid">
+                <div class="column ten wide">
+                    <div class="ui two column grid   ">
+                        <div class="column">
+                            <div class="ui   piled raised segment ">
+                                <a class="ui  teal right ribbon label">Overview</a>
+                                <div class="ui blue segment">
+                                    <div class="ui right aligned grid">
+                                        <div class="center aligned two column row">
+                                            <div class="column right aligned">
+
+                                                Center محسن row
+
+                                            </div>
+                                            <div class="column left aligned">
+
+                                                Center aligned row
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="ui red segment">
+                                    <p>Middle</p>
+                                </div>
+                                <div class="ui blue segment">
+                                    <p>Middle</p>
+                                </div>
+                                <div class="ui green segment">
+                                    <p>Middle</p>
+                                </div>
+                                <div class="ui yellow segment">
+                                    <p>Bottom</p>
+                                </div>
+
+                            </div>
+                        </div>
+                        <div class="column">
+                            <div class="ui  piled raised segment ">
+                                <a class="ui olive ribbon label">Overview</a>
+                                <div class="ui blue segment">
+                                    <div class="ui right aligned grid">
+                                        <div class="center aligned two column row">
+                                            <div class="column right aligned">
+
+                                                Center aligned row
+
+                                            </div>
+                                            <div class="column left aligned">
+
+                                                Center aligned row
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="ui red segment">
+                                    <p>Middle</p>
+                                </div>
+                                <div class="ui blue segment">
+                                    <p>Middle</p>
+                                </div>
+                                <div class="ui green segment">
+                                    <p>Middle</p>
+                                </div>
+                                <div class="ui yellow segment">
+                                    <p>Bottom</p>
+                                </div>
+
+                            </div>
                         </div>
                     </div>
-
                 </div>
-
                 <div class="thirteen wide column centered row ">
                     <div class=" ui grid centered">
                         <div class="eight wide column centered">
-                            <button v-on:click="close" class="ui inverted massive fluid red button"> درخواست خروج از بازی </button>
+                            <button v-on:click="close" class="ui inverted massive fluid red button"> درخواست خروج از
+                                بازی
+                            </button>
 
                         </div>
                         <div class="eight wide column centered">
-                            <button v-on:click="reverseMessage" class="ui inverted massive fluid olive button"> ورود به
+                            <button v-on:click="reverseMessage" class="ui inverted massive fluid olive button"> ورود
+                                به
                                 بخش
                                 داوطلبی
                             </button>
@@ -34,9 +100,9 @@
                     </div>
                 </div>
             </div>
+
+
         </div>
-
-
         <div id="dmm" class="ui page dimmer ">
             <div class="content">
                 <div class="center"> لطفا صبر کنید
