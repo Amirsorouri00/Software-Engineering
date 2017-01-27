@@ -33,6 +33,23 @@ class api extends Controller
      * @param Request $request
      * @return \Illuminate\Http\RedirectResponse
      */
+
+    public function forceuserexit($id){
+        try{
+            $user = Studentinfo::where('participantID', '=', $id)->firstOrFail();
+            if($user->roundNumber <5 || $user->finalScore<5){
+                $this->userForceExit($user);
+                return;
+            }
+            else{
+                return;
+            }
+        }
+        catch(\Exception $e){
+
+        }
+    }
+
     public function getEnteredPerson(Request $request)
     {
         $enteredPersonRequest = collect(['data' => ['person' => ['personalID' => '1274568', 'classID' => '1111111'],
@@ -44,6 +61,7 @@ class api extends Controller
         try {
             //Todo classsexam must be fix
             //$class = Classexam::where('classID', '=', $request['data']['person']['classID'])->firstOrFail();
+            //todo for test
             $class = Classexam::where('classID', '=', '1111111')->firstOrFail();
             $exam = $class->exam()->get();
             $person = new Classindividual();
@@ -59,7 +77,7 @@ class api extends Controller
             }
             */
             //todo check Instructor string with enter and exit
-            if ($request['data']['person']['role'] == 'Instructor') {
+            if ($request['data']['person']['role'] == 'instructor') {
                 $person->accessibility = 1;
             } else {
                 $person->accessibility = 0;
@@ -215,6 +233,7 @@ class api extends Controller
             $basketOriginal = Basket::where('basketID', '=', $request['data']['basket']['basketID'])->firstOrFail();
             $objector = Studentinfo::where('participantID', '=', $basketOriginal->responderedID)->firstOrFail();
             $objectorPerson = $objector->individuals();
+            //todo check whether exam must be changed
             $exam = Exam::where('examID', '=', $basketOriginal->examID)->firstOrFail();
             //Do stuff when user exists.
             if ($basketOriginal->basketStatus == 'deActive' || $objectorPerson->isPresent == 0) {
@@ -223,14 +242,13 @@ class api extends Controller
                 echo $objectorPerson->isPresent;
             } else {
                 $objector->finalScore -= $exam->questionScore;
-                //$basketOriginal->basketScore += $exam->questionScore; //todo
+                $basketOriginal->basketScore += $exam->questionScore;
                 $objector->save();
-                //$basketOriginal->save();
-                echo 'saved';
+                $basketOriginal->save();
                 $client = new client();
                 try {
-                    //todo
-                    $response = $client->post('http://software:81/l'/*objectoin system url*/, $request);/*variable*/
+                    //todo needtotest
+                    $response = $client->post('http://judge.intellexa.me/rfj/'/*objectoin system url*/, ['json' => [$request]]);/*variable*/
                 } catch (\GuzzleHttp\Exception\ClientException $e) {
                     //echo 'Caught response: ' . $e->getResponse()->getStatusCode();
                 }
@@ -408,17 +426,17 @@ class api extends Controller
         }
     }*/
 
-    public function userForceExit(Request $request, Classindividual $person)
+    public function userForceExit(Classindividual $person)
     {
-        //todo must write code for sending user into this function and redirect him to exit
+        //todo needtotest
         $person->isPresent = 0;
         $person->save();
+        //todo need socket
         $userForceExitRequest = collect(['data' => [['person' => ['personalID' => $person->personalID, 'classID' => '1111111']],
             "ticket" => "volunteerRespondUserTicket"]])->toJson();
         $client = new client();
         try {
-            //todo post must be checked
-            $response = $client->post('http://software:81/l' /*force exit*/, ['data' => [['person'=>
+            $response = $client->post('http://sign.intellexa.me/logout/' /*force exit*/, ['data' => [['person'=>
                     ['personalID' => $person->personalID, 'classID' => '1111111']]
                     ,"ticket" => "volunteerRespondUserTicket"]]);
         } catch (\Exception $e) {

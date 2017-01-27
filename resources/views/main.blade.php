@@ -21,8 +21,7 @@
                 <div class="thirteen wide column centered row ">
                     <div class=" ui grid centered">
                         <div class="eight wide column centered">
-                            <button v-on:click="close" class="ui inverted massive fluid red button">خروج از بازی<
-                            </button>
+                            <button v-on:click="close" class="ui inverted massive fluid red button"> درخواست خروج از بازی </button>
 
                         </div>
                         <div class="eight wide column centered">
