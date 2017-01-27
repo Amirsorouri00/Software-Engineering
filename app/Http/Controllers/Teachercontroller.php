@@ -28,15 +28,12 @@ class Teachercontroller extends Controller
      */
     public function getbasketsview()
     {
-
-        $baskets = Basket::paginate(15);
+        $baskets = Basket::paginate(10);
         return view('teacher.baskets', ['baskets' => $baskets]);
-
     }
 
     public function getbasket(Request $request, Basket $basket)
     {
-
         return view('Teacher.basket', ['basket' => $basket]);//basketview
     }
 
@@ -45,10 +42,10 @@ class Teachercontroller extends Controller
         /*
          * update $basket
          */
-
         $basket->basketScore = $request->score;//:D
         $basket->save();
-        return 1;
+        $baskets = Basket::paginate(10);
+        return view('teacher.baskets', ['baskets' => $baskets]);
     }
 
     /**
@@ -74,6 +71,7 @@ class Teachercontroller extends Controller
 
     public function login(Request $request)
     {
+        /*
         $teacherClass = new Classindividual();
 
         $teacherClass->accessibility = 1;
@@ -82,11 +80,11 @@ class Teachercontroller extends Controller
         $teacherClass->save();
 $teacherStudent= new Studentinfo();
         $teacherStudent->individuals()->save($teacherClass);
-        $teacherClass->save();
+        $teacherClass->save();*/
         /*
          * create teacher in classindividuals
          */
-        return view('teacher.teacherpage');
+        return view('teacher.teacherMain');
     }
 
 }

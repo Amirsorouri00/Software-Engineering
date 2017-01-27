@@ -28,23 +28,37 @@ use GuzzleHttp\Psr7;
 
 class api extends Controller
 {
+    //todo prestart
     // <!-- Amir Hossein -->
     /**
      * @param Request $request
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function forceuserexit($id){
-        try{
+    public function forceuserexit($id)
+    {
+        try {
             $user = Studentinfo::where('participantID', '=', $id)->firstOrFail();
-            if($user->roundNumber <5 || $user->finalScore<5){
-                $this->userForceExit($user);
+            if ($user->roundNumber < 5 || $user->finalScore < 5) {
+                $student = Classindividual::where('personalID', '=', $id)->firstOrFail();
+                $this->userForceExit($student);
+                return;
+            } else {
                 return;
             }
-            else{
-                return;
-            }
+        } catch (\Exception $e) {
+
         }
-        catch(\Exception $e){
+    }
+
+    public function attributes($id)
+    {
+        try {
+            $res = array();
+            $student = Studentinfo::where('participantID', '=', $id)->firstOrFail();
+            $max = Studentinfo::all()->max('finalScore');
+            array_push($res, $student, $max);
+            return $res;
+        } catch (Exception $e) {
 
         }
     }
@@ -55,9 +69,8 @@ class api extends Controller
 
     public function getEnteredPerson(Request $request)
     {
-
         $enteredPersonRequest = collect(['data' => ['person' => ['personalID' => '1274568', 'classID' => '1111111'],
-                                    "ticket" => "volunteerRespondUserTicket"]])->toJson();
+            "ticket" => "volunteerRespondUserTicket"]])->toJson();
         $client = new Client();
         $data = $request['data']['person']['personalID'];
         $r = $client->request('POST', 'http://blog:81/post', ['json' => [$enteredPersonRequest]]);
@@ -67,8 +80,7 @@ class api extends Controller
             //$class = Classexam::where('classID', '=', $request['data']['person']['classID'])->firstOrFail();
             //todo for test
             $class = Classexam::where('classID', '=', '1111111')->firstOrFail();
-
-            $exam = $class->exam()->get();
+            //$exam = $class->exam()->get();
             $person = new Classindividual();
             $person->personalID = $request['data']['person']['personID'];
             //$person->classID = $request['data']['person']['classID'];
@@ -92,21 +104,23 @@ class api extends Controller
             $person->save();
 
             //echo $request['data']['person']['personalID'];
-
             //$class->member()->save($person);
             $student = new Studentinfo();
             $student->roundNumber = 0;
             $student->individualStatus = 0;
             //todo must be checked with enter exit
             $student->platform = $request['data']['person']['platform'];
+            $exam = Exam::all()->take(1);
             $student->finalScore = $exam->average;
             $student->save();
             $person->person()->save($student);
+            if ($person->accessibility == 1) {
+                return view('teacher.teacherMain');
+            }
             //$parameter = ['stdID' => $student->participantID];
             //return redirect()->route('client', ['stdID' => $parameter]);
             return redirect()->route('client', $student->participantID);//Todo set
-            // Todo send client to main.blade
-            //Do stuff when user exists.
+            //todo mohsen
         } catch (Exception $e) {
             if (!(Classexam::where('classID', '=', $request['data']['person']['classID'])->exists())) {
                 echo 'getEnteredPerson/classID not exists!';
@@ -129,37 +143,38 @@ class api extends Controller
             if ($basketOriginal->basketStatus == 'deActive' || $responderPerson->isPresent == 0) {
                 //continue;
                 echo 'O';
-            }
-            //todo check this if to run appropriatly
-            else if ($request['data']['basket']['answer']['result'] == 1/* ... if responder gave wrong answer to the question */) {
-                $responder->individualStatus = 1;
-                $questioner->individualStatus = 1;
+            } //todo check this if to run appropriatly
+            else if ($request['data']['basket']['answer']['result'] == 0/* ... if responder gave wrong answer to the question */) {
+                $responder->individualStatus = 0;
+                $questioner->individualStatus = 0;
                 $responder->save();
                 $questioner->save();
+                //todo check forceuserexit function
+                $this->forceuserexit($responder->participantID);
+                $this->forceuserexit($questioner->participantID);
                 $basketOriginal->basketStatus = 'Volunteer';
                 $basketOriginal->flag = 1;
                 $basketOriginal->save();
-                //todo must be checked if responder or questioner must be out of the game and check for cycling
                 $client = new client();
                 try {
-                    $response = $client->post('http://software:81/l');//volunteery system
+                    $response = $client->request('POST', '', ['json' => []]);//todo volunteery system
                 } catch (\GuzzleHttp\Exception\ClientException $e) {
                     echo 'Caught response: ' . $e->getResponse()->getStatusCode();
                 }
                 // check if clients must be redirected anywhere (i guess they must be redirected in our page that they are free in it!!)
-            }
-            //todo
+            } //todo
             else {
                 $responder->finalScore += $basketOriginal->basketScore;
                 $responder->save();
-                $responder->individualStatus = 1;
-                $questioner->individualStatus = 1;
+                $responder->individualStatus = 0;
+                $questioner->individualStatus = 0;
                 $responder->save();
                 $questioner->save();
                 $basketOriginal->basketStatus = 'deActive';
                 $basketOriginal->save();
                 //todo must be checked if clients must be out of the game and check for cycling
-
+                $this->forceuserexit($questioner->participantID);
+                $this->forceuserexit($responder->participantID);
             }
             //Ready to send the volunteery basketID to volunteer system
             //Do stuff when user exists.
@@ -181,16 +196,17 @@ class api extends Controller
         $b = Basket::where('basketStatus', '=', 'volunteer')->firstOrFail();
         $questionPartVolunteerRequest = collect(['data' => [['basket' => $b], "respondentlist" => ['RS8DaLx', 'DqA02oI', 'pZu9C0T']]
             , "ticket" => "volunteerRespondUserTicket"])->toJson();
-        //
+        //todo redirect me or mohsen
+
         try {
             $correctResponders = array();
             $basketOriginal = Basket::where('basketID', '=', $request['data']['basket']['basketID'])->firstOrFail();
             $responder = Studentinfo::where('participantID', '=', $basketOriginal->responderedID)->firstOrFail();
-            $responderPerson = $responder->individuals();
+            //$responderPerson = $responder->individuals();
             $respondersInfo = $request['data']['respondentlist'];
 
-            if ($basketOriginal->basketStatus == 'deActive' || $responderPerson->isPresent == 0) {
-                echo 'O';
+            if ($basketOriginal->basketStatus == 'deActive') {
+                return;
             } else {
                 //echo 'e';
                 $correctAnswerNumber = 0;
@@ -198,34 +214,35 @@ class api extends Controller
                     //return $responderInfo;
                     $responder = Studentinfo::where('participantID', '=', $responderInfo)->firstOrFail();
                     if ($responderInfo['answer']['result'] == 1 /* True answer */) {
-                        $correctResponders[$correctAnswerNumber] = $responder;
+                        array_push($correctResponders, $responder);
                         $correctAnswerNumber++;
                     } else {
                         continue;
                     }
                 }
-                $basketOriginal->basketStatus = 'deActive';//todo must be checked if it works or not
+                $basketOriginal->basketStatus = 'deActive';//todo test
                 if ($correctAnswerNumber >= 0) {
                     $bonus = $basketOriginal->basketScore / $correctAnswerNumber;
                     foreach ($correctResponders as $resp) {
                         $resp->finalScore += $bonus;
                         $resp->individualStatus = 0;
                         $resp->save();
+                        $this->forceuserexit($resp->participantID);
                     }
-                }
-                else{
+                } else {
                     foreach ($respondersInfo as $responderInfo) {
                         $responder = Studentinfo::where('participantID', '=', $responderInfo)->firstOrFail();
                         $responder->individualStatus = 0;
                         $responder->save();
+                        $this->forceuserexit($responder->participantID);
                     }
-                    try{
+                    try {
                         $questioner = Studentinfo::where('participantID', '=', $basketOriginal->questionerID)->firstOrFail();
                         $questioner->finalScore += Exam::all()->take(1)[0]->questionScore;
                         $questioner->save();
-                        //todo check if user must be out of the game and check cycling event
-                    }catch(\Exception $e){
-                        //todo must be checked what that is
+                        $this->forceuserexit($questioner->participantID)->firstOrFail();
+                    } catch (\Exception $e) {
+                        echo 'volunteerResult';
                     }
                 }
             }
@@ -238,13 +255,13 @@ class api extends Controller
 
     public function getObjectedToScoreBasket(Request $request)
     {
+        //todo redirect or not me and mohsen with mahdi
         try {
             $basketOriginal = Basket::where('basketID', '=', $request['data']['basket']['basketID'])->firstOrFail();
             $objector = Studentinfo::where('participantID', '=', $basketOriginal->responderedID)->firstOrFail();
             $objectorPerson = $objector->individuals();
-            //todo check whether exam must be changed
-            $exam = Exam::where('examID', '=', $basketOriginal->examID)->firstOrFail();
-            //Do stuff when user exists.
+            //$exam = Exam::where('examID', '=', $basketOriginal->examID)->firstOrFail();
+            $exam = Exam::all()->take(1);
             if ($basketOriginal->basketStatus == 'deActive' || $objectorPerson->isPresent == 0) {
                 //continue;
                 echo $basketOriginal->basketStatus;
@@ -252,16 +269,17 @@ class api extends Controller
             } else {
                 $objector->finalScore -= $exam->questionScore;
                 $basketOriginal->basketScore += $exam->questionScore;
+                //$this->forceuserexit($objector->participantID); //no need
                 $objector->save();
                 $basketOriginal->save();
-                $client = new client();
                 try {
                     //todo needtotest
-                    $response = $client->post('http://judge.intellexa.me/rfj/'/*objectoin system url*/, ['json' => [$request]]);/*variable*/
+                    $client = new client();
+                    $response = $client->request('POST', 'http://judge.intellexa.me/rfj/', ['json' => [$request]]);//todo variable
                 } catch (\GuzzleHttp\Exception\ClientException $e) {
                     //echo 'Caught response: ' . $e->getResponse()->getStatusCode();
+                    echo 'getObjectedToScoreBasket';
                 }
-                //echo 12;
             }
         } catch (Exception $e) {
             if (!(Basket::where('basketID', '=', $request['data']['basket']['basketID'])->exists())) {
@@ -292,19 +310,26 @@ class api extends Controller
             $basketOriginal = Basket::where('basketID', '=', $request['data']['basket']['basketID'])->firstOrFail();
             $objector = Studentinfo::where('participantID', '=', $basketOriginal->responderedID)->firstOrFail();
             $objectorPerson = $objector->individuals();
+            $questioner = Studentinfo::where('participantID', '=', $basketOriginal->questionerID)->firstOrFail();
             if (($basketOriginal->basketStatus == 'deActive' || $objectorPerson->isPresent == 0)) {
                 //continue;
                 echo 'O';
-            } else if (($basketOriginal->basketStatus == 'Active' || $objectorPerson->isPresent == 1) && $request['Judge'] != 'accepted') {
+            } else if (($basketOriginal->basketStatus == 'Active' || $objectorPerson->isPresent == 1) && /*todo true or accepted*/
+                $request['Judge'] != ''
+            ) {
                 $basketOriginal->basketStatus = 'Volunteer';
                 $basketOriginal->save();
                 $volunteerRequest = collect(['data' => ['basket' => $basketOriginal, 'ticket' => 'volunteerRespondUserTicket']])->toJson();
-                echo 'saved7';
                 //todo free qestioner and responder
-
+                $objector->individualStatus = 0;
+                $questioner->individualStatus = 0;
+                $objector->save();
+                $questioner->save();
+                $this->forceuserexit($objector->participantID);
+                $this->forceuserexit($questioner->participantID);
                 $client = new client();
                 try {
-                    $response = $client->post('http://software:81/l' /*variable*/);//volunteery system
+                    $response = $client->request('POST', '', ['json' => []]);//todo variable and link
                 } catch (\GuzzleHttp\Exception\ClientException $e) {
                     //echo 'Caught response: ' . $e->getResponse()->getStatusCode();
                 }
@@ -314,9 +339,12 @@ class api extends Controller
                 $objector->save();
                 $basketOriginal->basketStatus = 'deActive';
                 $basketOriginal->save();
-                // todo free questioner and responder
-
-                echo 'saved6';
+                $questioner->individualStatus = 0;
+                $objector->individualStatus = 0;
+                $objector->save();
+                $questioner->save();
+                $this->forceuserexit($objector->participantID);
+                $this->forceuserexit($questioner->participantID);
             }
             //Ready to send the volunteery basketID to volunteer system
             //Do stuff when user exists.
@@ -328,6 +356,7 @@ class api extends Controller
             if (!(Studentinfo::where('participantID', '=', $basketOriginal->responderedID)->exists())) {
                 echo 'getObjectedToScoreBasketResult/participantID not exists!';
             }
+            echo 'getVolunteerBasketResult';
             return 1;
             //Do stuff if it doesn't exist.
         }
@@ -340,7 +369,12 @@ class api extends Controller
      */
     public function getVolunteersBasket(Request $request)
     {
-
+        $b = Basket::where('basketID', $request)->firstOrFail();
+        /*
+        $volunteerRequest = collect(['data' => ['basketsArray' => [[['basket' => $b], "respondentlist" => ['S8rb5pB', '7WNyPMm', 'hsuZxXJ']]
+            , [['basket' => $b], "respondentlist" => ['K3ruTLY', 'HCkfF41', 'y5d1jSs']]
+            , [['basket' => $b], "respondentlist" => ['a6cwGz0', '7rYlioA', 'SRuph0i']]]]
+            , "ticket" => "volunteerRespondUserTicket"])->toJson();*/
         $volunteerBaskets = $request['data']['basketsArray'];
         $resultBaskets = collect();
         $counter = 0;
@@ -348,7 +382,6 @@ class api extends Controller
             try {
                 $basketOriginal = Basket::where('basketID', '=', $vBasket['basket']['basketID'])->firstOrFail();
                 if ($basketOriginal->basketStatus == 'deActive') {
-                   //todo must be checked whether if there is need to do something here
                     continue;
                 }
                 $volunteers = $vBasket['respondentlist'];
@@ -359,31 +392,31 @@ class api extends Controller
                         $volunteer = $volunteerInfo->individuals();
                         $questionerInfo = Studentinfo::where('participantID', '=', $basketOriginal->questionerID)->firstOrFail();
                         $questioner = $questionerInfo->individuals();
-
-                        if ($volunteer->isPresent == 1 && $volunteerInfo->individualStatus  == 0) {
+                        if ($volunteer->isPresent == 1 && $volunteerInfo->individualStatus == 0 && $basketOriginal->basketStatus == 'Volunteer') {
                             try {
-                                print_r("oomad toosh");
-                                $exam = Exam::where('examID', '=', $basketOriginal->examID)->firstOrFail();
+                                //print_r("oomad toosh");
+                                //$exam = Exam::where('examID', '=', $basketOriginal->examID)->firstOrFail();
+                                $exam = Exam::all()->take(1);
                                 $volunteerInfo->individualStatus = 1;
                                 $volunteerInfo->finalScore -= $exam->questionScore;
+                                $basketOriginal->basketScore += $exam->questionScore;
+                                $basketOriginal->save;
                                 $volunteerInfo->save();
-
                                 //todo isfree and individual status must mean busy basket status deactive
                                 //todo check whether the client must be redirected from volunteer system
                                 //todo on their own or we must redirect them
                             } catch (\Exception $s) {
-                                print_r('nayoomad toosh');
+                                echo 'getVolunteerBasket';
                                 continue;
                                 //Do continue if it doesn't exist.
                             }
-                        }
-                        else
-                        {
-                            print_r( "ELSE");
+                        } else {
+                            print_r("ELSE");
                             echo "else";
                         }
                         //Do stuff when user exists.
                     } catch (\Exception $e) {
+                        echo 'getVolunteerBasket';
                         continue;
                         //Do continue if it doesn't exist.
                     }
@@ -393,31 +426,25 @@ class api extends Controller
                 if (!(Exam::where('examID', '=', $basketOriginal->examID)->exists())) {
                     echo 'getVolunteersBasket/examID not exists!';
                 }
+                echo 'getVolunteerBasket';
                 continue;
                 //Do continue if it doesn't exist.
             }
             $basketOriginal->basketStatus = 'volunteer';
             $basketOriginal->save();
         }
-
-//        $b = Basket::where('basketID', $request)->firstOrFail();
-//        $volunteerRequest = collect(['data' => ['basketsArray' => [[['basket' => $b], "respondentlist" => ['S8rb5pB', '7WNyPMm', 'hsuZxXJ']]
-//            , [['basket' => $b], "respondentlist" => ['K3ruTLY', 'HCkfF41', 'y5d1jSs']]
-//            , [['basket' => $b], "respondentlist" => ['a6cwGz0', '7rYlioA', 'SRuph0i']]]]
-//            , "ticket" => "volunteerRespondUserTicket"])->toJson();
         $requestToQuestionPart = collect(['data' => $request])->toJson();
-//        echo $request;
         $client = new client();
         try {
-            /*
-             * Soal O Javab URL
-             */
-            $response = $client->post('http://bit.com/testPost', ['json' => $request]);
+
+            $response = $client->request('POST', '', ['json' => [$request]]);//todo link
         } catch (\GuzzleHttp\Exception\ClientException $e) {
             echo 'Caught response: ' . $e->getResponse()->getStatusCode();
+            echo 'getVolunteerBasket';
         }
         //Ready to send to quesion part
     }
+
     /*
      * Not Tested
      */
@@ -427,7 +454,7 @@ class api extends Controller
         $student = Studentinfo::where('participantID', $request->id)->firstOrFail();
         //$classExam = $student->classes();
         $exitPersonRequest = collect(['data' => ['person' => [$student], 'classID' => '1111111'],
-                                        "ticket" => "volunteerRespondUserTicket"])->toJson();
+            "ticket" => "volunteerRespondUserTicket"])->toJson();
         $client = new client();
         try {
             //todo post must be checked
@@ -440,22 +467,22 @@ class api extends Controller
     /*
      * Not Tested
      */
-     /*public function volunteerExitResult(Request $request)
-    {
-        $enteredPersonRequest = collect(['data' => [['person' => ['personalID' => '1234567', 'classID' => '1234567']],
-            "ticket" => "volunteerRespondUserTicket"]])->toJson();
-        try {
-            if (Classindividual::where('personalID', '=', $request['data']['person']['personalID'])->exists()) {
-                $user = Classindividual::where('personalID', '=', $request['data']['person']['personalID'])->firstOrFail();
-                $user->isPresent = 0;
-                $user->save();
-            }
-            //Do stuff when user exists.
-        } catch (Exception $e) {
-            return 1;
-            //Do stuff if it doesn't exist.
-        }
-    }*/
+    /*public function volunteerExitResult(Request $request)
+   {
+       $enteredPersonRequest = collect(['data' => [['person' => ['personalID' => '1234567', 'classID' => '1234567']],
+           "ticket" => "volunteerRespondUserTicket"]])->toJson();
+       try {
+           if (Classindividual::where('personalID', '=', $request['data']['person']['personalID'])->exists()) {
+               $user = Classindividual::where('personalID', '=', $request['data']['person']['personalID'])->firstOrFail();
+               $user->isPresent = 0;
+               $user->save();
+           }
+           //Do stuff when user exists.
+       } catch (Exception $e) {
+           return 1;
+           //Do stuff if it doesn't exist.
+       }
+   }*/
 
     public function userForceExit(Classindividual $person)
     {
@@ -467,9 +494,9 @@ class api extends Controller
             "ticket" => "volunteerRespondUserTicket"]])->toJson();
         $client = new client();
         try {
-            $response = $client->post('http://sign.intellexa.me/logout/' /*force exit*/, ['data' => [['person'=>
-                    ['personalID' => $person->personalID, 'classID' => '1111111']]
-                    ,"ticket" => "volunteerRespondUserTicket"]]);
+            $response = $client->post('http://sign.intellexa.me/logout/' /*force exit*/, ['data' => [['person' =>
+                ['personalID' => $person->personalID, 'classID' => '1111111']]
+                , "ticket" => "volunteerRespondUserTicket"]]);
         } catch (\Exception $e) {
         }
         //ready for sending to enter and exit system

@@ -9,7 +9,7 @@
     {{--src="https://code.jquery.com/jquery-3.1.1.min.js"--}}
     {{--integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8="--}}
     {{--crossorigin="anonymous"></script>--}}
-    <link rel="shortcut icon" href="{{ asset('favicon-16x16.png') }}">
+    <link rel="shortcut icon" href="{{ asset('favicon-16x16.png') }}" >
     <script src="{{asset('js/jqueryA.min.js')}}"></script>
     <script src="{{ asset('semantic/dist/semantic.min.js') }}"></script>
     {{--<script src="{{ asset('js/bootstrap.js') }}"></script>--}}
@@ -24,25 +24,7 @@
     {{--<link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet">--}}
 
     <title>Laravel Quickstart - Intermediate</title>
-<style>
-    @font-face {
-        font-family: "KoodakBold";
-        src: url(../font/KoodakBold.eot);
-        src: url(../font/KoodakBold.eot?#iefix) format("embedded-opentype"), url(../font/KoodakBold.woff) format("woff"), url(../font/KoodakBold.ttf) format("truetype"), url(../font/Yekan.svg#BYekan) format("svg");
-        font-weight: normal;
-        font-style: normal
 
-    }
-
-
-
-    body {
-        font-family: 'KoodakBold';
-
-    }
-
-
-</style>
 
     <script>
 
@@ -59,45 +41,30 @@
 </head>
 <body style="background-image: url(../img/back.jpg)">
 
-{{--@if( isset($err))--}}
+<canvas class='connecting-dots'></canvas>
+@if( isset($err))
 
 
-    {{--<div class="ui warning message">--}}
-        {{--<i class="close icon"></i>--}}
-        {{--<div class="header">--}}
-            {{--خطا--}}
-        {{--</div>--}}
-        {{--{{$err}}--}}
-    {{--</div>--}}
-{{--@endif--}}
-
-
-<div class="ui borderless main menu" style="height: 55px;background-color: #f9f9f9;">
-    <div class="ui  container" style="width: 937px;">
-        <div href="#" class="header item">
-            <img style="width: 55px" src="{{asset('img/logo.jpg')}}">
-            Project Name
+    <div class="ui warning message">
+        <i class="close icon"></i>
+        <div class="header">
+            خطا
         </div>
-
+        {{$err}}
     </div>
-</div>
+@endif
 
+<script src="{{ asset('js/app.js') }}"></script>
 
-
-
-<canvas style="z-index: -1" class='connecting-dots'></canvas>
-
-
-{{--<button onClick="fn()" class="ui button" id="btn-show">--}}
-    {{--Show modal--}}
-{{--</button>--}}
+<button onClick="fn()" class="ui button" id="btn-show">
+    Show modal
+</button>
 
 <div id="main" class="ui container ">
 
-
     @yield('content')
+
 </div>
 
-<script src="{{ asset('js/app.js') }}"></script>
 </body>
 </html>

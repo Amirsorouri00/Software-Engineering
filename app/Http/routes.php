@@ -62,7 +62,7 @@ Route::group(['middleware' => ['web']], function () {
     Route::get('/client/{stdID}', ['as' => 'client', function (Request $request, $stdID) {
         //dd($request->stdID);
         return $stdID;
-        return view('client', ['stdID' => $request->stdID]);
+        return view('main', ['stdID' => $request->stdID]);
     }]);
 
     Route::get('fire', function () {
@@ -86,7 +86,7 @@ Route::group(['middleware' => ['web']], function () {
     //Teacher part //Mohsen
     Route::get('baskets', 'Teachercontroller@getbasketsview');
     Route::get('enterround', 'Teachercontroller@enterround');
-    Route::get('basket/{basket}', 'Teachercontroller@getbasket');
+    Route::post('basket/{basket}', 'Teachercontroller@getbasket');
     Route::get('teacherlogin', 'Teachercontroller@login');
     Route::post('basketupdate/{basket}', 'Teachercontroller@basketupdate');
 
