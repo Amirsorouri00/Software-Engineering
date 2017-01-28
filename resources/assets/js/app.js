@@ -167,7 +167,7 @@ var aap = new Vue({
 })
 
 //var c = io.connect('http://localhost:158', {query: "username=" + "{{ Auth::user()->name}}"});
-var c = io.connect('http://localhost:0158', {query: "username=" + app5.$data.studentid });
+var c = io.connect('51.254.79.220:3618', {query: "username=" + 9330033 });
 //var socket = io.connect('http://localhost:0158');
 
 c.on('updateroundnumber', function (data) {

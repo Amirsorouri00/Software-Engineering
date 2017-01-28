@@ -34,13 +34,14 @@ setInterval(function () {
             }
             else {
                 redisround.del('lastroundtime')
-                request('/mahditest', function (error, response, body) {
+                request('http://51.254.79.220:7777/startcycling', function (error, response, body) {
                     //  console.log(error); // console.log(error)
                     if (error) {
-                        console.log('error')
+                        console.log(error)
                     }
                     else {
                         console.log('last round time has finished')
+                        write(body)
                     }
                     //  write(body)
                 });
@@ -65,7 +66,7 @@ setInterval(function () {
             else {
                 redisround.srem('round', JSON.stringify(obj))
 
-                request('http://51.254.79.220:2/startround/' + obj['roundnumber'], function (error, response, body) {
+                request('http://51.254.79.220:7777/startround/' + obj['roundnumber'], function (error, response, body) {
 
                     if (error) {
                         console.log('error in send start cycling signal')
@@ -112,7 +113,7 @@ io.use(function (socket, next) {
     next();
 });
 
-server.listen(0158);
+server.listen(3618);
 io.on('connection', function (socket) {
 
     var userid = visitorsData[socket.id];

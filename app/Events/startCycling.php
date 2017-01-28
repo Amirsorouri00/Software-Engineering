@@ -7,7 +7,7 @@ use App\Events\Event;
 use Carbon\Carbon;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
-
+use Redis;
 class startCycling extends Event
 {
     use SerializesModels;
@@ -44,9 +44,9 @@ class startCycling extends Event
         foreach ($Qusers as $quser) {
 
             $quser->roundNumber = $nextRoundNum;
-            $quser->save();
+            
             $quser->individualStatus = 1;
-
+$quser->save();
         }
         /*
                 $r = Redis::connection();
@@ -68,8 +68,9 @@ class startCycling extends Event
         foreach ($Rusers as $ruser) {
 
             $ruser->roundNumber = $nextRoundNum;
-            $ruser->save();
-            $ruser->individualStatus = 1;
+                        $ruser->individualStatus = 1;
+        $ruser->save();
+
         }
     }
 

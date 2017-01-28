@@ -144,8 +144,8 @@ Route::group(['middleware' => ['web']], function () {
     });
     Route::get('startcycling', function () {
 
-        return 2;
-        //Event::fire(new \App\Events\startCycling());
+        
+       Event::fire(new \App\Events\startCycling());
 
 
     });
