@@ -22,7 +22,8 @@ class prestartCycling extends Event
     public  $Rsize;
     public function __construct()
     {
-        $user = Studentinfo::getFree();
+
+        $user = Studentinfo::getFree();//get free student
         $this->Qsize = $user->where('QorR', 1)->count();
         $this->Rsize = $user->where('QorR', 0)->count();
     }

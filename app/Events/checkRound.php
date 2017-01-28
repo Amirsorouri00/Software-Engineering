@@ -21,6 +21,7 @@ class checkRound extends Event
     public function __construct($num)
     {
 
+dd(1);
         $this->roundnumber = $num;
         //
     }

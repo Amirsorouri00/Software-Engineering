@@ -6,6 +6,7 @@ use Illuminate\Support\Facades\Redis;
 use Illuminate\Support\Facades\Storage;
 use illuminate\Events\Dispatcher;
 use GuzzleHttp\client;
+
 class SendtoQuestionpart
 {
     /**
@@ -25,13 +26,11 @@ class SendtoQuestionpart
         $temp->put('basketsArray',$event->list);
         $listforsend->put('data', $temp);
         $listforsend->put('ticket', 'justforfun');
-        dd($listforsend);
-        // dd(json_encode($listforsend));
         $response = $client->post('http://questionandanswer.herokuapp.com/getPartBaskets', [
             'json' => $listforsend
         ]);
 
-        dd($response->getBody());
+        //dd($response->getBody());
     }
     /*
             $response = $client->post('http://bit.com:8585/posttest', [

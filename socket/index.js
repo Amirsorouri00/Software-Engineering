@@ -28,20 +28,22 @@ setInterval(function () {
 
         if (reply) {
 
-            if (reply < 10) {
-                redisround.incr('lastroundtime')
+            if (reply > 0) {
+                redisround.decr('lastroundtime')
+                console.log(reply)
             }
             else {
                 redisround.del('lastroundtime')
-                request('http://51.254.79.220:2222/startcycling/', function (error, response, body) {
-                  //  console.log(error); // console.log(error)
+                request('http://51.254.79.220:7777/startcycling', function (error, response, body) {
+                    //  console.log(error); // console.log(error)
                     if (error) {
-                        // Show the HTML for the Modulus homepage.
+                        console.log(error)
                     }
                     else {
-
+                        console.log('last round time has finished')
+                        write(body)
                     }
-                  //  write(body)
+                    //  write(body)
                 });
 
             }
@@ -49,29 +51,28 @@ setInterval(function () {
     })
 
 
-
     redisround.smembers('round', function (err, reply) {
         for (var i in reply) {
 
             var obj = JSON.parse(reply[i]);
+            //console.log(obj['time'])
 
-
-            if (obj['time'] < 200) {
-                redisround.srem('round',JSON.stringify(obj))
-                obj['time'] = obj['time'] + 1
+            if (obj['time'] > 0) {
+                redisround.srem('round', JSON.stringify(obj))
+                obj['time'] = obj['time'] - 1
                 redisround.sadd('round', JSON.stringify(obj));
 
             }
             else {
-                redisround.srem('round',JSON.stringify(obj))
-                
-                request('http://51.254.79.220:2222/startround/'+obj['roundnumber'], function (error, response, body) {
+                redisround.srem('round', JSON.stringify(obj))
+
+                request('http://51.254.79.220:7777/startround/' + obj['roundnumber'], function (error, response, body) {
 
                     if (error) {
-
+                        console.log('error in send start cycling signal')
                     }
                     else {
-
+                        console.log('get range time finished in round number=', obj['roundnumber'])
                     }
 
                 });
@@ -98,6 +99,7 @@ io.use(function (socket, next) {
         userinfo[newuserid]['socketid'] = socket.id
         //Todo reload history
         //Todo next
+        next()
     }
     var tmp = {};
     tmp['socketid'] = socket.id;
@@ -111,11 +113,11 @@ io.use(function (socket, next) {
     next();
 });
 
-server.listen(0158);
+server.listen(3618);
 io.on('connection', function (socket) {
 
     var userid = visitorsData[socket.id];
-    console.log(userid);
+    console.log('new user connected with this user id:', userid);
     var redisClient = redis.createClient();
     redisClient.subscribe('message');
     var redisGet = redis.createClient();
@@ -130,17 +132,11 @@ io.on('connection', function (socket) {
     })
 
     redisClient.on("message", function (channel, message2) {
-        //  console.log("message2 is", message2);
+
         message = JSON.parse(message2);
 
-        //     socket.emit('folan', '1');
-        //  console.log(typeof (message));
-        // console.log(message.mohsen);
-        //  console.log("message.name is", message.ali);
-        // console.log("userid is", visitorsData[socket.id]);
         message = message.users;
-        //  console.log('users', message);
-        //  console.log("After Array : ",message)
+
         for (var v in message) {
             console.log(message[v].userid)
             console.log(message[v].roundnumber);
@@ -167,11 +163,31 @@ io.on('connection', function (socket) {
                 console.log(userinfo[message[v].userid]['socketid'])
                 break;
             }
-            //  console.log("V = ",v)
-            //  console.log("V = ",v)
-            //   console.log("Username = ", message[v].userid , "Age = ", message[v].Age);
         }
     });
+
+    var redisRespondentModal = redis.createClient();
+    redisRespondentModal.subscribe('RespondentModal');
+    redisRespondentModal.on('message', function (channel, mes) {
+
+        //Todo
+        if (mes = userid) {
+            socket.emit('loading', 1);
+        }
+
+    })
+
+    var redisRedirecttoQuestionPart = redis.createClient();
+    redisRedirecttoQuestionPart.subscribe('redirect');
+    redisRedirecttoQuestionPart.on('message', function (channel, mes) {
+
+        //Todo
+        if (mes == userid) {
+            socket.emit('redirect', 1);
+        }
+
+    })
+
 
     socket.on('disconnect', function () {
         console.log("this user has exit", visitorsData[socket.id]);

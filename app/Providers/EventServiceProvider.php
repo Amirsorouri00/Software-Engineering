@@ -15,7 +15,8 @@ class EventServiceProvider extends ServiceProvider
      */
     protected $listen = [
         'App\Events\socketio' => [
-            'App\Listeners\eventlistener'],
+            'App\Listeners\eventlistener'
+        ],
         'App\Events\checkRound' => [
             'App\Listeners\checkRoundListen'
         ],

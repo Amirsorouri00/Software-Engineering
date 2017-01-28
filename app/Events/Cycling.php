@@ -27,6 +27,7 @@ class Cycling extends Event
     {
         $this->roundnimber = $num;
         $QRarray = $this->matchwithperiod();
+     //dd($num);
         $this->list = $this->listofbasket($QRarray);
         // return redirect('test');
     }
@@ -38,7 +39,7 @@ class Cycling extends Event
      */
     public function matchwithperiod()
     {
-        $user = Studentinfo::all()->where('roundnumber', $this->roundnimber);//get free student
+        $user = Studentinfo::all()->where('roundNumber', $this->roundnimber);//get free student
         $Qsize = $user->where('QorR', 1)->count();
         $Rsize = $user->where('QorR', 0)->count();
 
@@ -59,6 +60,7 @@ class Cycling extends Event
             $qr->save();
 
         }
+
         $questioner = $questioner->shuffle();
         $respondent = $respondent->shuffle();
         $sorted = $questioner->sortBy(function ($product, $key) {
@@ -133,9 +135,11 @@ class Cycling extends Event
             // dd($ClassIR);
             $basket = new Basket;
             $basket->basketID = str_random(7);
-            $basket->examID=2;
-            $basket->qPlatform=$tem['questioner']->platform;
-            $basket->rPlatform=$tem['respondent']->platform;
+
+//            $basket->qPlatform=$tem['questioner']->platform;
+            $basket->qPlatform="web";
+//            $basket->rPlatform=$tem['respondent']->platform;
+            $basket->rPlatform="web";
             $basket->basketScore=2;
             $basket->basketStatus='Active';
             $basket->flag=1;
@@ -143,7 +147,9 @@ class Cycling extends Event
             $basket->save();
             $ClassIQ->Qbasket()->save($basket);
             $ClassIR->Rbasket()->save($basket);
-            $list->push($basket);
+            $temp=collect();
+            $temp->put('basket',$basket);
+            $list->push($temp);
         }
         //return redirect('/test');
         return $list;

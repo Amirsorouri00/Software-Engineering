@@ -634,4 +634,21 @@ class api extends Controller
     {
 
     }
+
+    public function attributes($id)
+    {
+        try {
+            $res = array();
+            $student = Studentinfo::where('participantID', '=', $id)->firstOrFail();
+            $max = Studentinfo::all()->max('finalScore');
+            $avg = Studentinfo::all()->sum('finalScore')/Studentinfo::all()->count();
+            $min = Studentinfo::all()->min('finalScore');
+            $studentnumbers = Studentinfo::all()->count();
+            $maxroundNum = Studentinfo::all()->max('roundNumber');
+            array_push($res, $student, $max, $min, $avg, $studentnumbers, $maxroundNum);
+            return $res;
+        } catch (Exception $e) {
+
+        }
+    }
 }

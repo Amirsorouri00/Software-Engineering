@@ -121,22 +121,25 @@ Route::group(['middleware' => ['web']], function () {
     });
 
     Route::post('Ajtest', function (Request $req) {
-        $user = \App\Studentinfo::all()->where('participantID', $req->studentid)->first();
-        $user->gradeH = $req->num2;
-        $user->gradeL = $req->num1;//31523
-        $user->roundNumber = $req->roundnumber;
+//
+
+        $user = \App\Studentinfo::all()->where('participantID', $req['studentid'])->first();
+        $user->gradeH = $req['num2'];
+        $user->gradeL = $req['num1'];//31523
+        $user->roundNumber = $req['roundnumber'];
         $user->save();
 
-        $allusersRound = \App\Studentinfo::all()->where('roundnumber', $req->roundnumber);
-        foreach ($allusersRound as $u) {
-            if ($u->gradeH == -1 || $u->gradeL == -1) {
-                return 1;//
-            }
-        }
-        //fire to continue cycling
-        Event::fire(new \App\Events\Cycling($req->roundnumber));
-
-        return $req;
+//        $allusersRound = \App\Studentinfo::all()->where('roundnumber', $req->roundnumber);
+//        foreach ($allusersRound as $u) {
+//            if ($u->gradeH == -1 || $u->gradeL == -1) {
+//                return 1;//
+//            }
+//        }
+//        //fire to continue cycling
+//        Event::fire(new \App\Events\Cycling($req->roundnumber));
+//
+//        return $req;
+        return 1;
     });
 
     Route::get('mostafa', function () {
@@ -149,28 +152,16 @@ Route::group(['middleware' => ['web']], function () {
     });
     Route::get('startcycling', function () {
 
-        return 2;
-        //Event::fire(new \App\Events\startCycling());
+        
+       Event::fire(new \App\Events\startCycling());
 
 
     });
     Route::get('startround/{num}', function ($num) {
-
-
         Event::fire(new \App\Events\Cycling($num));
-
-
         return $num;
     });
-////?!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-    Route::get('semantic', function () {
-        return 2;
-    });
-    Route::post('/testPost' , function(){
 
-        return '{"Hossein" : 1}'  ;
-    });
-    ////?!!!!!!!!!!!!!!!!!!!!!!!!!!
     //test socket
     Route::get('sockettest', function () {
         /*  $redis = Redis::connection();
@@ -190,26 +181,24 @@ Route::group(['middleware' => ['web']], function () {
         return dd($zaman);
     });
 
-    Route::post('telegraRange', function (Request $request) {
+    Route::get('/main/{userid}', function ($userid) {
 
-        $reqdecode = $request->json();
-        $studentnumber = $reqdecode->all()['username'];
-        $userid = \App\Classindividual::all()->where('personalID', $studentnumber);
-        $user = \App\Studentinfo::all()->where('participantID', $userid);
-        $user->gradeH = $reqdecode->all()['range']['max'];
-        $user->gradeL = $reqdecode->all()['range']['min'];//31523
+$api= new \App\Http\Controllers\api();
+       // return $api->attributes($userid);
+
+        return view('main')->with('info', $api->attributes($userid));
+    });
+    Route::post('telegramRange', function (Request $request) {
+
+        
+       
+        $user = \App\Studentinfo::all()->where('participantID', $request['username'])->first();
+        $user->gradeH = $request['range']['max'];
+        $user->gradeL = $request['range']['min'];//31523
         $user->save();
 
-        $allusersRound = \App\Studentinfo::all()->where('roundnumber', $reqdecode->all()['round_number']);
-        foreach ($allusersRound as $u) {
-            if ($u->gradeH == -1 || $u->gradeL == -1) {
-                return 1;//
-            }
-        }
-        //fire to continue cycling
-        Event::fire(new \App\Events\Cycling($reqdecode->all()['round_number']));
 
-        return 1;
+        return 'ok';
 
         //Todo save and cheack
 
@@ -302,8 +291,14 @@ Route::group(['middleware' => ['web']], function () {
 
         return $response->getHeader();
     });
-    Route::post('dfg', function (Request $request) {
-        return $request;
+    Route::get('mahditest', function (Request $request) {
+        Event::fire(new \App\Events\Cycling(0));
+        return 1;
+    });
+
+    Route::get('start',function(){
+       Event::fire(new \App\Events\startCycling());
+
     });
     Route::get('cheackSet', function () {
         $r = Redis::connection();
