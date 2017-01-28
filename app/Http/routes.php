@@ -144,8 +144,8 @@ Route::group(['middleware' => ['web']], function () {
     });
     Route::get('startcycling', function () {
 
-        return 2;
-        //Event::fire(new \App\Events\startCycling());
+        
+       Event::fire(new \App\Events\startCycling());
 
 
     });
@@ -178,18 +178,17 @@ Route::group(['middleware' => ['web']], function () {
 
         return view('main')->with('userid', $userid);
     });
-    Route::post('telegraRange', function (Request $request) {
+    Route::post('telegramRange', function (Request $request) {
 
-        $reqdecode = $request->json();
-        $studentnumber = $reqdecode['username'];
-
-        $user = \App\Studentinfo::all()->where('participantID', $studentnumber);
-        $user->gradeH = $reqdecode['range']['max'];
-        $user->gradeL = $reqdecode['range']['min'];//31523
+        
+       
+        $user = \App\Studentinfo::all()->where('participantID', $request['username'])->first();
+        $user->gradeH = $request['range']['max'];
+        $user->gradeL = $request['range']['min'];//31523
         $user->save();
 
 
-        return 1;
+        return 'ok';
 
         //Todo save and cheack
 

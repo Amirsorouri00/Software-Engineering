@@ -26,9 +26,9 @@ class SendtoQuestionpart
         $temp->put('basketsArray',$event->list);
         $listforsend->put('data', $temp);
         $listforsend->put('ticket', 'justforfun');
-//dd($listforsend);
+        //dd($listforsend);
        // dd(json_encode($listforsend));
-        $response = $client->post('http://172.17.30.93:2000/getPartBaskets', [
+        $response = $client->post('http://questionandanswer.herokuapp.com/getPartBaskets', [
             'json' => $listforsend
         ]);
 

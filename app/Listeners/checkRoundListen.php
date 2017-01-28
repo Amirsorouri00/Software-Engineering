@@ -71,6 +71,7 @@ class checkRoundListen
         $Qusers = $user->where('QorR', 1);//Todo where is telegram user
         $userscollect = collect();
 
+dd($telegramQ);
         try {
             $client = new Client();
             $response = $client->request('POST', 'http://172.17.10.252:2000/getPartBaskets', [
