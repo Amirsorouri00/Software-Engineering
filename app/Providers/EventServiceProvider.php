@@ -22,11 +22,14 @@ class EventServiceProvider extends ServiceProvider
         'App\Events\forceExit' => [
             'App\Listeners\foceExitListener'
         ],
+        'App\Events\prestartCycling1' => [
+            'App\Listeners\prestartCyclinglistener1'
+        ],
+        'App\Events\startCycling2' => [
+            'App\Listeners\startCyclinglistener'
+        ],
         'App\Events\prestartCycling' => [
             'App\Listeners\prestartCyclinglistener'
-        ],
-        'App\Events\startCycling' => [
-            'App\Listeners\startCyclinglistener'
         ]
     ];
 

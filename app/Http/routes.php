@@ -89,7 +89,15 @@ Route::group(['middleware' => ['web']], function () {
     Route::get('basket/{basket}', 'Teachercontroller@getbasket');
     Route::get('teacherlogin', 'Teachercontroller@login');
     Route::post('basketupdate/{basket}', 'Teachercontroller@basketupdate');
-
+    //Route::get('')
+    /*
+    Route::get('teacherEntertoGame/{classindividual}', function($studentinfo){
+        return view('teacher.teacherStart', ['id' => $studentinfo->personalID]);
+    });*/
+    Route::post('teacherEntertoGame/{studentinfo}', 'Teachercontroller@teacherEntertoGame');
+    Route::get('startgame', function(){
+        Event::fire(new \App\Events\prestartCycling());
+    });
 
     // test
     Route::get(

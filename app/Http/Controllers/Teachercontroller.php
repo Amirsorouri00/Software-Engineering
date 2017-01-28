@@ -73,18 +73,37 @@ class Teachercontroller extends Controller
     {
         /*
         $teacherClass = new Classindividual();
-
         $teacherClass->accessibility = 1;
         $teacherClass->classID = 'sdfsd';
         $teacherClass->personalID = 'sdfa';
         $teacherClass->save();
-$teacherStudent= new Studentinfo();
+        $teacherStudent= new Studentinfo();
         $teacherStudent->individuals()->save($teacherClass);
         $teacherClass->save();*/
         /*
          * create teacher in classindividuals
          */
-        return view('teacher.teacherMain');
+        $studentinfos = Studentinfo::all();
+        foreach($studentinfos as $studentinfo){
+            try{
+                $studentinfo = Classindividual::where('accessibility', '=', 1)->firstOrFail();
+                if(Studentinfo::where('participantID', '=', $studentinfo->personalID)->exists()){
+                    break;
+                }
+                dd($studentinfo , 'here');
+            }catch(\Exception $e)
+            {
+                continue;
+            }
+        }
+        return view('teacher.teacherStart', ['id' => $studentinfo->personalID]);
     }
 
+    public function teacherEntertoGame(Request $request, Studentinfo $studentinfo){
+        //dd('amir');
+        $studentinfo->individualStatus = 0;
+        //dd($studentinfo, 'there');
+        //return view('teacher.teacherStart', ['id' => $studentinfo->participantID]);
+        return redirect('/teacherlogin');
+    }
 }

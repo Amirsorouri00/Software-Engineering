@@ -19,7 +19,7 @@ class startCycling extends Event
     public  $nextRoundNum;
     public function __construct()
     {
-
+        dd('startcycling');
 
     $nextRoundNum=null;
 

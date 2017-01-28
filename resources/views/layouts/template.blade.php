@@ -60,8 +60,6 @@
 <body style="background-image: url(../img/back.jpg)">
 
 {{--@if( isset($err))--}}
-
-
     {{--<div class="ui warning message">--}}
         {{--<i class="close icon"></i>--}}
         {{--<div class="header">--}}
@@ -82,9 +80,6 @@
     </div>
 </div>
 
-
-
-
 <canvas style="z-index: -1" class='connecting-dots'></canvas>
 
 
@@ -93,8 +88,6 @@
 {{--</button>--}}
 
 <div id="main" class="ui container ">
-
-
     @yield('content')
 </div>
 

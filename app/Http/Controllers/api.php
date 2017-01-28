@@ -56,7 +56,11 @@ class api extends Controller
             $res = array();
             $student = Studentinfo::where('participantID', '=', $id)->firstOrFail();
             $max = Studentinfo::all()->max('finalScore');
-            array_push($res, $student, $max);
+            $avg = Studentinfo::all()->sum('finalScore')/Studentinfo::all()->count();
+            $min = Studentinfo::all()->min('finalScore');
+            $studentnumbers = Studentinfo::all()->count();
+            $maxroundNum = Studentinfo::all()->max('roundNumber');
+            array_push($res, $student, $max, $min, $avg, $studentnumbers, $maxroundNum);
             return $res;
         } catch (Exception $e) {
 
@@ -79,14 +83,13 @@ class api extends Controller
             //Todo classsexam must be fix
             //$class = Classexam::where('classID', '=', $request['data']['person']['classID'])->firstOrFail();
             //todo for test
-            $class = Classexam::where('classID', '=', '1111111')->firstOrFail();
+            //$class = Classexam::where('classID', '=', '1111111')->firstOrFail();
             //$exam = $class->exam()->get();
             $person = new Classindividual();
             $person->personalID = $request['data']['person']['personID'];
             //$person->classID = $request['data']['person']['classID'];
             $person->isPresent = 1;
             $person->isActive = 1;
-
             /*
             if (Classexam::where('instructorID', '=', $request['data']['person']['personalID'])->exists()) {
 
@@ -191,6 +194,7 @@ class api extends Controller
 
     }
 
+    //todo with mahdi bakhshi
     public function volunteerResult(Request $request)
     {
         $b = Basket::where('basketStatus', '=', 'volunteer')->firstOrFail();
@@ -451,6 +455,8 @@ class api extends Controller
     public function volunteerExitRequest(Request $request)
     {
         //todo we must check on our own how to pass student id from the page to controller
+
+        //todo must handle redirecting user important
         $student = Studentinfo::where('participantID', $request->id)->firstOrFail();
         //$classExam = $student->classes();
         $exitPersonRequest = collect(['data' => ['person' => [$student], 'classID' => '1111111'],
@@ -458,7 +464,7 @@ class api extends Controller
         $client = new client();
         try {
             //todo post must be checked
-            $response = $client->post('http://software:81/l' /*enter exit system*/, $exitPersonRequest);
+            $response = $client->request('post', 'https://sign.intellexa.me/volunteer_logout' /*enter exit system*/, ['json' => $exitPersonRequest]);
         } catch (\GuzzleHttp\Exception\ClientException $e) {
             echo 'Caught response: ' . $e->getResponse()->getStatusCode();
         }
@@ -467,7 +473,7 @@ class api extends Controller
     /*
      * Not Tested
      */
-    /*public function volunteerExitResult(Request $request)
+    public function volunteerExitResult(Request $request)
    {
        $enteredPersonRequest = collect(['data' => [['person' => ['personalID' => '1234567', 'classID' => '1234567']],
            "ticket" => "volunteerRespondUserTicket"]])->toJson();
@@ -482,21 +488,21 @@ class api extends Controller
            return 1;
            //Do stuff if it doesn't exist.
        }
-   }*/
+   }
 
     public function userForceExit(Classindividual $person)
     {
         //todo needtotest
         $person->isPresent = 0;
         $person->save();
+        $student = Studentinfo::where('participantID', '=', $person->personalID)->firstOrFail();
         //todo need socket
-        $userForceExitRequest = collect(['data' => [['person' => ['personalID' => $person->personalID, 'classID' => '1111111']],
-            "ticket" => "volunteerRespondUserTicket"]])->toJson();
+        $userForceExitRequest = collect(['data' => ['person' => [$student], 'classID' => '1111111'],
+            "ticket" => "volunteerRespondUserTicket"])->toJson();
         $client = new client();
         try {
-            $response = $client->post('http://sign.intellexa.me/logout/' /*force exit*/, ['data' => [['person' =>
-                ['personalID' => $person->personalID, 'classID' => '1111111']]
-                , "ticket" => "volunteerRespondUserTicket"]]);
+            $response = $client->request('post', 'http://sign.intellexa.me/logout/' /*force exit*/, ['json' => $student]);
+
         } catch (\Exception $e) {
         }
         //ready for sending to enter and exit system

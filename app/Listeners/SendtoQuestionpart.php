@@ -11,18 +11,27 @@ class SendtoQuestionpart
     /**
      * Handle round start in send to question part
      */
-    public function startRound($event) {
+    public function startRound($event)
+    {
+
+
+
+
 
         //   dd($event->list);
         $client = new Client();
+        $listforsend = collect();
+        $temp=collect();
+        $temp->put('basketsArray',$event->list);
+        $listforsend->put('data', $temp);
+        $listforsend->put('ticket', 'justforfun');
+        dd($listforsend);
+        // dd(json_encode($listforsend));
+        $response = $client->post('http://questionandanswer.herokuapp.com/getPartBaskets', [
+            'json' => $listforsend
+        ]);
 
-        foreach ($event->list as $sabad) {
-
-            $response = $client->post('http://bit.com:8585/posttest', [
-                'json' => ['foo' => 'bar']
-            ]);
-        }
-        # code...
+        dd($response->getBody());
     }
     /*
             $response = $client->post('http://bit.com:8585/posttest', [
@@ -45,7 +54,8 @@ class SendtoQuestionpart
     /**
      * Handle volunteer part in send to question part.
      */
-    function handelvolunteer($event) {
+    function handelvolunteer($event)
+    {
 
 
     }
@@ -53,7 +63,7 @@ class SendtoQuestionpart
     /**
      * Register the listeners for the subscriber.
      *
-     * @param  Illuminate\Events\Dispatcher  $events
+     * @param  Illuminate\Events\Dispatcher $events
      */
     function subscribe($events)
     {
@@ -70,5 +80,4 @@ class SendtoQuestionpart
         $events->listen('App\Events\socketio',
             'App\Listeners\eventlistener@handle');
     }
-
 }
