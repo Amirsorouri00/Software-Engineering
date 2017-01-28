@@ -26,8 +26,12 @@ class startCyclinglistener
      */
     public function handle(startCycling $event)
     {
+
         if($event->nextRoundNum)
        {
+
+
+
         Event::fire(new \App\Events\checkRound($event->nextRoundNum));
        }
 
