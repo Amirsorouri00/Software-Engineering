@@ -175,8 +175,10 @@ Route::group(['middleware' => ['web']], function () {
 
     Route::get('/main/{userid}', function ($userid) {
 
+$api= new \App\Http\Controllers\api();
+       // return $api->attributes($userid);
 
-        return view('main')->with('userid', $userid);
+        return view('main')->with('info', $api->attributes($userid));
     });
     Route::post('telegramRange', function (Request $request) {
 

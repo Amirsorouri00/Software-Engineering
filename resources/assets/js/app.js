@@ -4,6 +4,7 @@ var VueResource = require('vue-resource');
 Vue.use(VueResource);
 Vue.http.headers.common['X-CSRF-TOKEN'] = document.querySelector('#token').getAttribute('content');//in meta in template
 var sss = 12;
+var userID = $('meta[name=userid]').attr('content');
 var interval
 var app5 = new Vue({
     el: '#app2',
@@ -16,7 +17,7 @@ var app5 = new Vue({
         startroundtime: 0,
         cansend: true,
         errormessage: '',
-        studentid: document.getElementById('userid').textContent
+        studentid: userID
     },
     watch: {
         num1: {
