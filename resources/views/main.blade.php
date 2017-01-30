@@ -19,7 +19,6 @@
                                         <div class="center aligned two column row">
                                             <div id="userid" class="column right aligned">Max grade</div>
                                             <div class="column left aligned">
-
                                                 {{$info[1]}}
                                             </div>
                                         </div>
@@ -30,7 +29,6 @@
                                         <div class="center aligned two column row">
                                             <div id="userid" class="column right aligned">Min grade</div>
                                             <div class="column left aligned">
-
                                                 {{$info[2]}}
                                             </div>
                                         </div>
@@ -41,7 +39,6 @@
                                         <div class="center aligned two column row">
                                             <div id="userid" class="column right aligned">Average</div>
                                             <div class="column left aligned">
-
                                                 {{$info[3]}}
                                             </div>
                                         </div>
@@ -52,7 +49,6 @@
                                         <div class="center aligned two column row">
                                             <div id="userid" class="column right aligned">Maximum round number</div>
                                             <div class="column left aligned">
-
                                                 {{$info[5]}}
                                             </div>
                                         </div>
@@ -63,7 +59,6 @@
                                         <div class="center aligned two column row">
                                             <div id="userid" class="column right aligned">Student numbers</div>
                                             <div class="column left aligned">
-
                                                 {{$info[4]}}
                                             </div>
                                         </div>
@@ -80,7 +75,6 @@
                                         <div class="center aligned two column row">
                                             <div id="userid" class="column right aligned">Grade</div>
                                             <div class="column left aligned">
-
                                                 {{$info[0]->finalScore}}
                                             </div>
                                         </div>
@@ -91,7 +85,6 @@
                                         <div class="center aligned two column row">
                                             <div id="userid" class="column right aligned">Individual round number</div>
                                             <div class="column left aligned">
-
                                                 {{$info[0]->roundNumberInd}}
                                             </div>
                                         </div>
@@ -103,7 +96,6 @@
                                             <div id="userid" class="column right aligned">Correct answers
                                             </div>
                                             <div class="column left aligned">
-
                                                 {{$info[0]->grade}}
                                             </div>
                                         </div>
@@ -114,7 +106,6 @@
                                         <div class="center aligned two column row">
                                             <div id="userid" class="column right aligned">Wrong answers</div>
                                             <div class="column left aligned">
-
                                                 {{$info[5]}}
                                             </div>
                                         </div>
@@ -127,11 +118,9 @@
                                             <div class="column left aligned">
                                                 @if($info[0]->QorR==1)
                                                     Questionnaire
-
                                                 @else
                                                     Respondent
                                                 @endif
-
                                             </div>
                                         </div>
                                     </div>
@@ -145,20 +134,23 @@
             <div class="thirteen wide column centered row ">
                 <div class=" ui grid centered">
                     <div class="eight wide column centered">
-                        <button v-on:click="close" class="ui inverted massive fluid red button">Exit
-                        </button>
-
+                        <form action="http://software:81/volunteerExit/{{$info[0]->participantID}}" method="post">
+                            <button v-on:click="close" class="ui inverted massive fluid red button">
+                                Exit
+                            </button>
+                        </form>
                     </div>
                     <div class="eight wide column centered">
-                        <button v-on:click="reverseMessage" class="ui inverted massive fluid olive button">
-                            Volunteer
-                        </button>
+                        <form action="http://volunteer.intellexa.me/api/" method="post">
+                            <button v-on:click="close" class="ui inverted massive fluid olive button">
+                                Volunteer
+                            </button>
+                        </form>
 
                     </div>
                 </div>
             </div>
         </div>
-
 
     </div>
     <div id="dmm" class="ui page dimmer ">
@@ -171,7 +163,6 @@
     </div>
 
     <div class="ui modal">
-
         {{--<i class="close icon"></i>--}}
         <div class="header">
 
@@ -193,10 +184,7 @@
                                oninvalid="this.setCustomValidity('بازه نمره میبایست بین 0 تا 20 باشد')">
                     </div>
                     <div class="right floated  one wide column">از</div>
-
-
                 </div>
-
 
             </div>
             <p> @{{ errormessage }} </p>
@@ -214,11 +202,7 @@
 
     </div>
 
-
     </div>
-
-
-
 
     <script>
         $('.message .close')

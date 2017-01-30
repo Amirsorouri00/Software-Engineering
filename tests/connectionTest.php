@@ -44,33 +44,34 @@ class connectionTest extends TestCase
            [$volunteerRequest]           // Extra headers (optional)
        )->seeStatusCode(200)->seePageIs('test')->see('amir');*/
 
-
-    public function testGetEnteredPerson(){
-        $enteredPersonRequest = collect(['data' => ['person' => ['personalID' => '1533574', 'classID' => '7HhRE7U'],
-            "ticket" => "volunteerRespondUserTicket"]])->toJson();
-        try {
-            //echo $enteredPersonRequest;
-            //$this->post('/entertogame', [$enteredPersonRequest])->seeStatusCode(200);
-            //$client = static::createClient();
-            //$crawler = $client->request()
-            $headers = [];
-            $headers['CONTENT_TYPE'] = 'application/json';
-            $headers['Accept'] = 'application/json';
-            $server = $this->transformHeadersToServerVars($headers);
-            $response = $this->call('post', '/entertogame',[],[],[],$server, $enteredPersonRequest);
-            //$post = $this->action('POST', '/entertogame', null, array(), array(), array(), $enteredPersonRequest);
-            //$this->assertTrue($this->client->getResponse()->isOk());
-            //$this->assertResponseOk();
-            $u = \GuzzleHttp\json_decode($enteredPersonRequest, true);
-            //print_r($u['data']);
-            $this->seeInDatabase('classindividuals', ['personalID' => $u['data']['person']['personalID'], 'isPresent' => 1, 'isActive' => 1]);
-            $this->seeInDatabase('studentinfos', ['participantID' => $u['data']['person']['personalID'], 'roundNumber' => 0, 'individualStatus' => true]);
-            $this->seePageIs('/test')->assertViewHas('amir');
-            //$this->post('/entertogame',[$enteredPersonRequest])->assertRedirectedTo('/test');
-        }catch(\Exception $e){
-            echo $e;
+    /*
+        public function testGetEnteredPerson(){
+            $enteredPersonRequest = collect(['data' => ['person' => ['personalID' => '1533574', 'classID' => '7HhRE7U'],
+                "ticket" => "volunteerRespondUserTicket"]])->toJson();
+            try {
+                //echo $enteredPersonRequest;
+                //$this->post('/entertogame', [$enteredPersonRequest])->seeStatusCode(200);
+                //$client = static::createClient();
+                //$crawler = $client->request()
+                $headers = [];
+                $headers['CONTENT_TYPE'] = 'application/json';
+                $headers['Accept'] = 'application/json';
+                $server = $this->transformHeadersToServerVars($headers);
+                $response = $this->call('post', '/entertogame',[],[],[],$server, $enteredPersonRequest);
+                //$post = $this->action('POST', '/entertogame', null, array(), array(), array(), $enteredPersonRequest);
+                //$this->assertTrue($this->client->getResponse()->isOk());
+                //$this->assertResponseOk();
+                $u = \GuzzleHttp\json_decode($enteredPersonRequest, true);
+                //print_r($u['data']);
+                $this->seeInDatabase('classindividuals', ['personalID' => $u['data']['person']['personalID'], 'isPresent' => 1, 'isActive' => 1]);
+                $this->seeInDatabase('studentinfos', ['participantID' => $u['data']['person']['personalID'], 'roundNumber' => 0, 'individualStatus' => true]);
+                $this->seePageIs('/test')->assertViewHas('amir');
+                //$this->post('/entertogame',[$enteredPersonRequest])->assertRedirectedTo('/test');
+            }catch(\Exception $e){
+                echo $e;
+            }
         }
-    }
+    */
 
     /*
     public function testVolunteerGetBasket(){
@@ -254,37 +255,34 @@ class connectionTest extends TestCase
         }
     }*/
 
-    public function test(){
-        $enteredPersonRequest = collect(['data' => ['person' => ['personalID' => '1534574', 'classID' => '7HhRE7U'],
-            "ticket" => "volunteerRespondUserTicket"]]);
-        $headers = [];
-        $headers['CONTENT_TYPE'] = 'json/application';
-        $headers['Active'] = 'json/application';
+    /*
+        public function test(){
+            $enteredPersonRequest = collect(['data' => ['person' => ['personalID' => '1534574', 'classID' => '7HhRE7U'],
+                "ticket" => "volunteerRespondUserTicket"]]);
+            $headers = [];
+            $headers['CONTENT_TYPE'] = 'json/application';
+            $headers['Active'] = 'json/application';
 
-        $client = new client();
-        //$server = $this->transformHeadersToServerVars($headers);
-        //$response = $this->post('/entertogame', $headers, $headers)->seePageIs('/test');
-        $queryParams = [
-            'foo=1',
-            'bar=2',
-            'bar=3',
-            'baz=4',
-        ];
-        //$content = implode('&', $queryParams);
-        /** @var Goutte\Client $client */
-        $crawler = $client->request('POST', 'software:81/entertogame', [], [], ['CONTENT_TYPE' => 'json/application'], $enteredPersonRequest);
-        $i = $client->followRedirect();
-        $message = $crawler->filter('.success-message');
-        $this->assertCount(1, $message);
-        $crawler = $this->client->request('post', '/entertogame', ['test' => 'testak']);
-        $this->assertResponseStatus(302);
+            $client = new client();
+            //$server = $this->transformHeadersToServerVars($headers);
+            //$response = $this->post('/entertogame', $headers, $headers)->seePageIs('/test');
+            $queryParams = [
+                'foo=1',
+                'bar=2',
+                'bar=3',
+                'baz=4',
+            ];
+            //$content = implode('&', $queryParams);
+            $crawler = $client->request('POST', 'software:81/entertogame', [], [], ['CONTENT_TYPE' => 'json/application'], $enteredPersonRequest);
+            $i = $client->followRedirect();
+            $message = $crawler->filter('.success-message');
+            $this->assertCount(1, $message);
+            $crawler = $this->client->request('post', '/entertogame', ['test' => 'testak']);
+            $this->assertResponseStatus(302);
 
-        $this->assertCount(1, $message);
-        //$response->seeStatusCode(200)->seePageIs('/test');
-    }
-
-
-
-
+            $this->assertCount(1, $message);
+            //$response->seeStatusCode(200)->seePageIs('/test');
+        }
+    */
 
 }

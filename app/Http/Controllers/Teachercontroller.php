@@ -8,16 +8,15 @@ use App\Http\Controllers\Controller;
 use App\Http\Middleware\VerifyCsrfToken;
 use App\Studentinfo;
 use Illuminate\Http\Request;
-
 use App\Http\Requests;
 use Mockery\CountValidator\Exception;
+
 
 class Teachercontroller extends Controller
 {
     public function __construct()
     {
-
-        //   $this->middleware(VerifyCsrfToken::class);
+        //$this->middleware(VerifyCsrfToken::class);
         //verify with csrf
         //verify the teacher
     }
@@ -88,20 +87,21 @@ class Teachercontroller extends Controller
             try{
                 $studentinfo = Classindividual::where('accessibility', '=', 1)->firstOrFail();
                 if(Studentinfo::where('participantID', '=', $studentinfo->personalID)->exists()){
-                    break;
+                    $api = new \App\Http\Controllers\api();
+                    return view('teacher.teacherMain', ['id' => $studentinfo->personalID, 'info' => $api->attributes($studentinfo->personalID)]);
                 }
-                dd($studentinfo , 'here');
+                //dd($studentinfo , 'here');
             }catch(\Exception $e)
             {
                 continue;
             }
         }
-        return view('teacher.teacherStart', ['id' => $studentinfo->personalID]);
     }
 
     public function teacherEntertoGame(Request $request, Studentinfo $studentinfo){
         //dd('amir');
         $studentinfo->individualStatus = 0;
+        $studentinfo->save();
         //dd($studentinfo, 'there');
         //return view('teacher.teacherStart', ['id' => $studentinfo->participantID]);
         return redirect('/teacherlogin');

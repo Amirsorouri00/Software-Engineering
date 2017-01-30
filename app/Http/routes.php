@@ -43,7 +43,24 @@ Route::group(['middleware' => ['web']], function () {
 
     Route::post('forceExit', 'api@userForceExit');
 
-    Route::post('volunteerExit', 'api@volunteerExitRequest');
+    Route::post('volunteerExit/{studeninfoid}', function($studeninfoid){
+        //todo we must check on our own how to pass student id from the page to controller
+        //todo must handle redirecting user important
+        //return $studeninfoid;
+        $student = \App\Studentinfo::where('participantID', $studeninfoid)->firstOrFail();
+        //$str=str_replace("\r\n","",$student);
+        //return $str;
+        $exitPersonRequest = collect(['data' => ['person' => $student, 'classID' => '1111111'],
+            "ticket" => "volunteerRespondUserTicket"])->toJson();
+        //return $exitPersonRequest;
+        //return 'this is right time for exiting from the game';
+        try {
+            $client = new client();
+            $response = $client->request('post', 'http://sign.intellexa.me/volunteer_logout' /*enter exit system*/, ['json' => $exitPersonRequest]);
+        } catch (\GuzzleHttp\Exception\ClientException $e) {
+            echo 'Caught response: ' . $e->getResponse()->getStatusCode();
+        }
+    });
 
     Route::post('/getVolunteers', 'api@getVolunteersBasket');
 
@@ -64,29 +81,25 @@ Route::group(['middleware' => ['web']], function () {
         return $stdID;
         return view('client', ['stdID' => $request->stdID]);
     }]);
-
     Route::get('fire', function () {
         // this fires the event
         event(new App\Events\socketio());
         return "event fired";
     });
-
     Route::get('/test', function () {
         // this checks for the event
         return view('test');
     });
-
     Route::post('l', function () {
         $basket = App\Basket::where('basketID', '4VeF64t')->firstOrFail();
         $basket->basketStatus = 'amir';
         $basket->save();
         return view('test');
     });
-
-    //Teacher part //Mohsen
+    //Teacher part
     Route::get('baskets', 'Teachercontroller@getbasketsview');
     Route::get('enterround', 'Teachercontroller@enterround');
-    Route::get('basket/{basket}', 'Teachercontroller@getbasket');
+    Route::post('basket/{basket}', 'Teachercontroller@getbasket');
     Route::get('teacherlogin', 'Teachercontroller@login');
     Route::post('basketupdate/{basket}', 'Teachercontroller@basketupdate');
     //Route::get('')
@@ -95,11 +108,13 @@ Route::group(['middleware' => ['web']], function () {
         return view('teacher.teacherStart', ['id' => $studentinfo->personalID]);
     });*/
     Route::post('teacherEntertoGame/{studentinfo}', 'Teachercontroller@teacherEntertoGame');
-    Route::get('startgame', function(){
+    Route::get('startgame', function () {
         Event::fire(new \App\Events\prestartCycling());
     });
 
-    // test
+    /*
+     * Mohsen Routes
+     * */
     Route::get(
         'redistime', function () {
         $r = Redis::connection();
@@ -121,8 +136,6 @@ Route::group(['middleware' => ['web']], function () {
     });
 
     Route::post('Ajtest', function (Request $req) {
-//
-
         $user = \App\Studentinfo::all()->where('participantID', $req['studentid'])->first();
         $user->gradeH = $req['num2'];
         $user->gradeL = $req['num1'];//31523
@@ -151,11 +164,7 @@ Route::group(['middleware' => ['web']], function () {
         return $response;
     });
     Route::get('startcycling', function () {
-
-        
-       Event::fire(new \App\Events\startCycling());
-
-
+        Event::fire(new \App\Events\startCycling());
     });
     Route::get('startround/{num}', function ($num) {
         Event::fire(new \App\Events\Cycling($num));
@@ -172,8 +181,6 @@ Route::group(['middleware' => ['web']], function () {
 
         $redis = Redis::connection();
         $redis->publish('goToquestionpart', 'MetR2I7');
-
-
         $redis = Redis::connection();
         $zaman = Carbon::now();
         Redis::set('lastroundtime', $zaman);
@@ -182,26 +189,17 @@ Route::group(['middleware' => ['web']], function () {
     });
 
     Route::get('/main/{userid}', function ($userid) {
-
-$api= new \App\Http\Controllers\api();
-       // return $api->attributes($userid);
-
+        $api = new \App\Http\Controllers\api();
         return view('main')->with('info', $api->attributes($userid));
     });
-    Route::post('telegramRange', function (Request $request) {
 
-        
-       
+    Route::post('telegramRange', function (Request $request) {
         $user = \App\Studentinfo::all()->where('participantID', $request['username'])->first();
         $user->gradeH = $request['range']['max'];
         $user->gradeL = $request['range']['min'];//31523
         $user->save();
-
-
         return 'ok';
-
         //Todo save and cheack
-
     });
     Route::get('splash', function () {
         return view('splash');
@@ -296,8 +294,8 @@ $api= new \App\Http\Controllers\api();
         return 1;
     });
 
-    Route::get('start',function(){
-       Event::fire(new \App\Events\startCycling());
+    Route::get('start', function () {
+        Event::fire(new \App\Events\startCycling());
 
     });
     Route::get('cheackSet', function () {
