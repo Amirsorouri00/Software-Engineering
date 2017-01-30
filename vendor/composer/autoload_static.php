@@ -99,6 +99,7 @@ class ComposerStaticInitf50d610e0a89df1b0f04368f4aac364e
         ),
         'C' => 
         array (
+            'Cron\\' => 5,
             'ClassPreloader\\' => 15,
             'Carbon\\' => 7,
         ),
@@ -280,6 +281,10 @@ class ComposerStaticInitf50d610e0a89df1b0f04368f4aac364e
         array (
             0 => __DIR__ . '/..' . '/maximebf/debugbar/src/DebugBar',
         ),
+        'Cron\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/mtdowling/cron-expression/src/Cron',
+        ),
         'ClassPreloader\\' => 
         array (
             0 => __DIR__ . '/..' . '/classpreloader/classpreloader/src',
@@ -347,13 +352,6 @@ class ComposerStaticInitf50d610e0a89df1b0f04368f4aac364e
                 0 => __DIR__ . '/..' . '/doctrine/collections/lib',
             ),
         ),
-        'C' => 
-        array (
-            'Cron' => 
-            array (
-                0 => __DIR__ . '/..' . '/mtdowling/cron-expression/src',
-            ),
-        ),
         'B' => 
         array (
             'Barryvdh' => 
@@ -372,7 +370,12 @@ class ComposerStaticInitf50d610e0a89df1b0f04368f4aac364e
         'App\\Events\\Cycling' => __DIR__ . '/../..' . '/app/Events/Cycling.php',
         'App\\Events\\Event' => __DIR__ . '/../..' . '/app/Events/Event.php',
         'App\\Events\\checkRound' => __DIR__ . '/../..' . '/app/Events/checkRound.php',
+        'App\\Events\\forceExit' => __DIR__ . '/../..' . '/app/Events/forceExit.php',
+        'App\\Events\\prestartCycling' => __DIR__ . '/../..' . '/app/Events/prestartCycling.php',
+        'App\\Events\\prestartCycling1' => __DIR__ . '/../..' . '/app/Events/prestartCycling1.php',
         'App\\Events\\socketio' => __DIR__ . '/../..' . '/app/Events/socketio.php',
+        'App\\Events\\startCycling' => __DIR__ . '/../..' . '/app/Events/startCycling.php',
+        'App\\Events\\startCycling2' => __DIR__ . '/../..' . '/app/Events/startCycling2.php',
         'App\\Events\\volunteerToQusteinpart' => __DIR__ . '/../..' . '/app/Events/volunteerToQusteinpart.php',
         'App\\Exam' => __DIR__ . '/../..' . '/app/Exam.php',
         'App\\Exceptions\\Handler' => __DIR__ . '/../..' . '/app/Exceptions/Handler.php',
@@ -394,11 +397,16 @@ class ComposerStaticInitf50d610e0a89df1b0f04368f4aac364e
         'App\\Listeners\\SendtoQuestionpart' => __DIR__ . '/../..' . '/app/Listeners/SendtoQuestionpart.php',
         'App\\Listeners\\checkRoundListen' => __DIR__ . '/../..' . '/app/Listeners/checkRoundListen.php',
         'App\\Listeners\\eventlistener' => __DIR__ . '/../..' . '/app/Listeners/eventlistener.php',
+        'App\\Listeners\\foceExitListener' => __DIR__ . '/../..' . '/app/Listeners/foceExitListener.php',
+        'App\\Listeners\\prestartCyclinglistener' => __DIR__ . '/../..' . '/app/Listeners/prestartCyclinglistener.php',
+        'App\\Listeners\\prestartCyclinglistener1' => __DIR__ . '/../..' . '/app/Listeners/prestartCyclinglistener1.php',
+        'App\\Listeners\\startCyclinglistener' => __DIR__ . '/../..' . '/app/Listeners/startCyclinglistener.php',
         'App\\Policies\\TaskPolicy' => __DIR__ . '/../..' . '/app/Policies/TaskPolicy.php',
         'App\\Providers\\AppServiceProvider' => __DIR__ . '/../..' . '/app/Providers/AppServiceProvider.php',
         'App\\Providers\\AuthServiceProvider' => __DIR__ . '/../..' . '/app/Providers/AuthServiceProvider.php',
         'App\\Providers\\EventServiceProvider' => __DIR__ . '/../..' . '/app/Providers/EventServiceProvider.php',
         'App\\Providers\\RouteServiceProvider' => __DIR__ . '/../..' . '/app/Providers/RouteServiceProvider.php',
+        'App\\Providers\\triggerServiceProvider' => __DIR__ . '/../..' . '/app/Providers/triggerServiceProvider.php',
         'App\\Randomnumber' => __DIR__ . '/../..' . '/app/Randomnumber.php',
         'App\\Repositories\\TaskRepository' => __DIR__ . '/../..' . '/app/Repositories/TaskRepository.php',
         'App\\Studentinfo' => __DIR__ . '/../..' . '/app/Studentinfo.php',
@@ -470,6 +478,7 @@ class ComposerStaticInitf50d610e0a89df1b0f04368f4aac364e
         'Barryvdh\\Reflection\\DocBlock\\Type\\Collection' => __DIR__ . '/..' . '/barryvdh/reflection-docblock/src/Barryvdh/Reflection/DocBlock/Type/Collection.php',
         'Carbon\\Carbon' => __DIR__ . '/..' . '/nesbot/carbon/src/Carbon/Carbon.php',
         'Carbon\\CarbonInterval' => __DIR__ . '/..' . '/nesbot/carbon/src/Carbon/CarbonInterval.php',
+        'Carbon\\Exceptions\\InvalidDateException' => __DIR__ . '/..' . '/nesbot/carbon/src/Carbon/Exceptions/InvalidDateException.php',
         'ClassPreloader\\ClassList' => __DIR__ . '/..' . '/classpreloader/classpreloader/src/ClassList.php',
         'ClassPreloader\\ClassLoader' => __DIR__ . '/..' . '/classpreloader/classpreloader/src/ClassLoader.php',
         'ClassPreloader\\ClassNode' => __DIR__ . '/..' . '/classpreloader/classpreloader/src/ClassNode.php',
