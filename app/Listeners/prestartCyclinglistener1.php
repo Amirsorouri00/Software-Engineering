@@ -7,7 +7,7 @@ use App\Studentinfo;
 use GuzzleHttp\Client;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
-
+use Redis;
 class prestartCyclinglistener1
 {
     /**
@@ -28,10 +28,11 @@ class prestartCyclinglistener1
      */
     public function handle(prestartCycling1 $event)
     {
-        //dd('re1listener');
+
+     $redis = Redis::connection();
         if ($event->nextRoundNum) {
 
-            $user = Studentinfo::all()->where('roundNumber', $event->nextRoundNum);
+            $user = Studentinfo::all()->where('roundNumberInd',(int) $event->nextRoundNum);
 
             $Qusers = $user->where('QorR', 1);//Todo wherer client must web
             $userscollect = collect();
@@ -42,10 +43,13 @@ class prestartCyclinglistener1
 
 
             }
-            $e = 0;
             $telegramQ = collect();
             $telegramQ->put('roundnumber', $event->nextRoundNum);
+            $androidlist=collect();
+            $androidlist->put('roundnumber',$event->nextRoundNum);
             $telTemplist = collect();
+            $androidtemp=collect();
+
             foreach ($Qusers as $userq) {
 
                 if ($userq->platform == 'web') {
@@ -53,39 +57,47 @@ class prestartCyclinglistener1
                     $tmp->put('userid', $userq->participantID);
                     $tmp->put('roundnumber', $event->nextRoundNum);
                     $userscollect->push($tmp);
-                } else {
+                } else if($userq->platform=='telegram') {
                     $telTemplist->push($userq->participantID);
 
+                }
+                else
+                {
+                $androidtemp->push($userq->participantID);
                 }
 
 
             }
+            $androidlist->put('users',$androidtemp);
             $telegramQ->put('users', $telTemplist);
             $flist = collect();
             $flist->put('users', $userscollect);
-            // dd($aa->all());
-            //dd($flist->all());
             $redis = \Redis::connection();
             $redis->publish('message', $flist);
-
-
             /// telegram send
             $Qusers = $user->where('QorR', 1);//Todo where is telegram user
             $userscollect = collect();
-
-
             try {
                 $client = new Client();
                 $response = $client->request('POST', 'http://51.254.79.221:8002/turns', [
                     'json' => $telegramQ
                 ]);
-                //dd($response->getBody());
+            } catch (\Exception $e) {
+
+            }
+
+
+            try {
+                $client = new Client();
+                $response = $client->request('POST', 'http://54.67.65.222:3000/androidgameserver/turningPost', [
+                    'json' => $androidlist
+                ]);
+               
             } catch (\Exception $e) {
 
             }
             //Todo send to telegram flist
 
-            //  dd(1);
 
         }
     }

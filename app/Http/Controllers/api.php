@@ -266,6 +266,8 @@ class api extends Controller
     public function getObjectedToScoreBasketResult(Request $request)
     {
         $request = $request->json()->all();
+        return $request->getContent();
+
         try {
             $basketOriginal = Basket::where('basketID', '=', $request['data']['basket']['basketID'])->firstOrFail();
             $objector = Studentinfo::where('participantID', '=', $basketOriginal->responderedID)->firstOrFail();

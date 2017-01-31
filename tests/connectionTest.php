@@ -284,5 +284,4 @@ class connectionTest extends TestCase
             //$response->seeStatusCode(200)->seePageIs('/test');
         }
     */
-
 }

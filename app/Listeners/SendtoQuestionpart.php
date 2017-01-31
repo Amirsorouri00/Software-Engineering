@@ -15,21 +15,27 @@ class SendtoQuestionpart
     public function startRound($event)
     {
 
-
-
-
+        $redis = Redis::connection();
 
         //   dd($event->list);
         $client = new Client();
         $listforsend = collect();
-        $temp=collect();
-        $temp->put('basketsArray',$event->list);
+        $temp = collect();
+        $temp->put('basketsArray', $event->list);
         $listforsend->put('data', $temp);
         $listforsend->put('ticket', 'justforfun');
-        $response = $client->post('http://questionandanswer.herokuapp.com/getPartBaskets', [
+        $redis->publish('log', $listforsend);
+        $response = $client->post('http://77.244.214.149:2000/getPartBaskets', [
             'json' => $listforsend
         ]);
 
+
+        foreach ($listforsend['data']['basketsArray'] as $l) {
+            $redis2 = Redis::connection();
+            $redis2->publish('redirect', $l['basket']['responderedID']);
+            $redis2->publish('redirect', $l['basket']['questionerID']);
+            # code...
+        }
         //dd($response->getBody());
     }
     /*
@@ -79,4 +85,5 @@ class SendtoQuestionpart
         $events->listen('App\Events\socketio',
             'App\Listeners\eventlistener@handle');
     }
+
 }

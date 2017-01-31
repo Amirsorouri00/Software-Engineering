@@ -2,7 +2,6 @@
 
 @section('content')
 
-
     <div id="app2">
         {{--<button v-on:click="Aj">Reverse Message</button>--}}
 
@@ -64,6 +63,7 @@
                                         </div>
                                     </div>
                                 </div>
+
                             </div>
                         </div>
                         <div class="column">
@@ -211,9 +211,7 @@
                 {{--</div>--}}
             </div>
         </form>
-
     </div>
-
 
     <script>
         $('.message .close')

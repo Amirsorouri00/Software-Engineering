@@ -22,9 +22,6 @@ class startCycling extends Event
 
     public function __construct()
     {
-        dd('startcycling');
-
-
         $user = Studentinfo::getFree();//get free student
         $Qsize = $user->where('QorR', 1)->count();
         $Rsize = $user->where('QorR', 0)->count();

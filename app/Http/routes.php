@@ -21,10 +21,12 @@
 | kernel and includes session state, CSRF protection, and more.
 |
 */
+
 use Carbon\Carbon;
 use GuzzleHttp\Client;
 use Illuminate\Http\Request;
 use App\User;
+use App\Studentinfo;
 
 Route::group(['middleware' => ['web']], function () {
 
@@ -38,12 +40,10 @@ Route::group(['middleware' => ['web']], function () {
     //amirsorouri00
     Route::get('/data', 'amircontroller@test');
     Route::get('/cycling', 'amircontroller@cycle');
-
     Route::post('/entertogame', 'api@getEnteredPerson');
-
     Route::post('forceExit', 'api@userForceExit');
 
-    Route::post('volunteerExit/{studeninfoid}', function($studeninfoid){
+    Route::post('volunteerExit/{studeninfoid}', function ($studeninfoid) {
         //todo we must check on our own how to pass student id from the page to controller
         //todo must handle redirecting user important
         //return $studeninfoid;
@@ -61,6 +61,7 @@ Route::group(['middleware' => ['web']], function () {
             echo 'Caught response: ' . $e->getResponse()->getStatusCode();
         }
     });
+    //Route::post('volunteerExit', 'api@volunteerExitRequest');
 
     Route::post('/getVolunteers', 'api@getVolunteersBasket');
 
@@ -81,26 +82,54 @@ Route::group(['middleware' => ['web']], function () {
         return $stdID;
         return view('client', ['stdID' => $request->stdID]);
     }]);
-    Route::get('fire', function () {
+
+
+    Route::get('fire', function (Request $request) {
         // this fires the event
-        event(new App\Events\socketio());
+        //  event(new App\Events\socketio());
+        //$rt= $request->getContent();
+        $data = $request->json()->all();
+        // Log::debug($request);
+        // $phpArray = json_decode($data,true);
+        $name = $data['name'];
+        $coach_uuid = $data['coach']['uuid']; // works now !!!
+        $category_uuid = $data['category']['uuid']; // works now!!!
+        $ee = '{"af":"34"}';
+        $df = json_decode($ee, JSON_HEX_APOS);
+        //return $df['af'];
+        $df = json_decode($ee, true);
+        //return $df['af'];/*
+        /*$ee='{'af':34}';
+        return $df['af'];
+        $name = $request->input('data');
+        $redis = Redis::connection();
+        $redis->publish('log',json_decode($df));
+*/
+
         return "event fired";
     });
+
     Route::get('/test', function () {
         // this checks for the event
         return view('test');
     });
+
     Route::post('l', function () {
         $basket = App\Basket::where('basketID', '4VeF64t')->firstOrFail();
         $basket->basketStatus = 'amir';
         $basket->save();
         return view('test');
     });
+
     //Teacher part
     Route::get('baskets', 'Teachercontroller@getbasketsview');
+
     Route::get('enterround', 'Teachercontroller@enterround');
+
     Route::post('basket/{basket}', 'Teachercontroller@getbasket');
+
     Route::get('teacherlogin', 'Teachercontroller@login');
+
     Route::post('basketupdate/{basket}', 'Teachercontroller@basketupdate');
     //Route::get('')
     /*
@@ -108,15 +137,17 @@ Route::group(['middleware' => ['web']], function () {
         return view('teacher.teacherStart', ['id' => $studentinfo->personalID]);
     });*/
     Route::post('teacherEntertoGame/{studentinfo}', 'Teachercontroller@teacherEntertoGame');
-    Route::get('startgame', function () {
-        Event::fire(new \App\Events\prestartCycling());
-    });
+
+
 
     /*
      * Mohsen Routes
      * */
-    Route::get(
-        'redistime', function () {
+    Route::get('startgame', function () {
+        Event::fire(new \App\Events\prestartCycling());
+    });
+
+    Route::get('redistime', function () {
         $r = Redis::connection();
         $l = collect();
         $l->put('roundnumber', 1);
@@ -136,12 +167,12 @@ Route::group(['middleware' => ['web']], function () {
     });
 
     Route::post('Ajtest', function (Request $req) {
+
         $user = \App\Studentinfo::all()->where('participantID', $req['studentid'])->first();
         $user->gradeH = $req['num2'];
         $user->gradeL = $req['num1'];//31523
         $user->roundNumber = $req['roundnumber'];
         $user->save();
-
 //        $allusersRound = \App\Studentinfo::all()->where('roundnumber', $req->roundnumber);
 //        foreach ($allusersRound as $u) {
 //            if ($u->gradeH == -1 || $u->gradeL == -1) {
@@ -167,6 +198,8 @@ Route::group(['middleware' => ['web']], function () {
         Event::fire(new \App\Events\startCycling());
     });
     Route::get('startround/{num}', function ($num) {
+
+        Event::fire(new \App\Events\prestartCycling());
         Event::fire(new \App\Events\Cycling($num));
         return $num;
     });
@@ -178,7 +211,6 @@ Route::group(['middleware' => ['web']], function () {
           //    $list = collect(['usernames' => ['mohsen', 'ali', 'amir']]);
           $redis->publish('message', $list);
           return $list->toJson();*/
-
         $redis = Redis::connection();
         $redis->publish('goToquestionpart', 'MetR2I7');
         $redis = Redis::connection();
@@ -189,17 +221,29 @@ Route::group(['middleware' => ['web']], function () {
     });
 
     Route::get('/main/{userid}', function ($userid) {
+
         $api = new \App\Http\Controllers\api();
         return view('main')->with('info', $api->attributes($userid));
     });
 
+
     Route::post('telegramRange', function (Request $request) {
+
+        $request= $request->json()->all();
         $user = \App\Studentinfo::all()->where('participantID', $request['username'])->first();
         $user->gradeH = $request['range']['max'];
         $user->gradeL = $request['range']['min'];//31523
         $user->save();
         return 'ok';
-        //Todo save and cheack
+        //Todo save and check
+    });
+    Route::post('androidRange',function(Request $request){
+
+         $user = \App\Studentinfo::all()->where('participantID', $request['username'])->first();
+        $user->gradeH = $request['range']['max'];
+        $user->gradeL = $request['range']['min'];//31523
+        $user->save();
+        return 'ok';
     });
     Route::get('splash', function () {
         return view('splash');
@@ -254,6 +298,7 @@ Route::group(['middleware' => ['web']], function () {
 //        ]);
         try {
             $client = new Client();
+            //todo json check!!!
             $response = $client->request('POST', 'http://172.17.10.252:2000/getPartBaskets', [
                 'json' => [json_decode($jsond)]
             ]);
@@ -282,21 +327,22 @@ Route::group(['middleware' => ['web']], function () {
 //        $request->setBody($jsond); #set body!
 //        $response = $request->send();
 //        return $response;
-
-
         //  $res=   $client->request('POST', '/dfg', ['json' => [$jsond]]);
-
 
         return $response->getHeader();
     });
+
     Route::get('mahditest', function (Request $request) {
         Event::fire(new \App\Events\Cycling(0));
         return 1;
     });
 
-    Route::get('start', function () {
-        Event::fire(new \App\Events\startCycling());
+    Route::get('start',function(){
+       Event::fire(new \App\Events\startCycling());
 
+    });
+    Route::get('startbazi',function(){
+        \Event::fire(new \App\Events\prestartCycling1());
     });
     Route::get('cheackSet', function () {
         $r = Redis::connection();
@@ -306,10 +352,6 @@ Route::group(['middleware' => ['web']], function () {
         $r->sadd('round', json_encode($l));
 
     });
-
 });
-
-
-
 //Route::post('posttest', 'amircontroller@posttest');
 

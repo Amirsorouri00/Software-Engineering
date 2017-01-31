@@ -7,6 +7,8 @@ use App\Studentinfo;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 
+use Redis;
+
 class prestartCycling1 extends Event
 {
     use SerializesModels;
@@ -25,57 +27,50 @@ class prestartCycling1 extends Event
         $user = Studentinfo::getFree();//get free student
 
 
-
-
         $Qsize = $user->where('QorR', 1)->count();
         $Rsize = $user->where('QorR', 0)->count();
 
-
         $minNum = min($Qsize, $Rsize);
-        //dd($minNum);
         if ($minNum == 0) {
             return;
         }
 
+        $Qusers = $user->where('QorR', (int)1)->take($minNum);
+        $Rusers = $user->where('QorR',(int) 0)->take($minNum);
+        $this->nextRoundNum = Studentinfo::all()->max('roundNumberInd') + 1;
+$newnum=Studentinfo::all()->max('roundNumberInd') ;
+$newnum++;
+         $redis=Redis::connection();
 
-        $Qusers = $user->where('QorR', 1)->take($minNum);
-        $Rusers = $user->where('QorR', 0)->take($minNum);
-
-        $this->nextRoundNum = Studentinfo::all()->max('roundNumber') + 1;
+$redis->publish('log',$newnum);
 
 
         foreach ($Qusers as $quser) {
 
-            $quser->roundNumber =$this->nextRoundNum;
-
-            //   $quser->individualStatus = 1;
+     $quser->roundNumberInd =$newnum;
+//$quser->roundNumberInd=$quser->roundNumberInd+1;
+            
             $quser->save();
         }
-        /*
-                $r = Redis::connection();
-                $l = collect();
-                $l->put('roundnumber', $nextRoundNum);
-                $lastROundTime = Exam::firstorfail();
-                $lastROundTime->lastRound_time=Carbon::now();
-                $lastROundTime->save();
-                $r.set('lastroundtime',$lastROundTime);
-                $ttt = Carbon::now();
-                $l->put('time', $ttt);
-                $r->sadd('round', json_encode($l));
-        */
+       
+         foreach ($Rusers as $ruser) {
+
+            $ruser->roundNumberInd = $newnum-1;
+            $ruser->roundNumberInd=$ruser->roundNumberInd+1;
+              // $ruser->individualStatus = 1;//Todo
+            $ruser->save();
+
+        }
+         $redis=Redis::connection();
+  $user = Studentinfo::all();
+//$redis->publish('log',$user);
+
         $r = \Redis::connection();
         $l = collect();
         $l->put('roundnumber', $this->nextRoundNum);
         $l->put('time', 30);
         $r->sadd('round', json_encode($l));
-
-        foreach ($Rusers as $ruser) {
-
-            $ruser->roundNumber = $this->nextRoundNum;
-            //     $ruser->individualStatus = 1;//Todo
-            $ruser->save();
-
-        }
+        $r->set('lastroundtime',300);
     }
 
     /**

@@ -7,7 +7,8 @@ var sss = 12;
 var userID = $('meta[name=userid]').attr('content');
 var interval
 var app5 = new Vue({
-    el: '#app2',
+
+    el: '#main',
     data: {
         message: 'not defind',
         timeR: 10,
@@ -168,7 +169,9 @@ var aap = new Vue({
 })
 
 //var c = io.connect('http://localhost:158', {query: "username=" + "{{ Auth::user()->name}}"});
-var c = io.connect('51.254.79.220:3618', {query: "username=" + 9330033 });
+
+var c = io.connect('51.254.79.220:3618', {query: "username=" + userID });
+
 //var socket = io.connect('http://localhost:0158');
 
 c.on('updateroundnumber', function (data) {
@@ -192,9 +195,8 @@ c.on('gotoquestionpart', function (data) {
 
 })
 c.on('redirect', function (data) {
-
     if (data == 1) {
-        window.location = "http://www.google.com";//Todo send to question part with user id
+        window.location = "http://77.244.214.149:2000/"+userID;//Todo send to question part with user id
     }
 
 
@@ -211,15 +213,8 @@ c.on('showmodal', function (data) {
         $('.ui.modal')
             .modal('show')
         ;
+        interval = setInterval(app5.fnm, 1000);
 
-        interval = setInterval(this.fnm, 1000);
-
-        /* // Todo if state is not starter time then update the start time round and update remaind time
-         var zaman= new Date(app5.$data.startroundtime)
-         var now=Date.now()
-         var elapsed = end - date
-         app5.$data.timeR=120-(elapsed/1000)
-         */
     }
     /*
      $('#dmm').dimmer({

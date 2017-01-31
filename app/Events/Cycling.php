@@ -4,11 +4,13 @@ namespace App\Events;
 
 use App\Classindividual;
 use App\Events\Event;
+use App\Exam;
 use App\Studentinfo;
 use App\Basket;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 use Illuminate\Support\Facades\Storage;
+use Redis;
 
 class Cycling extends Event
 {
@@ -21,13 +23,15 @@ class Cycling extends Event
      */
 
     public $list;
-    public $roundnimber;
+
+    public $roundnumberInd;
 
     public function __construct($num)
     {
-        $this->roundnimber = $num;
+        $this->roundnumberInd = $num;
+      //  $redis =Redis::connection();
+      //  $redis->publish('log',$this->roundnumberInd);
         $QRarray = $this->matchwithperiod();
-     //dd($num);
         $this->list = $this->listofbasket($QRarray);
         // return redirect('test');
     }
@@ -39,7 +43,10 @@ class Cycling extends Event
      */
     public function matchwithperiod()
     {
-        $user = Studentinfo::all()->where('roundNumber', $this->roundnimber);//get free student
+
+        $user = Studentinfo::all()->where('roundNumberInd', (int)$this->roundnumberInd);
+        //get free student
+
         $Qsize = $user->where('QorR', 1)->count();
         $Rsize = $user->where('QorR', 0)->count();
 
@@ -133,29 +140,30 @@ class Cycling extends Event
             $ClassIR = Classindividual::where('personalID', $ClassIR)->first();
 
             // dd($ClassIR);
+            $scoreExam = Exam::all()->first()->questionScore;
             $basket = new Basket;
             $basket->basketID = str_random(7);
 
-//            $basket->qPlatform=$tem['questioner']->platform;
-            $basket->qPlatform="web";
-//            $basket->rPlatform=$tem['respondent']->platform;
-            $basket->rPlatform="web";
-            $basket->basketScore=2;
-            $basket->basketStatus='Active';
-            $basket->flag=1;
+            $basket->qPlatform = $tem['questioner']->platform;
+            $tem['questioner']->finalScore = $tem['questioner']->finalScore - $scoreExam;
+            $tem['respondent']->finalScore = $tem['respondent']->finalScore - $scoreExam;
+            $tem['questioner']->save();
+            $tem['respondent']->save();
+            $basket->rPlatform = $tem['respondent']->platform;
+
+            $basket->basketScore = 2;
+            $basket->basketStatus = 'Active';
+            $basket->flag = 0;
 
             $basket->save();
             $ClassIQ->Qbasket()->save($basket);
             $ClassIR->Rbasket()->save($basket);
-            $temp=collect();
-            $temp->put('basket',$basket);
+            $temp = collect();
+            $temp->put('basket', $basket);
             $list->push($temp);
         }
         //return redirect('/test');
         return $list;
-
-
-
     }
 
     /**

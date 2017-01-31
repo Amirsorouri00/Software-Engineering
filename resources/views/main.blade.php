@@ -146,12 +146,10 @@
                                 Volunteer
                             </button>
                         </form>
-
                     </div>
                 </div>
             </div>
         </div>
-
     </div>
     <div id="dmm" class="ui page dimmer ">
         <div class="content">
@@ -185,7 +183,6 @@
                     </div>
                     <div class="right floated  one wide column">از</div>
                 </div>
-
             </div>
             <p> @{{ errormessage }} </p>
             <div class="actions">
@@ -202,7 +199,7 @@
 
     </div>
 
-    </div>
+    <!--</div>-->
 
     <script>
         $('.message .close')

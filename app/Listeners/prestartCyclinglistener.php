@@ -27,11 +27,12 @@ class prestartCyclinglistener
      */
     public function handle(prestartCycling $event)
     {
-        \Event::fire(new \App\Events\prestartCycling1());
-        if (min($event->Qsize, $event->Rsize) > 20) {
+
+        if (min($event->Qsize, $event->Rsize) > 0) {
             \Event::fire(new \App\Events\prestartCycling1());
         } else {
-            echo 'not enough students';
+            $r = \Redis::connection();
+            $r->set('lastroundtime', 300);
         }
     }
 }

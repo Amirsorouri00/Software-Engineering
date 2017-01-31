@@ -21,6 +21,7 @@ function write(value) {
     });
 
 }
+
 setInterval(function () {
 
     redisround.get('lastroundtime', function (err, reply) {
@@ -40,8 +41,10 @@ setInterval(function () {
                         console.log(error)
                     }
                     else {
-                        console.log('last round time has finished')
-                        write(body)
+
+                        console.log('last round time has finished',response)
+                        //write(response)
+
                     }
                     //  write(body)
                 });
@@ -73,6 +76,7 @@ setInterval(function () {
                     }
                     else {
                         console.log('get range time finished in round number=', obj['roundnumber'])
+
                     }
 
                 });
@@ -114,6 +118,14 @@ io.use(function (socket, next) {
 });
 
 server.listen(3618);
+
+var redislog=redis.createClient();
+redislog.subscribe('log');
+redislog.on('message',function(channel,mes){
+    console.log(mes);
+    write(mes)
+})
+
 io.on('connection', function (socket) {
 
     var userid = visitorsData[socket.id];
@@ -184,6 +196,7 @@ io.on('connection', function (socket) {
         //Todo
         if (mes == userid) {
             socket.emit('redirect', 1);
+            console.log('mustredirect',userid)
         }
 
     })
