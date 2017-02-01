@@ -3,6 +3,9 @@
 @section('content')
     <p id="power">0</p>
     <p>amir</p>
+
+    tes
+
 @stop
 
 @section('footer')

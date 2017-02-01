@@ -5,7 +5,7 @@
 
     <div id="app2">
         {{--<button v-on:click="Aj">Reverse Message</button>--}}
-
+        
         {{--@{{ message }}--}}
         <div class="ui  container">
             <div class="ui two column centered grid">

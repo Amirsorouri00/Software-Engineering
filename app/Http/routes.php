@@ -43,6 +43,7 @@ Route::group(['middleware' => ['web']], function () {
     Route::post('/entertogame', 'api@getEnteredPerson');
     Route::post('forceExit', 'api@userForceExit');
 
+
     Route::post('volunteerExit/{studeninfoid}', function ($studeninfoid) {
         //todo we must check on our own how to pass student id from the page to controller
         //todo must handle redirecting user important
@@ -354,4 +355,3 @@ Route::group(['middleware' => ['web']], function () {
     });
 });
 //Route::post('posttest', 'amircontroller@posttest');
-
