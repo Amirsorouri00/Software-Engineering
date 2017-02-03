@@ -1,5 +1,5 @@
 var elixir = require('laravel-elixir');
-
+var browserSync = require('laravel-elixir-browsersync2');
 require('laravel-elixir-webpack');
 /*
  |--------------------------------------------------------------------------
@@ -13,11 +13,19 @@ require('laravel-elixir-webpack');
  */
 
 elixir(function(mix) {
+     mix.scripts([
+       'vendor/vue.min.js',
+       'vendor/vue-resource.min.js'
+     ], 'public/js/vendor.js');
+     mix.browserSync({
+       proxy : 'bit.com:2000/'
+     });
      mix.sass('app.scss');
      mix.webpack('app.js');
-    // mix.webpack('back.js');
-    // mix.browserify('main.js');
-    // mix.browserify('../../../node_modules/bootstrap-sass/assets/javascripts/bootstrap.js');
-    // mix.webpack('../../../node_modules/jquery/dist/jquery.min.js');
-    // mix.sass('../../../node_modules/bootstrap-sass/assets/stylesheets/_bootstrap.scss');
+     mix.webpack('back.js');
+     //mix.browserify('guestexam.js');
+     //mix.browserify('main.js');
+     //mix.browserify('../../../node_modules/bootstrap-sass/assets/javascripts/bootstrap.js');
+     mix.webpack('../../../node_modules/jquery/dist/jquery.min.js');
+     mix.sass('../../../node_modules/bootstrap-sass/assets/stylesheets/_bootstrap.scss');
 });

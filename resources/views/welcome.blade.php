@@ -6,15 +6,13 @@
         <div class="col-md-10 col-md-offset-1">
             <div class="panel panel-default">
                 <div class="panel-heading">Welcome</div>
-
                 <div class="panel-body">
-                    Your Application's Landing Page.
+                    You Must Be Logged In To Use Our System.
                 </div>
             </div>
         </div>
     </div>
 </div>
-<p id="demo">سیبسب</p>
 @endsection
 <script>
 

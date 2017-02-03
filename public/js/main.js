@@ -11,10 +11,7 @@ var app5 = new Vue({
         reverseMessage: function () {
             this.message = this.message.split('').reverse().join('')
             $('.ui.modal')
-                .modal()
-            ;
-
-
+                .modal();
         },
         close: function () {
             $('.ui.modal')

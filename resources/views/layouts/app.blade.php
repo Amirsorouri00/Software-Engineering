@@ -6,18 +6,13 @@
     {{--<script src="{{asset('js/jqueryA.min.js')}}"></script>--}}
     {{--<script src="{{ asset('semantic/dist/semantic.min.js') }}"></script>--}}
     {{--<script src="{{ asset('js/bootstrap.js') }}"></script>--}}
-
     <link rel="shortcut icon" href="{{ asset('favicon-16x16.png') }}" >
     <script src="{{asset('js/jqueryA.min.js')}}"></script>
     <script src="{{ asset('semantic/dist/semantic.min.js') }}"></script>
     {{--<script src="{{ asset('js/bootstrap.js') }}"></script>--}}
-
-
-
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.4.0/css/font-awesome.min.css" rel='stylesheet'
           type='text/css'>
     <link href="https://fonts.googleapis.com/css?family=Lato:100,300,400,700" rel='stylesheet' type='text/css'>
-
     <!-- Styles -->
     <link rel="shortcut icon" href="{{ asset('favicon-16x16.png') }}">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>

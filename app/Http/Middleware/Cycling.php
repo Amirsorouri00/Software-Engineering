@@ -21,7 +21,7 @@ class Cycling
      */
     public function handle($request, Closure $next)
     {
-        return view('splash');
+        //return view('splash');
         /*
          * check number of fre user
          *

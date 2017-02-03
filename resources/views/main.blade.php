@@ -2,10 +2,8 @@
 
 @section('content')
 
-
     <div id="app2">
         {{--<button v-on:click="Aj">Reverse Message</button>--}}
-        
         {{--@{{ message }}--}}
         <div class="ui  container">
             <div class="ui two column centered grid">
@@ -163,7 +161,6 @@
     <div class="ui modal">
         {{--<i class="close icon"></i>--}}
         <div class="header">
-
             لطفا باز ه ی نمره خود را وارد کنید
             <div> @{{ timeR }} زمان باقی مانده</div>
         </div>

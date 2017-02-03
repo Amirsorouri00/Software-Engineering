@@ -28,22 +28,53 @@ use Illuminate\Http\Request;
 use App\User;
 use App\Studentinfo;
 
+Route::get('/main/{userid}', function ($userid) {
+
+    $api = new \App\Http\Controllers\api();
+    return view('main')->with('info', $api->attributes($userid));
+});
+
+
 Route::group(['middleware' => ['web']], function () {
 
     Route::get('/', function () {
         return view('welcome');
     })->middleware('guest');
     Route::get('test', 'amircontroller@matchwithperiod');
-    Route::get('/tasks', 'TaskController@index');
-    Route::delete('/task/{task}', 'TaskController@destroy');
 
-    //amirsorouri00
-    Route::get('/data', 'amircontroller@test');
-    Route::get('/cycling', 'amircontroller@cycle');
+    Route::get('api/exams', function(){
+        return App\Exam::all();
+    });
+
+    Route::post('api/exams', function(){
+        App\Exam::create(Request::all());
+    });
+
+    Route::get('guestexam', function(){
+        return view('guestexam');
+    });
+
+    /*
+    * Api Controller Routes Amirsorouri00
+    */
+    // This Route Handles Any New Entered Player    Test: OK
     Route::post('/entertogame', 'api@getEnteredPerson');
-    Route::post('forceExit', 'api@userForceExit');
-
-
+    // This Route Gets Basket From QuestionPart And Handles Whether It Must Be Redirected Or Must Be Posted To
+    // Volunteer Subsystem    Test: OK
+    Route::post('/questionPartResult', 'api@questionPartResult');
+    // QuestionPart Posted Us Volunteer Baskests Results Using This Route Api     Test:OK
+    Route::post('volunteerResult', 'api@volunteerResult');
+    // QuestionPart Sends Baskets To This Route And We Send That To Objection Subsystem.    Test: OK
+    Route::post('/getObjectedBasket', 'api@getObjectedToScoreBasket');
+    // Objection Sends Baskets To This Route And We Decide Whether It Must Be Deactivated Or Sent To
+    // Volunteer Subsystem    Test: OK
+    Route::post('/getObjectionResult', 'api@getObjectedToScoreBasketResult');
+    // VolunteerPart Sends Baskets With Their Respondent, We Post That Request To QuestionPart After
+    // Doing Some Processes In Database    Test: OK
+    Route::post('/getVolunteers', 'api@getVolunteersBasket');
+    // We Call This Route for Sending Players To Exit Part And They Should Get User Out Of The Game
+    // If They Must Be Out In Order To Their Information Into Our Database
+    //Route::post('volunteerExit', 'api@volunteerExitRequest');
     Route::post('volunteerExit/{studeninfoid}', function ($studeninfoid) {
         //todo we must check on our own how to pass student id from the page to controller
         //todo must handle redirecting user important
@@ -62,28 +93,43 @@ Route::group(['middleware' => ['web']], function () {
             echo 'Caught response: ' . $e->getResponse()->getStatusCode();
         }
     });
-    //Route::post('volunteerExit', 'api@volunteerExitRequest');
 
-    Route::post('/getVolunteers', 'api@getVolunteersBasket');
+    /*
+    * Teacher Routes Controller Amirsorouri00
+    */
+    // Route For Teacher Entering To Game
+    Route::post('teacherEntertoGame/{studentinfo}', 'Teachercontroller@teacherEntertoGame');
+    Route::get('teacherlogin', 'Teachercontroller@login');
+    // Route For Teacher In Order To Enter To Next Round
+    //Route::get('enterround', 'Teachercontroller@enterround');
+    // This Route Returns All Active Baskets In A View For The Teacher
+    Route::get('baskets', 'Teachercontroller@getbasketsview');
+    // Route For Showing A Specific Basket To The Teacher
+    Route::post('basket/{basket}', 'Teachercontroller@getbasket');
+    // Route For Updating/Changing Basket Score By The Teacher
+    Route::post('basketupdate/{basket}', 'Teachercontroller@basketupdate');
+    /*
+    Route::get('teacherEntertoGame/{classindividual}', function($studentinfo){
+        return view('teacher.teacherStart', ['id' => $studentinfo->personalID]);
+    });*/
 
-    Route::post('/getObjectedBasket', 'api@getObjectedToScoreBasket');
-
-    Route::post('/getObjectionResult', 'api@getObjectedToScoreBasketResult');
-
-    Route::post('/questionPartResult', 'api@questionPartResult');
-
-    Route::post('volunteerResult', 'api@volunteerResult');
-
-    Route::post('posttest', function () {
-        return 'amirposttest';
-    });
-    //Route::get('/client', ['stdID' => 'stdID']);
+    /*
+    * Inner Routes Controller Amirsorouri00
+    */
     Route::get('/client/{stdID}', ['as' => 'client', function (Request $request, $stdID) {
         //dd($request->stdID);
         return $stdID;
         return view('client', ['stdID' => $request->stdID]);
     }]);
 
+    Route::get('/data', 'amircontroller@test');
+    Route::get('/cycling', 'amircontroller@cycle');
+    Route::post('forceExit', 'api@userForceExit');
+
+    Route::post('posttest', function () {
+        return 'amirposttest';
+    });
+    //Route::get('/client', ['stdID' => 'stdID']);
 
     Route::get('fire', function (Request $request) {
         // this fires the event
@@ -106,7 +152,6 @@ Route::group(['middleware' => ['web']], function () {
         $redis = Redis::connection();
         $redis->publish('log',json_decode($df));
 */
-
         return "event fired";
     });
 
@@ -121,24 +166,6 @@ Route::group(['middleware' => ['web']], function () {
         $basket->save();
         return view('test');
     });
-
-    //Teacher part
-    Route::get('baskets', 'Teachercontroller@getbasketsview');
-
-    Route::get('enterround', 'Teachercontroller@enterround');
-
-    Route::post('basket/{basket}', 'Teachercontroller@getbasket');
-
-    Route::get('teacherlogin', 'Teachercontroller@login');
-
-    Route::post('basketupdate/{basket}', 'Teachercontroller@basketupdate');
-    //Route::get('')
-    /*
-    Route::get('teacherEntertoGame/{classindividual}', function($studentinfo){
-        return view('teacher.teacherStart', ['id' => $studentinfo->personalID]);
-    });*/
-    Route::post('teacherEntertoGame/{studentinfo}', 'Teachercontroller@teacherEntertoGame');
-
 
 
     /*
@@ -195,11 +222,12 @@ Route::group(['middleware' => ['web']], function () {
 
         return $response;
     });
+
     Route::get('startcycling', function () {
         Event::fire(new \App\Events\startCycling());
     });
-    Route::get('startround/{num}', function ($num) {
 
+    Route::get('startround/{num}', function ($num) {
         Event::fire(new \App\Events\prestartCycling());
         Event::fire(new \App\Events\Cycling($num));
         return $num;
@@ -221,12 +249,6 @@ Route::group(['middleware' => ['web']], function () {
         return dd($zaman);
     });
 
-    Route::get('/main/{userid}', function ($userid) {
-
-        $api = new \App\Http\Controllers\api();
-        return view('main')->with('info', $api->attributes($userid));
-    });
-
 
     Route::post('telegramRange', function (Request $request) {
 
@@ -238,6 +260,7 @@ Route::group(['middleware' => ['web']], function () {
         return 'ok';
         //Todo save and check
     });
+
     Route::post('androidRange',function(Request $request){
 
          $user = \App\Studentinfo::all()->where('participantID', $request['username'])->first();
@@ -246,14 +269,38 @@ Route::group(['middleware' => ['web']], function () {
         $user->save();
         return 'ok';
     });
+
+    Route::get('mahditest', function (Request $request) {
+        Event::fire(new \App\Events\Cycling(0));
+        return 1;
+    });
+
+    Route::get('start',function(){
+       Event::fire(new \App\Events\startCycling());
+
+    });
+
+    Route::get('startbazi',function(){
+        \Event::fire(new \App\Events\prestartCycling1());
+    });
+
+    Route::get('cheackSet', function () {
+        $r = Redis::connection();
+        $l = collect();
+        $l->put('roundnumber', 1);
+        $l->put('time', 0);
+        $r->sadd('round', json_encode($l));
+
+    });
+
     Route::get('splash', function () {
         return view('splash');
     });
-    Route::auth();
-    Route::get('parttest', function () {
 
-        $jsond = '{
-  "data": {
+    Route::auth();
+
+    Route::get('parttest', function () {
+        $jsond = '{"data": {
     "basketsArray": [
       {
         "basket": {
@@ -290,13 +337,8 @@ Route::group(['middleware' => ['web']], function () {
         }
       }
     ]
-  },
-  "ticket": "volunteerRespondUserTicket"
-}';
-//        $client = new Client();
-//        $response = $client->request('POST','http://172.17.10.252:2000/getPartBaskets', [
-//            'json' =>  [$jsond]
-//        ]);
+  },"ticket": "volunteerRespondUserTicket"}';
+
         try {
             $client = new Client();
             //todo json check!!!
@@ -306,6 +348,11 @@ Route::group(['middleware' => ['web']], function () {
         } catch (Exception $e) {
 
         }
+
+        //        $client = new Client();
+        //        $response = $client->request('POST','http://172.17.10.252:2000/getPartBaskets', [
+        //            'json' =>  [$jsond]
+        //        ]);
 
         // $client = new Client();
 
@@ -333,25 +380,6 @@ Route::group(['middleware' => ['web']], function () {
         return $response->getHeader();
     });
 
-    Route::get('mahditest', function (Request $request) {
-        Event::fire(new \App\Events\Cycling(0));
-        return 1;
-    });
 
-    Route::get('start',function(){
-       Event::fire(new \App\Events\startCycling());
-
-    });
-    Route::get('startbazi',function(){
-        \Event::fire(new \App\Events\prestartCycling1());
-    });
-    Route::get('cheackSet', function () {
-        $r = Redis::connection();
-        $l = collect();
-        $l->put('roundnumber', 1);
-        $l->put('time', 0);
-        $r->sadd('round', json_encode($l));
-
-    });
 });
 //Route::post('posttest', 'amircontroller@posttest');

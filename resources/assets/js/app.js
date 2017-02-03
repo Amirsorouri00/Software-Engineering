@@ -7,7 +7,6 @@ var sss = 12;
 var userID = $('meta[name=userid]').attr('content');
 var interval
 var app5 = new Vue({
-
     el: '#main',
     data: {
         message: 'not defind',

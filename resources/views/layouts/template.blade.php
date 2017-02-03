@@ -32,17 +32,12 @@
             src: url(../font/KoodakBold.eot?#iefix) format("embedded-opentype"), url(../font/KoodakBold.woff) format("woff"), url(../font/KoodakBold.ttf) format("truetype"), url(../font/Yekan.svg#BYekan) format("svg");
             font-weight: normal;
             font-style: normal
-
         }
 
         body {
             font-family: 'Tahoma';
-
         }
-
-
     </style>
-
     <script>
 
 
@@ -79,9 +74,7 @@
     </div>
 </div>
 
-<canvas style="z-index: -1" class='connecting-dots'></canvas>
-
-
+<!--<canvas style="z-index: -1" class='connecting-dots'></canvas>-->
 {{--<button onClick="fn()" class="ui button" id="btn-show">--}}
 {{--Show modal--}}
 {{--</button>--}}
