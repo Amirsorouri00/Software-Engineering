@@ -23,7 +23,7 @@
                         <td>{{$b->questionID}}</td>
                         <td>{{$b->basketScore}}</td>
                         <td style="direction: rtl;">
-                            <form action="http://software:81/basket/{{$b->id}}" method="post">
+                            <form action="basket/{{$b->id}}" method="post">
                                 <button class="btn btn-info col-md-4">Go</button>
                             </form>
                         </td>
@@ -35,7 +35,7 @@
                         <td>{{$b->questionID}}</td>
                         <td>{{$b->basketScore}}</td>
                         <td style="direction: rtl;">
-                            <form action="http://software:81/basket/{{$b->id}}" method="post">
+                            <form action="basket/{{$b->id}}" method="post">
                                 <button class="btn btn-info col-md-4">Go</button>
                             </form>
                         </td>
@@ -47,7 +47,7 @@
                         <td>{{$b->questionID}}</td>
                         <td>{{$b->basketScore}}</td>
                         <td style="direction: rtl;">
-                            <form action="http://software:81/basket/{{$b->id}}" method="post">
+                            <form action="basket/{{$b->id}}" method="post">
                                 <button class="btn btn-info col-md-4">Go</button>
                             </form>
                         </td>
@@ -59,7 +59,7 @@
                         <td>{{$b->questionID}}</td>
                         <td>{{$b->basketScore}}</td>
                         <td style="direction: rtl;">
-                            <form action="http://software:81/basket/{{$b->id}}" method="post">
+                            <form action="basket/{{$b->id}}" method="post">
                                 <button class="btn btn-info col-md-4">Go</button>
                             </form>
                         </td>
@@ -71,7 +71,7 @@
                         <td>{{$b->questionID}}</td>
                         <td>{{$b->basketScore}}</td>
                         <td style="direction: rtl;">
-                            <form action="http://software:81/basket/{{$b->id}}" method="post">
+                            <form action="basket/{{$b->id}}" method="post">
                                 <button class="btn btn-info col-md-4">Go</button>
                             </form>
                         </td>
@@ -83,10 +83,6 @@
         </table>
         {{ $baskets->links() }}
     </div>
-
-
-
-
     <!--
     <div class="container">
         @foreach($baskets as $b)

@@ -166,9 +166,7 @@
         </div>
         <form>
             <div class=" content">
-
                 <div class="ui   input">
-
                     <div class="right floated  four wide column">
                         <input v-model="num2" min="0" max="20"
                                oninvalid="this.setCustomValidity('بازه نمره میبایست بین 0 تا 20 باشد')">

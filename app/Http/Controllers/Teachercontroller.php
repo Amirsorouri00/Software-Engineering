@@ -45,7 +45,7 @@ class Teachercontroller extends Controller
                  continue;
              }
          }
-         return view('teacher.teacherStart', ['id' => $studentinfo->personalID]);
+         //return view('teacher.teacherMain', ['id' => $studentinfo->personalID]);
      }
 
     public function getbasketsview()

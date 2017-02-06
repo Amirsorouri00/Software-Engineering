@@ -28,11 +28,6 @@ use Illuminate\Http\Request;
 use App\User;
 use App\Studentinfo;
 
-Route::get('/main/{userid}', function ($userid) {
-
-    $api = new \App\Http\Controllers\api();
-    return view('main')->with('info', $api->attributes($userid));
-});
 
 
 Route::group(['middleware' => ['web']], function () {
@@ -52,6 +47,29 @@ Route::group(['middleware' => ['web']], function () {
 
     Route::get('guestexam', function(){
         return view('guestexam');
+    });
+
+
+    Route::get('/main/{userid}', function ($userid) {
+
+        $api = new \App\Http\Controllers\api();
+        return view('main')->with('info', $api->attributes($userid));
+    });
+
+    Route::post('teacherUpdateStatus', function(Request $request){
+        $teacher = Studentinfo::where('name', 'pattern');
+    });
+
+    Route::post('api/teacherstatus', function(Request $request){
+      try{
+        $teacher = Studentinfo::where('participantID', $request->json)->firstOrFail();
+        $teacher->individualStatus = 0;
+        $teacher->save();
+        return 'yeeeeeeeeeees';
+      }catch(\Exception $e){
+        return 'noooooooooooooooo';
+      }
+
     });
 
     /*
@@ -101,7 +119,7 @@ Route::group(['middleware' => ['web']], function () {
     Route::post('teacherEntertoGame/{studentinfo}', 'Teachercontroller@teacherEntertoGame');
     Route::get('teacherlogin', 'Teachercontroller@login');
     // Route For Teacher In Order To Enter To Next Round
-    //Route::get('enterround', 'Teachercontroller@enterround');
+    // Route::get('enterround', 'Teachercontroller@enterround');
     // This Route Returns All Active Baskets In A View For The Teacher
     Route::get('baskets', 'Teachercontroller@getbasketsview');
     // Route For Showing A Specific Basket To The Teacher
@@ -190,12 +208,12 @@ Route::group(['middleware' => ['web']], function () {
         Redis::set('time', $carbonnow);
         return 1;
     });
+
     Route::get('template', function () {
         return view('main')->with(['err' => 'sfsdfsdfsf']);
     });
 
     Route::post('Ajtest', function (Request $req) {
-
         $user = \App\Studentinfo::all()->where('participantID', $req['studentid'])->first();
         $user->gradeH = $req['num2'];
         $user->gradeL = $req['num1'];//31523

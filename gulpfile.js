@@ -20,12 +20,15 @@ elixir(function(mix) {
      mix.browserSync({
        proxy : 'bit.com:2000/'
      });
+
      mix.sass('app.scss');
      mix.webpack('app.js');
      mix.webpack('back.js');
-     //mix.browserify('guestexam.js');
-     //mix.browserify('main.js');
-     //mix.browserify('../../../node_modules/bootstrap-sass/assets/javascripts/bootstrap.js');
+     mix.browserify('app.js');
+     mix.browserify('main.js');
+     mix.browserify('guestexam.js');
+     mix.browserify('teacher-main.js');
+     mix.browserify('../../../node_modules/bootstrap-sass/assets/javascripts/bootstrap.js');
      mix.webpack('../../../node_modules/jquery/dist/jquery.min.js');
      mix.sass('../../../node_modules/bootstrap-sass/assets/stylesheets/_bootstrap.scss');
 });

@@ -8,6 +8,7 @@ var userID = $('meta[name=userid]').attr('content');
 var interval
 var app5 = new Vue({
     el: '#main',
+
     data: {
         message: 'not defind',
         timeR: 10,
@@ -19,6 +20,7 @@ var app5 = new Vue({
         errormessage: '',
         studentid: userID
     },
+
     watch: {
         num1: {
             handler: function (val, oldval) {

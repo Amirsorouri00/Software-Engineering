@@ -72,6 +72,7 @@ class ComposerStaticInitf50d610e0a89df1b0f04368f4aac364e
         'L' => 
         array (
             'League\\Flysystem\\' => 17,
+            'Laracasts\\Utilities\\JavaScript\\' => 31,
         ),
         'I' => 
         array (
@@ -233,6 +234,10 @@ class ComposerStaticInitf50d610e0a89df1b0f04368f4aac364e
         array (
             0 => __DIR__ . '/..' . '/league/flysystem/src',
         ),
+        'Laracasts\\Utilities\\JavaScript\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/laracasts/utilities/src',
+        ),
         'Illuminate\\' => 
         array (
             0 => __DIR__ . '/..' . '/laravel/framework/src/Illuminate',
@@ -386,6 +391,7 @@ class ComposerStaticInitf50d610e0a89df1b0f04368f4aac364e
         'App\\Http\\Controllers\\Teachercontroller' => __DIR__ . '/../..' . '/app/Http/Controllers/Teachercontroller.php',
         'App\\Http\\Controllers\\amircontroller' => __DIR__ . '/../..' . '/app/Http/Controllers/amircontroller.php',
         'App\\Http\\Controllers\\api' => __DIR__ . '/../..' . '/app/Http/Controllers/api.php',
+        'App\\Http\\Controllers\\innerFunctions' => __DIR__ . '/../..' . '/app/Http/Controllers/innerFunctions.php',
         'App\\Http\\Kernel' => __DIR__ . '/../..' . '/app/Http/Kernel.php',
         'App\\Http\\Middleware\\Authenticate' => __DIR__ . '/../..' . '/app/Http/Middleware/Authenticate.php',
         'App\\Http\\Middleware\\Cycling' => __DIR__ . '/../..' . '/app/Http/Middleware/Cycling.php',
@@ -2011,6 +2017,11 @@ class ComposerStaticInitf50d610e0a89df1b0f04368f4aac364e
         'JakubOnderka\\PhpConsoleColor\\ConsoleColor' => __DIR__ . '/..' . '/jakub-onderka/php-console-color/src/JakubOnderka/PhpConsoleColor/ConsoleColor.php',
         'JakubOnderka\\PhpConsoleColor\\InvalidStyleException' => __DIR__ . '/..' . '/jakub-onderka/php-console-color/src/JakubOnderka/PhpConsoleColor/InvalidStyleException.php',
         'JakubOnderka\\PhpConsoleHighlighter\\Highlighter' => __DIR__ . '/..' . '/jakub-onderka/php-console-highlighter/src/JakubOnderka/PhpConsoleHighlighter/Highlighter.php',
+        'Laracasts\\Utilities\\JavaScript\\JavaScriptFacade' => __DIR__ . '/..' . '/laracasts/utilities/src/JavaScriptFacade.php',
+        'Laracasts\\Utilities\\JavaScript\\JavaScriptServiceProvider' => __DIR__ . '/..' . '/laracasts/utilities/src/JavaScriptServiceProvider.php',
+        'Laracasts\\Utilities\\JavaScript\\LaravelViewBinder' => __DIR__ . '/..' . '/laracasts/utilities/src/LaravelViewBinder.php',
+        'Laracasts\\Utilities\\JavaScript\\PHPToJavaScriptTransformer' => __DIR__ . '/..' . '/laracasts/utilities/src/PHPToJavaScriptTransformer.php',
+        'Laracasts\\Utilities\\JavaScript\\ViewBinder' => __DIR__ . '/..' . '/laracasts/utilities/src/ViewBinder.php',
         'League\\Flysystem\\AdapterInterface' => __DIR__ . '/..' . '/league/flysystem/src/AdapterInterface.php',
         'League\\Flysystem\\Adapter\\AbstractAdapter' => __DIR__ . '/..' . '/league/flysystem/src/Adapter/AbstractAdapter.php',
         'League\\Flysystem\\Adapter\\AbstractFtpAdapter' => __DIR__ . '/..' . '/league/flysystem/src/Adapter/AbstractFtpAdapter.php',
