@@ -221,18 +221,15 @@
               </div>
               <div class="thirteen wide column centered row">
                   <div class="ui grid centered" id="guestexam">
-                      <div class="eight wide column centered"  >
+                      <div class="eight wide column centered">
                           <form action="http://software:81/teacher Ent ertoGame/{{ $id }}" v-on="submit: onSubmitForm" method="post">
-                              <div class="alert alert-success" v-show="submitted">
-                                  Thanks!!
-                              </div>
                               <button  class="ui inverted massive fluid red button" type="submit" v-on="click: submit" name="button" v-attr = "disabled: errors">
                                   Enter To Game
                               </button>
                           </form>
                       </div>
                       <div class="eight wide column centered">
-                          <form action="http://software:81/startgame" v-on="submit: enterToGame" method="get">
+                          <form action="/startgame" v-on="submit: enterToGame" method="get">
                               <button  class="ui inverted massive fluid olive button" v-on="click: submit" v-attr = "disabled: notstarted">
                                   Start Game
                               </button>

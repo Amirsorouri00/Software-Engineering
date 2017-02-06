@@ -131,6 +131,12 @@ Route::group(['middleware' => ['web']], function () {
         return view('teacher.teacherStart', ['id' => $studentinfo->personalID]);
     });*/
 
+    Route::get('startgame', function () {
+        Event::fire(new \App\Events\prestartCycling());
+        dd('here');
+        return view('teacherMain');
+    });
+
     /*
     * Inner Routes Controller Amirsorouri00
     */
@@ -189,9 +195,7 @@ Route::group(['middleware' => ['web']], function () {
     /*
      * Mohsen Routes
      * */
-    Route::get('startgame', function () {
-        Event::fire(new \App\Events\prestartCycling());
-    });
+
 
     Route::get('redistime', function () {
         $r = Redis::connection();
