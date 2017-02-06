@@ -17,18 +17,17 @@ elixir(function(mix) {
        'vendor/vue.min.js',
        'vendor/vue-resource.min.js'
      ], 'public/js/vendor.js');
-     mix.browserSync({
-       proxy : 'bit.com:2000/'
-     });
-
+  //   mix.browserSync({
+//       proxy : 'bit.com:2000/'
+//
      mix.sass('app.scss');
      mix.webpack('app.js');
      mix.webpack('back.js');
-     mix.browserify('app.js');
-     mix.browserify('main.js');
-     mix.browserify('guestexam.js');
-     mix.browserify('teacher-main.js');
-     mix.browserify('../../../node_modules/bootstrap-sass/assets/javascripts/bootstrap.js');
-     mix.webpack('../../../node_modules/jquery/dist/jquery.min.js');
+  //   mix.browserify('app.js');
+  //   mix.browserify('main.js');
+//mix.browserify('guestexam.js');
+  //   mix.browserify('teacher-main.js');
+  //   mix.browserify('../../../node_modules/bootstrap-sass/assets/javascripts/bootstrap.js');
+  //   mix.webpack('../../../node_modules/jquery/dist/jquery.min.js');
      mix.sass('../../../node_modules/bootstrap-sass/assets/stylesheets/_bootstrap.scss');
 });

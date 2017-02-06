@@ -8,7 +8,6 @@ var userID = $('meta[name=userid]').attr('content');
 var interval
 var app5 = new Vue({
     el: '#main',
-
     data: {
         message: 'not defind',
         timeR: 10,
@@ -65,7 +64,7 @@ var app5 = new Vue({
                 console.log(val)
                 if (val < 0) {
 
-
+console.log('injasssssssssssssssssssssssssss')
                     this.submit();
                 }
             },

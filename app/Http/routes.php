@@ -51,7 +51,6 @@ Route::group(['middleware' => ['web']], function () {
 
 
     Route::get('/main/{userid}', function ($userid) {
-
         $api = new \App\Http\Controllers\api();
         return view('main')->with('info', $api->attributes($userid));
     });
@@ -221,7 +220,7 @@ Route::group(['middleware' => ['web']], function () {
         $user = \App\Studentinfo::all()->where('participantID', $req['studentid'])->first();
         $user->gradeH = $req['num2'];
         $user->gradeL = $req['num1'];//31523
-        $user->roundNumber = $req['roundnumber'];
+        //$user->roundNumber = $req['roundnumber'];
         $user->save();
 //        $allusersRound = \App\Studentinfo::all()->where('roundnumber', $req->roundnumber);
 //        foreach ($allusersRound as $u) {
@@ -246,11 +245,12 @@ Route::group(['middleware' => ['web']], function () {
     });
 
     Route::get('startcycling', function () {
-        Event::fire(new \App\Events\startCycling());
+        Event::fire(new \App\Events\prestartCycling());
+        //Event::fire(new \App\Events\startCycling());
     });
 
     Route::get('startround/{num}', function ($num) {
-        Event::fire(new \App\Events\prestartCycling());
+
         Event::fire(new \App\Events\Cycling($num));
         return $num;
     });

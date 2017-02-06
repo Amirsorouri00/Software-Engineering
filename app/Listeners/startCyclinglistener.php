@@ -82,7 +82,7 @@ class startCyclinglistener
                 $response = $client->request('POST', 'http://51.254.79.221:8002/turns', [
                     'json' => $telegramQ
                 ]);
-                dd($response->getBody());
+              //  dd($response->getBody());
             } catch (Exception $e) {
 
             }

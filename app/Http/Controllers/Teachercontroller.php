@@ -29,6 +29,7 @@ class Teachercontroller extends Controller
 
      public function login(Request $request)
      {
+
          /*
           * create teacher in classindividuals
           */
@@ -38,6 +39,7 @@ class Teachercontroller extends Controller
                  $studentinfo = Classindividual::where('accessibility', '=', 1)->firstOrFail();
                  if(Studentinfo::where('participantID', '=', $studentinfo->personalID)->exists()) {
                      $api = new \App\Http\Controllers\api();
+                
                      return view('teacher.teacherMain', ['id' => $studentinfo->personalID, 'info' =>
                            $api->attributes($studentinfo->personalID)]);
                  }

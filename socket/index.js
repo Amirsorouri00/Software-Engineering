@@ -38,11 +38,11 @@ setInterval(function () {
                 request('http://51.254.79.220:7777/startcycling', function (error, response, body) {
                     //  console.log(error); // console.log(error)
                     if (error) {
-                        console.log(error)
+                   console.log('errorrrr dare haaaaaa')
                     }
                     else {
-
-                        console.log('last round time has finished',response)
+write(response)
+                        console.log('last round time has finished','response')
                         //write(response)
 
                     }
@@ -122,7 +122,7 @@ server.listen(3618);
 var redislog=redis.createClient();
 redislog.subscribe('log');
 redislog.on('message',function(channel,mes){
-    console.log(mes);
+    console.log('insfasfsafasdfsdafsdsdfa');
     write(mes)
 })
 

@@ -32,7 +32,7 @@ class prestartCyclinglistener1
      $redis = Redis::connection();
         if ($event->nextRoundNum) {
 
-            $user = Studentinfo::all()->where('roundNumberInd',(int) $event->nextRoundNum);
+            $user = Studentinfo::all()->where('roundNumber',(int) $event->nextRoundNum);
 
             $Qusers = $user->where('QorR', 1);//Todo wherer client must web
             $userscollect = collect();
@@ -74,6 +74,7 @@ class prestartCyclinglistener1
             $flist->put('users', $userscollect);
             $redis = \Redis::connection();
             $redis->publish('message', $flist);
+            $redis->publish('log',$flist);
             /// telegram send
             $Qusers = $user->where('QorR', 1);//Todo where is telegram user
             $userscollect = collect();
@@ -92,7 +93,7 @@ class prestartCyclinglistener1
                 $response = $client->request('POST', 'http://54.67.65.222:3000/androidgameserver/turningPost', [
                     'json' => $androidlist
                 ]);
-               
+
             } catch (\Exception $e) {
 
             }

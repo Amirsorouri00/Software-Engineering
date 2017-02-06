@@ -37,25 +37,25 @@ class prestartCycling1 extends Event
 
         $Qusers = $user->where('QorR', (int)1)->take($minNum);
         $Rusers = $user->where('QorR',(int) 0)->take($minNum);
-        $this->nextRoundNum = Studentinfo::all()->max('roundNumberInd') + 1;
-$newnum=Studentinfo::all()->max('roundNumberInd') ;
-$newnum++;
+        $this->nextRoundNum = Studentinfo::all()->max('roundNumber') + 1;
+
+
          $redis=Redis::connection();
 
-$redis->publish('log',$newnum);
+
 
 
         foreach ($Qusers as $quser) {
 
-     $quser->roundNumberInd =$newnum;
+     $quser->roundNumber =$this->nextRoundNum;
 //$quser->roundNumberInd=$quser->roundNumberInd+1;
-            
+
             $quser->save();
         }
-       
+
          foreach ($Rusers as $ruser) {
 
-            $ruser->roundNumberInd = $newnum-1;
+            $ruser->roundNumber = $this->nextRoundNum;
             $ruser->roundNumberInd=$ruser->roundNumberInd+1;
               // $ruser->individualStatus = 1;//Todo
             $ruser->save();

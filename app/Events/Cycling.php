@@ -24,15 +24,18 @@ class Cycling extends Event
 
     public $list;
 
-    public $roundnumberInd;
+    public $roundnumber;
 
     public function __construct($num)
     {
-        $this->roundnumberInd = $num;
-      //  $redis =Redis::connection();
-      //  $redis->publish('log',$this->roundnumberInd);
+      //Todo if this roundnumber has student or not
+        $this->roundnumber = $num;
+        $redis =Redis::connection();
+    //   $redis->publish('log',$this->roundnumber);
         $QRarray = $this->matchwithperiod();
+        //  $redis->publish('log',$QRarray);
         $this->list = $this->listofbasket($QRarray);
+      //  $redis->publish('log','$this->list');
         // return redirect('test');
     }
 
@@ -44,7 +47,7 @@ class Cycling extends Event
     public function matchwithperiod()
     {
 
-        $user = Studentinfo::all()->where('roundNumberInd', (int)$this->roundnumberInd);
+        $user = Studentinfo::all()->where('roundNumber', (int)$this->roundnumber);
         //get free student
 
         $Qsize = $user->where('QorR', 1)->count();
