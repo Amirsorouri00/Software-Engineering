@@ -22,71 +22,6 @@ function write(value) {
 
 }
 
-setInterval(function () {
-
-    redisround.get('lastroundtime', function (err, reply) {
-
-
-        if (reply) {
-
-            if (reply > 0) {
-                redisround.decr('lastroundtime')
-                console.log(reply)
-            }
-            else {
-                redisround.del('lastroundtime')
-                request('http://51.254.79.220:7777/startcycling', function (error, response, body) {
-                    //  console.log(error); // console.log(error)
-                    if (error) {
-                   console.log('errorrrr dare haaaaaa')
-                    }
-                    else {
-write(response)
-                        console.log('last round time has finished','response')
-                        //write(response)
-
-                    }
-                    //  write(body)
-                });
-
-            }
-        }
-    })
-
-
-    redisround.smembers('round', function (err, reply) {
-        for (var i in reply) {
-
-            var obj = JSON.parse(reply[i]);
-            //console.log(obj['time'])
-
-            if (obj['time'] > 0) {
-                redisround.srem('round', JSON.stringify(obj))
-                obj['time'] = obj['time'] - 1
-                redisround.sadd('round', JSON.stringify(obj));
-
-            }
-            else {
-                redisround.srem('round', JSON.stringify(obj))
-
-                request('http://51.254.79.220:7777/startround/' + obj['roundnumber'], function (error, response, body) {
-
-                    if (error) {
-                        console.log('error in send start cycling signal')
-                    }
-                    else {
-                        console.log('get range time finished in round number=', obj['roundnumber'])
-
-                    }
-
-                });
-
-            }
-        }
-
-    });
-
-}, 1000)
 var visitorsData = {};
 var userinfo = {};
 
@@ -209,3 +144,75 @@ io.on('connection', function (socket) {
     });
 
 })
+
+
+
+
+setInterval(function () {
+
+    redisround.get('lastroundtime', function (err, reply) {
+
+
+        if (reply) {
+
+            if (reply > 0) {
+                redisround.decr('lastroundtime')
+                console.log(reply)
+            }
+            else {
+                redisround.del('lastroundtime')
+                request('http://51.254.79.220:7777/startcycling', function (error, response, body) {
+                    //  console.log(error); // console.log(error)
+                    if (error) {
+                   console.log('errorrrr dare haaaaaa')
+                    }
+                    else {
+write(response)
+                        console.log('last round time has finished','response')
+                        //write(response)
+
+                    }
+                    //  write(body)
+                });
+
+            }
+        }
+    })
+
+
+    redisround.smembers('round', function (err, reply) {
+        for (var i in reply) {
+
+            var obj = JSON.parse(reply[i]);
+            //console.log(obj['time'])
+
+            if (obj['time'] > 0) {
+                redisround.srem('round', JSON.stringify(obj))
+                obj['time'] = obj['time'] - 1
+                io.emit('updatestate', obj);
+
+               
+                redisround.sadd('round', JSON.stringify(obj));
+
+            }
+            else {
+                redisround.srem('round', JSON.stringify(obj))
+
+                request('http://51.254.79.220:7777/startround/' + obj['roundnumber'], function (error, response, body) {
+
+                    if (error) {
+                        console.log('error in send start cycling signal')
+                    }
+                    else {
+                        console.log('get range time finished in round number=', obj['roundnumber'])
+
+                    }
+
+                });
+
+            }
+        }
+
+    });
+
+}, 1000)

@@ -46,10 +46,8 @@ class prestartCycling1 extends Event
 
 
         foreach ($Qusers as $quser) {
-
      $quser->roundNumber =$this->nextRoundNum;
-//$quser->roundNumberInd=$quser->roundNumberInd+1;
-
+        $quser->roundNumberInd=$quser->roundNumberInd+1;
             $quser->save();
         }
 
@@ -62,7 +60,7 @@ class prestartCycling1 extends Event
 
         }
          $redis=Redis::connection();
-  $user = Studentinfo::all();
+ // $user = Studentinfo::all();
 //$redis->publish('log',$user);
 
         $r = \Redis::connection();

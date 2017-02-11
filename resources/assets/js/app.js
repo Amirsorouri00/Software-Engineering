@@ -5,19 +5,22 @@ Vue.use(VueResource);
 Vue.http.headers.common['X-CSRF-TOKEN'] = document.querySelector('#token').getAttribute('content');//in meta in template
 var sss = 12;
 var userID = $('meta[name=userid]').attr('content');
+var roundNumber = $('meta[name=roundNumber]').attr('content');
+var QorR = $('meta[name=QorR]').attr('content');
 var interval
 var app5 = new Vue({
     el: '#main',
     data: {
         message: 'not defind',
         timeR: 10,
-        roundnum: 0,
+        roundnum: roundNumber,
         num1: 0,
         num2: 20,
         startroundtime: 0,
         cansend: true,
         errormessage: '',
-        studentid: userID
+        studentid: userID,
+        QorR:QorR
     },
 
     watch: {
@@ -65,7 +68,7 @@ var app5 = new Vue({
                 if (val < 0) {
 
 console.log('injasssssssssssssssssssssssssss')
-                    this.submit();
+                   // this.submit();
                 }
             },
             deep: true
@@ -83,8 +86,8 @@ console.log('injasssssssssssssssssssssssssss')
 
         },
         gameover: function () {
-            clearInterval(interval);
-            this.timeR = 120
+            //clearInterval(interval);
+          //  this.timeR = 120
             $('.ui.modal')
                 .modal('hide')
             ;
@@ -117,7 +120,7 @@ console.log('injasssssssssssssssssssssssssss')
         },
         fnm: function () {
 
-            this.timeR--;
+           // this.timeR--;
 
         },
         reverseMessage: function () {
@@ -179,12 +182,27 @@ c.on('updateroundnumber', function (data) {
 
     app5.$data.message = data;
     app5.$data.roundnum = data;
+      console.log(app5.$data.roundnum)
+    console.log(data)
 
 });
 c.on('setstartroundtime', function (data) {
 
-    app5.$data.timeR = data;
+    app5.$data.timeR = data.time;
 
+})
+c.on('updatestate',function(data){
+console.log(app5.$data.roundnum)
+if(app5.$data.roundnum==data.roundnumber && app5.$data.QorR==1)
+{
+    app5.$data.timeR=data.time
+     $('.ui.modal')
+            .modal({closable: false}).modal('show')
+        ;
+}else if(app5.$data.roundnum==data.roundnumber)
+{
+ app5.gameover();
+}
 })
 c.on('gotoquestionpart', function (data) {
     console.log('heeeeeeeeeeeeeee')
@@ -213,7 +231,8 @@ c.on('showmodal', function (data) {
         $('.ui.modal')
             .modal('show')
         ;
-        interval = setInterval(app5.fnm, 1000);
+        app5.$data.QorR=1;
+       // interval = setInterval(app5.fnm, 1000);
 
     }
     /*
