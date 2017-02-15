@@ -26,7 +26,7 @@ class SendtoQuestionpart
         $listforsend->put('ticket', 'justforfun');
        $redis->publish('log', $listforsend);
        try {
-         $response = $client->post('http://77.244.214.149:2000/getPartBaskets', [
+         $response = $client->post('http://172.17.15.71:2000/getPartBaskets', [
              'json' => $listforsend
          ]);
        } catch (Exception $e) {

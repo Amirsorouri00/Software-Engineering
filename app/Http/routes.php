@@ -285,8 +285,9 @@ Route::group(['middleware' => ['web']], function () {
 
 
     Route::post('telegramRange', function (Request $request) {
-
+//dd($request);
         $request= $request->json()->all();
+
         $user = \App\Studentinfo::all()->where('participantID', $request['username'])->first();
         $user->gradeH = $request['range']['max'];
         $user->gradeL = $request['range']['min'];//31523

@@ -122,7 +122,7 @@ class api extends Controller
             $student = new Studentinfo();
             $student->roundNumber = 0;
             $student->individualStatus = 0;
-            //$student->platform = $request['data']['person']['platform'];
+            $student->platform = $request['data']['person']['platform'];
             $student->finalScore = $exam[0]->average;
             if($last==null)
             {
@@ -140,6 +140,7 @@ class api extends Controller
             if ($person->accessibility == 1) {
                 //return 'Hello teacher';
                 $student->QorR = 1;
+                $student->individualStatus = 1;
                 $student->save();
                 return redirect()->route('client2', $student->participantID);
                 //return view('teacher.teacherMain');

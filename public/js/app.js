@@ -264,12 +264,13 @@
 	    var sendv = new Vue();
 	    //  window.location = "http://www.google.com";
 	    app5.sendtest();
+	    
 	
 	
 	})
 	c.on('redirect', function (data) {
 	    if (data == 1) {
-	        window.location = "http://77.244.214.149:2000/"+userID;//Todo send to question part with user id
+	        window.location = "http://172.17.15.71:2000/"+userID;//Todo send to question part with user id
 	    }
 	
 	
