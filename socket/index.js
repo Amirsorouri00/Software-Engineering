@@ -118,7 +118,7 @@ io.on('connection', function (socket) {
     redisRespondentModal.on('message', function (channel, mes) {
 
         //Todo
-        if (mes = userid) {
+        if (mes == userid) {
             socket.emit('loading', 1);
         }
 

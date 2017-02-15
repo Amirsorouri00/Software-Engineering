@@ -229,7 +229,7 @@
                           </form>
                       </div>
                       <div class="eight wide column centered">
-                          <form action="/startgame" v-on="submit: enterToGame" method="get">
+                          <form action="/startgame/{{$info[0]->participantID}}" v-on="submit: enterToGame" method="get">
                               <button  class="ui inverted massive fluid olive button" v-on="click: submit" v-attr = "disabled: notstarted">
                                   Start Game
                               </button>

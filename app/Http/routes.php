@@ -117,6 +117,13 @@ Route::group(['middleware' => ['web']], function () {
     // Route For Teacher Entering To Game
     Route::post('teacherEntertoGame/{studentinfo}', 'Teachercontroller@teacherEntertoGame');
     Route::get('teacherlogin', 'Teachercontroller@login');
+    Route::get('/client/{stdID}', ['as' => 'client', function (Request $request, $stdID) {
+        //dd($request->stdID);
+        $api = new \App\Http\Controllers\api();
+        return view('main')->with('info', $api->attributes($stdID));
+        //return $stdID;
+        return view('client', ['stdID' => $request->stdID]);
+    }]);
     // Route For Teacher In Order To Enter To Next Round
     // Route::get('enterround', 'Teachercontroller@enterround');
     // This Route Returns All Active Baskets In A View For The Teacher
@@ -130,18 +137,23 @@ Route::group(['middleware' => ['web']], function () {
         return view('teacher.teacherStart', ['id' => $studentinfo->personalID]);
     });*/
 
-    Route::get('startgame', function () {
+    Route::get('startgame/{stdID}', function ($stdID) {
         Event::fire(new \App\Events\prestartCycling());
-        dd('here');
-        return view('teacherMain');
+        //dd('here');
+        $api = new \App\Http\Controllers\api();
+        return view('teacher.teacherMain', ['id' => $stdID, 'info' =>
+                           $api->attributes($stdID)]);
     });
 
     /*
     * Inner Routes Controller Amirsorouri00
     */
-    Route::get('/client/{stdID}', ['as' => 'client', function (Request $request, $stdID) {
+    Route::get('/teacher/{stdID}', ['as' => 'client2', function (Request $request, $stdID) {
         //dd($request->stdID);
-        return $stdID;
+        $api = new \App\Http\Controllers\api();
+        return view('teacher.teacherMain', ['id' => $stdID, 'info' =>
+                           $api->attributes($stdID)]);
+        //return $stdID;
         return view('client', ['stdID' => $request->stdID]);
     }]);
 

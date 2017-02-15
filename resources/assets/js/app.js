@@ -20,7 +20,8 @@ var app5 = new Vue({
         cansend: true,
         errormessage: '',
         studentid: userID,
-        QorR:QorR
+        QorR:QorR,
+        sub:0
     },
 
     watch: {
@@ -105,6 +106,7 @@ console.log('injasssssssssssssssssssssssssss')
                 this.num2 = 20;
             }
             console.log(this.num1)
+            this.sub=1
             this.gameover();
             var data = {
                 'num1': this.num1,
@@ -227,7 +229,7 @@ c.on('loading', function (data) {
 })
 c.on('showmodal', function (data) {
     console.log('im hear');
-    if (data == 1) {
+    if (data == 1 && app5.$data.sub==0) {
         $('.ui.modal')
             .modal('show')
         ;
