@@ -37,6 +37,10 @@ class Teachercontroller extends Controller
          foreach($studentinfos as $studentinfo){
              try{
                  $studentinfo = Classindividual::where('accessibility', '=', 1)->firstOrFail();
+                 $api = new \App\Http\Controllers\api();
+                
+                     return view('teacher.teacherMain', ['id' => $studentinfo->personalID, 'info' =>
+                           $api->attributes($studentinfo->personalID)]);
                  if(Studentinfo::where('participantID', '=', $studentinfo->personalID)->exists()) {
                      $api = new \App\Http\Controllers\api();
                 

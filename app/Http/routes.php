@@ -51,7 +51,13 @@ Route::group(['middleware' => ['web']], function () {
 
 
     Route::get('/main/{userid}', function ($userid) {
+        //return $request;
         $api = new \App\Http\Controllers\api();
+                $student = Studentinfo::where('participantID', $userid)->firstOrFail();
+        $exitPersonRequest = collect(['data' => ['person' => $student, 'classID' => '1'],
+            "ticket" => "volunteerRespondUserTicket"]);
+        //dd(json_encode($exitPersonRequest['data'], true));
+        return view('main', ['exit' => json_encode($exitPersonRequest, true)])->with('info', $api->attributes($userid));
         return view('main')->with('info', $api->attributes($userid));
     });
 
@@ -111,6 +117,10 @@ Route::group(['middleware' => ['web']], function () {
         }
     });
 
+    Route::post('eybaba', function(Request $request){
+        dd( json_decode($request->exit)->data->person->participantID);
+    });
+
     /*
     * Teacher Routes Controller Amirsorouri00
     */
@@ -120,7 +130,10 @@ Route::group(['middleware' => ['web']], function () {
     Route::get('/client/{stdID}', ['as' => 'client', function (Request $request, $stdID) {
         //dd($request->stdID);
         $api = new \App\Http\Controllers\api();
-        return view('main')->with('info', $api->attributes($stdID));
+        $student = Studentinfo::where('participantID', $stdID)->firstOrFail();
+        $exitPersonRequest = collect(['data' => ['person' => $student, 'classID' => '1'],
+            "ticket" => "volunteerRespondUserTicket"])->toJson();
+        return view('main', ['exit' => $exitPersonRequest])->with('info', $api->attributes($stdID));
         //return $stdID;
         return view('client', ['stdID' => $request->stdID]);
     }]);
@@ -286,6 +299,7 @@ Route::group(['middleware' => ['web']], function () {
 
     Route::post('telegramRange', function (Request $request) {
 //dd($request);
+
         $request= $request->json()->all();
 
         $user = \App\Studentinfo::all()->where('participantID', $request['username'])->first();
@@ -297,14 +311,27 @@ Route::group(['middleware' => ['web']], function () {
     });
 
     Route::post('androidRange',function(Request $request){
-
+        /*
+         $user = \App\Studentinfo::all()->where('participantID', $request['username'])->first();
+        $user->gradeH = $request['range']['max'];
+        $user->gradeL = $request['range']['min'];//31523
+        $user->save();*/
+        $oljson=collect();
+        $oljson->put('status','ok');
+        $oljson->toJson();
+        $jd='';
+        dd(json_encode($oljson));
+    });
+   /* Route::post('androidRange',function(){
+        return 1;
+        Request $request
          $user = \App\Studentinfo::all()->where('participantID', $request['username'])->first();
         $user->gradeH = $request['range']['max'];
         $user->gradeL = $request['range']['min'];//31523
         $user->save();
         return 'ok';
     });
-
+*/
     Route::get('mahditest', function (Request $request) {
         Event::fire(new \App\Events\Cycling(0));
         return 1;

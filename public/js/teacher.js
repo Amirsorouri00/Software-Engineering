@@ -1,6 +1,9 @@
 (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
 'use strict';
 
+var teacher = document.querySelector('#teacher').getAttribute('content');
+var status = document.querySelector('#status').getAttribute('content');
+Vue.http.headers.common['X-CSRF-TOKEN'] = document.querySelector('#token').getAttribute('content');
 //var http = require('http');
 
 new Vue({
@@ -46,11 +49,12 @@ new Vue({
 
     onSubmitForm: function(event){
       event.preventDefault();
-      /*
-      if (teacher->individualStatus == 0 && teacher->accessibility == 1) {
+
+      console.log('.js');
+     /* if (teacher->individualStatus == 0 && teacher->accessibility == 1) {
           teacher->individualStatus = 1;
           submitted = false;
-          this.$http.post('teacherUpdateStatus', teacher).then((response) => {
+          this.$http.post('api/teacherstatus', teacher).then((response) => {
 
           }, (error) => {
 

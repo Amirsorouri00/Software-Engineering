@@ -2,7 +2,7 @@
 <html>
   <head>
     <meta charset="utf-8">
-    <meta name="teacher" id="teacher" content="{{$info[0]->participantID}}">
+    <meta name="teacher" id="teacher" content="{{$info[0]}}">
     <meta name="status" id="status" content="{{$info[0]->individualStatus}}">
     <meta name="max" id="max" content="{{$info[5]}}">
 
@@ -12,6 +12,7 @@
       body {padding: 2em 0;}
       .error {font-weight: bold; color: red;}
     </style>
+    <script src="js/teacher-main.js"></script>
     <script src="js/teacher-main.js"></script>
       <meta name="userid" content="{{ $info[0]->participantID }}">
       <meta charset="utf-8">
@@ -313,6 +314,8 @@
     </div>
 
     <script src="{{ asset('js/app.js') }}"></script>
+    <script src="{{ asset('js/teacher.js') }}"></script>
+    <script src="{{ asset('js/teacher-main.js') }}"></script>
     <script src="js/app.js"></script>
     <!--<script src="js/teacher.js"></script>-->
     <script src="js/vendor.js"></script>

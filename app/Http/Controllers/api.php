@@ -40,7 +40,7 @@ class api extends Controller
     {
         try {
             $user = Studentinfo::where('participantID', '=', $id)->firstOrFail();
-            if ($user->roundNumber > 3 || $user->finalScore < 5) {
+            if ($user->roundNumber > 3 && $user->finalScore < 5) {
                 //echo 'Exit';
                 $student = Classindividual::where('personalID', '=', $id)->firstOrFail();
                 //echo 'here';
@@ -79,7 +79,6 @@ class api extends Controller
         $enteredPersonRequest = collect(['data' => ['person' => ['personalID' => '1274568', 'role' => 'instructor', 'classID' => '1111111'],
             "ticket" => "volunteerRespondUserTicket"]])->toJson();
         $last = Studentinfo::all()->last();
-
         //return !(true);
         //return $enteredPersonRequest;
         //dd($enteredPersonRequest);
@@ -170,13 +169,20 @@ class api extends Controller
             || $responderPerson->isPresent == 0 || $questionerPerson->isPresent == 0) {
                 return 'deActive basket recieved or responder not exist';
             } else if ($request['data']['answer']['result'] == 0/* ... if responder gave wrong answer to the question */) {
-                $responder->individualStatus = 0;
-                $questioner->individualStatus = 0;
+                if($objectorPerson->accessibility == 1){
+                    $objector->individualStatus = 1;
+                    $questioner->individualStatus = 1;
+                }
+                else{
+                    $objector->individualStatus = 0;
+                    $questioner->individualStatus = 0;
+                }
                 $responder->save();
                 $questioner->save();
                 $this->forceuserexit($responder->participantID);
                 $this->forceuserexit($questioner->participantID);
                 $basketOriginal->basketStatus = 'Volunteer';
+                $basketOriginal->questionID = $request['data']['question']['questions'][0]['id'];
                 $basketOriginal->flag = 1;
                 $basketOriginal->save();
                 $client = new client();
@@ -189,11 +195,18 @@ class api extends Controller
             } else {
                 $responder->finalScore += $basketOriginal->basketScore;
                 $responder->save();
-                $responder->individualStatus = 0;
-                $questioner->individualStatus = 0;
+                if($objectorPerson->accessibility == 1){
+                    $objector->individualStatus = 1;
+                    $questioner->individualStatus = 1;
+                }
+                else{
+                    $objector->individualStatus = 0;
+                    $questioner->individualStatus = 0;
+                }
                 $responder->save();
                 $questioner->save();
                 $basketOriginal->basketStatus = 'deActive';
+                $basketOriginal->questionID = $request['data']['question']['questions'][0]['id'];
                 $basketOriginal->save();
                 $this->forceuserexit($questioner->participantID);
                 $this->forceuserexit($responder->participantID);
@@ -280,6 +293,7 @@ class api extends Controller
                 $objector->finalScore -= $exam->questionScore;
                 $basketOriginal->basketScore += $exam->questionScore;
                 $objector->save();
+                $basketOriginal->questionID = $request['data']['question']['questions']['id'];
                 $basketOriginal->save();
                 //echo 'did it right';
                 try {
@@ -321,8 +335,15 @@ class api extends Controller
                 $basketOriginal->basketStatus = 'Volunteer';
                 $basketOriginal->save();
                 $volunteerRequest = collect(['data' => ['basket' => $basketOriginal, 'ticket' => 'volunteerRespondUserTicket']])->toJson();
-                $objector->individualStatus = 0;
-                $questioner->individualStatus = 0;
+                if($objectorPerson->accessibility == 1){
+                    $objector->individualStatus = 1;
+                    $questioner->individualStatus = 1;
+                }
+                else{
+                    $objector->individualStatus = 0;
+                    $questioner->individualStatus = 0;
+                }
+                
                 $objector->save();
                 $questioner->save();
                 $this->forceuserexit($objector->participantID);
@@ -476,7 +497,7 @@ class api extends Controller
         $client = new client();
         try {
             $response = $client->request('post', 'http://sign.intellexa.me/logout/' /*force exit*/, ['json' => $student]);
-
+        // Todo return redirect('http://sign.intellexa.me/force_logout/');
         } catch (\Exception $e) {
         }
         //ready for sending to enter and exit system

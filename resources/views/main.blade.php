@@ -132,10 +132,11 @@
             <div class="thirteen wide column centered row ">
                 <div class=" ui grid centered">
                     <div class="eight wide column centered">
-                        <form action="http://software:81/volunteerExit/{{$info[0]->participantID}}" method="post">
+                        <form action="http://sign.intellexa.me/volunteer_logout/"  method="post">
                             <button v-on:click="close" class="ui inverted massive fluid red button">
                                 Exit
                             </button>
+                            <input type="hidden" value="{{ $exit }}" name="exit">
                         </form>
                     </div>
                     <div class="eight wide column centered">

@@ -69,7 +69,7 @@ class prestartCyclinglistener1
 
             }
             $androidlist->put('users',$androidtemp);
-            $telegramQ->put('users', $telTemplist);
+            $telegramQ->put('user', $telTemplist);
             $flist = collect();
             $flist->put('users', $userscollect);
             $redis = \Redis::connection();
@@ -78,16 +78,17 @@ class prestartCyclinglistener1
             /// telegram send
             $Qusers = $user->where('QorR', 1);//Todo where is telegram user
             $userscollect = collect();
+            if(!$telTemplist->isEmpty()) {
             try {
                 $client = new Client();
                 $response = $client->request('POST', 'http://51.254.79.221:8002/turns', [
-                    'json' => $telegramQ
+                    'body' => $telegramQ
                 ]);
             } catch (\Exception $e) {
 
             }
 
-
+}
             try {
                 $client = new Client();
                 $response = $client->request('POST', 'http://54.67.65.222:3000/androidgameserver/turningPost', [

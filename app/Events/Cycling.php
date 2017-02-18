@@ -157,6 +157,7 @@ class Cycling extends Event
             $basket->basketScore = 2;
             $basket->basketStatus = 'Active';
             $basket->flag = 0;
+              $basket->examID=Exam::all()->first()->examID;
 
             $basket->save();
             $ClassIQ->Qbasket()->save($basket);
