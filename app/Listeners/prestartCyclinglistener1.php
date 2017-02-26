@@ -81,7 +81,7 @@ class prestartCyclinglistener1
             if(!$telTemplist->isEmpty()) {
             try {
                 $client = new Client();
-                $response = $client->request('POST', 'http://51.254.79.221:8002/turns', [
+                $response = $client->request('POST', 'http://51.254.79.197:9002/turns', [
                     'body' => $telegramQ
                 ]);
             } catch (\Exception $e) {

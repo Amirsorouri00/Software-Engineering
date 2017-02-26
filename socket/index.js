@@ -135,6 +135,17 @@ io.on('connection', function (socket) {
         }
 
     })
+    var redisgotovilunteer = redis.createClient();
+    redisgotovilunteer.subscribe('volunteer');
+    redisgotovilunteer.on('message', function (channel, mes) {
+
+        //Todo
+        if (mes == userid) {
+            socket.emit('gotovolunteer', 1);
+            console.log('gotovolunteer',userid)
+        }
+
+    })
 
 
     socket.on('disconnect', function () {

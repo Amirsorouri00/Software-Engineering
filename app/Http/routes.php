@@ -80,6 +80,8 @@ Route::group(['middleware' => ['web']], function () {
     /*
     * Api Controller Routes Amirsorouri00
     */
+    Route::post('/entertogame2', 'api@getEnteredPerson2');
+
     // This Route Handles Any New Entered Player    Test: OK
     Route::post('/entertogame', 'api@getEnteredPerson');
     // This Route Gets Basket From QuestionPart And Handles Whether It Must Be Redirected Or Must Be Posted To
@@ -299,7 +301,7 @@ Route::group(['middleware' => ['web']], function () {
 
     Route::post('telegramRange', function (Request $request) {
 //dd($request);
-
+try{
         $request= $request->json()->all();
 
         $user = \App\Studentinfo::all()->where('participantID', $request['username'])->first();
@@ -307,20 +309,23 @@ Route::group(['middleware' => ['web']], function () {
         $user->gradeL = $request['range']['min'];//31523
         $user->save();
         return 'ok';
-        //Todo save and check
+    }
+    catch (Exception $e) {
+return 'notok';
+    }    //Todo save and check
     });
 
     Route::post('androidRange',function(Request $request){
-        /*
+        
          $user = \App\Studentinfo::all()->where('participantID', $request['username'])->first();
         $user->gradeH = $request['range']['max'];
         $user->gradeL = $request['range']['min'];//31523
-        $user->save();*/
+        $user->save();
         $oljson=collect();
         $oljson->put('status','ok');
-        $oljson->toJson();
-        $jd='';
-        dd(json_encode($oljson));
+        return $oljson->toJson();
+       
+      /// return json_encode($oljson);
     });
    /* Route::post('androidRange',function(){
         return 1;

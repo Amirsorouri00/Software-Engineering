@@ -110,13 +110,13 @@ class Cycling extends Event
                 if ($difc < $min) {
                     $min = $diff;
                     $resres = $r;
-                } else if ($diff < $min) {
+                } else  {// todo else if bood k=je baresh dashtam
                     $min = $difc;
                     $resres = $r;
                 }
             }
 
-
+//dd($resres);
             $resp = $respondent->pull($respondent->search($resres));
             //dd($resp);
             $temp = collect(['questioner' => $s, 'respondent' => $resp]);

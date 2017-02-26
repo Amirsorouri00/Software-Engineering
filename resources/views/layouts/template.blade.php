@@ -28,7 +28,7 @@
 
     {{--<link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet">--}}
 
-    <title>Laravel Quickstart - Intermediate</title>
+    <title>Bit</title>
     <style>
         @font-face {
             font-family: "KoodakBold";

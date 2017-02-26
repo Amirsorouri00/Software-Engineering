@@ -16,6 +16,7 @@ use App\Exam;
 use App\Http\Controllers\amircontroller;
 use App\Studentinfo;
 use App\User;
+use Redis;
 use App\Basket;
 use Exception;
 use Symfony\Component\HttpFoundation\ParameterBag;
@@ -24,6 +25,7 @@ use App\Http\Requests;
 use GuzzleHttp\client;
 use GuzzleHttp\Pool;
 use GuzzleHttp\Psr7;
+
 //use App\Http\Requests\Request;
 
 //use Illuminate\Support\Facades\Request;
@@ -78,28 +80,36 @@ class api extends Controller
     {
         $enteredPersonRequest = collect(['data' => ['person' => ['personalID' => '1274568', 'role' => 'instructor', 'classID' => '1111111'],
             "ticket" => "volunteerRespondUserTicket"]])->toJson();
-        $last = Studentinfo::all()->last();
-        //return !(true);
-        //return $enteredPersonRequest;
-        //dd($enteredPersonRequest);
-        //return $enteredPersonRequest;
-        //$client = new Client();
-        //$r = $client->request('POST', 'http://blog:81/post', ['json' => [$enteredPersonRequest]]);
-        $er=json_decode($request->data);
-        $request=$er;
-        //dd($request);
-        //$data = $request['data']['person']['personalID'];
+
+        $redis = Redis::connection();
+        $last = null;
+        $redis->publish('log', "inja");
         try {
-            if(Classindividual::where('personalID', $request->data->person->personalID)->exists()){
+            if (Studentinfo::all()->count() == 0) {
+                $qor = 0;
+            } else {
+                //$last = Studentinfo::all()->last();
+                //$qor = $last->QorR;
+                $qor = 1;
+            }
+            $redis->publish('log', 'no problem');
+        } catch (Exception $e) {
+            $redis->publish('log', 'no');
+        }
+        $er = json_decode($request->data);
+        $request = $er;
+        
+        try {
+            if (Classindividual::where('personalID', $request->data->person->personalID)->exists()) {
                 $person = Classindividual::where('personalID', $request->data->person->personalID)->firstOrFail();
-                if($person->accessibility == 0){
+
+                if ($person->accessibility == 0) {
                     return redirect()->route('client', $person->personalID);
-                }
-                else{
+                } else {
                     return redirect()->route('client2', $person->personalID);
                 }
             }
-         
+
             $class = Classexam::where('classID', '=', $request->data->person->classID)->firstOrFail();
             $exam = $class->exam()->get();
             //return $exam;
@@ -113,24 +123,20 @@ class api extends Controller
             //todo check Instructor string with enter and exit
             if ($request->data->person->role == 'instructor') {
                 $person->accessibility = 1;
-            } else
-            {
+            } else {
                 $person->accessibility = 0;
             }
             $person->save();
             $student = new Studentinfo();
             $student->roundNumber = 0;
             $student->individualStatus = 0;
-            $student->platform = $request['data']['person']['platform'];
+            $student->platform = $request->data->person->platform;
             $student->finalScore = $exam[0]->average;
-            if($last==null)
-            {
-                    $student->QorR=1;
-            }
-            else if ($last->QorR == 0) {
+            if ($last == null) {
                 $student->QorR = 1;
-            }
-            else{
+            } else if ($qor == 0) {
+                $student->QorR = 1;
+            } else {
                 $student->QorR = 0;
             }
             $student->examID = $exam[0]->examID;
@@ -153,6 +159,108 @@ class api extends Controller
         }
     }
 
+    public function getEnteredPerson2(Request $request)
+    {
+        $enteredPersonRequest = collect(['data' => ['person' => ['personalID' => '1274568', 'role' => 'instructor', 'classID' => '1111111'],
+            "ticket" => "volunteerRespondUserTicket"]])->toJson();
+        $redis = Redis::connection();
+
+        $redis->publish('log', "inja");
+        try {
+            if (Studentinfo::all()->count() == 0) {
+                $qor = 0;
+            } else {
+                $last = Studentinfo::all()->last();
+                $qor = $last->QorR;
+            }
+            
+        } catch (Exception $e) {
+            $redis->publish('log', 'no');
+        }
+
+
+        //return !(true);
+        //return $enteredPersonRequest;
+        //dd($enteredPersonRequest);
+        //return $enteredPersonRequest;
+        //$client = new Client();
+        //$r = $client->request('POST', 'http://blog:81/post', ['json' => [$enteredPersonRequest]]);
+        $redis->publish('log', 'no problem2');
+        try {
+        $er = json_decode($request['data']);
+        $request = $er;
+         $redis->publish('log', $er);
+        }
+        catch(Exception $e)
+        {
+            $redis->publish('log', $e);
+        }
+        //dd($request);
+        //$data = $request['data']['person']['personalID'];
+        try {
+            if (Classindividual::where('personalID', $request->data->person->personalID)->exists()) {
+                $person = Classindividual::where('personalID', $request->data->person->personalID)->firstOrFail();
+                if ($person->accessibility == 0) {
+                    //return redirect()->route('client', $person->personalID);
+                    return true;
+                } else {
+                    //return redirect()->route('client2', $person->personalID);
+                    return true;
+                }
+            }
+
+            $class = Classexam::where('classID', '=', $request->data->person->classID)->firstOrFail();
+            $exam = $class->exam()->get();
+            //return $exam;
+            $person = new Classindividual();
+            $person->personalID = $request->data->person->personalID;
+            $person->classID = $request->data->person->classID;
+            //$person->classID = '1111111';
+            $person->isPresent = 1;
+            $person->isActive = 1;
+
+            //todo check Instructor string with enter and exit
+            if ($request->data->person->role == 'instructor') {
+                $person->accessibility = 1;
+            } else {
+                $person->accessibility = 0;
+            }
+            $person->save();
+            $student = new Studentinfo();
+            $student->roundNumber = 0;
+            $student->individualStatus = 0;
+            $student->platform = $request['data']['person']['platform'];
+            $student->finalScore = $exam[0]->average;
+            if ($last == null) {
+                $student->QorR = 1;
+            } else if ($qor == 0) {
+                $student->QorR = 1;
+            } else {
+                $student->QorR = 0;
+            }
+            $student->examID = $exam[0]->examID;
+            $student->save();
+            $person->person()->save($student);
+            if ($person->accessibility == 1) {
+                //return 'Hello teacher';
+                $student->QorR = 1;
+                $student->individualStatus = 1;
+                $student->save();
+                //return redirect()->route('client2', $student->participantID);
+                return true;
+                //return view('teacher.teacherMain');
+            }
+            //$parameter = ['stdID' => $student->participantID];
+            //return redirect()->route('client', ['stdID' => $parameter]);
+            //return redirect()->route('client', $student->participantID);//Todo set mohsen
+            return true;
+            //todo mohsen
+        } catch (Exception $e) {
+            echo $e;
+        }
+    }
+
+
     // Test: OK
     public function questionPartResult(Request $request)
     {
@@ -166,14 +274,14 @@ class api extends Controller
             $questionerPerson = $questioner->individuals();
 
             if ($basketOriginal->basketStatus == 'deActive' || $basketOriginal->basketStatus == 'volunteer'
-            || $responderPerson->isPresent == 0 || $questionerPerson->isPresent == 0) {
+                || $responderPerson->isPresent == 0 || $questionerPerson->isPresent == 0
+            ) {
                 return 'deActive basket recieved or responder not exist';
             } else if ($request['data']['answer']['result'] == 0/* ... if responder gave wrong answer to the question */) {
-                if($objectorPerson->accessibility == 1){
+                if ($objectorPerson->accessibility == 1) {
                     $objector->individualStatus = 1;
                     $questioner->individualStatus = 1;
-                }
-                else{
+                } else {
                     $objector->individualStatus = 0;
                     $questioner->individualStatus = 0;
                 }
@@ -195,11 +303,10 @@ class api extends Controller
             } else {
                 $responder->finalScore += $basketOriginal->basketScore;
                 $responder->save();
-                if($objectorPerson->accessibility == 1){
+                if ($objectorPerson->accessibility == 1) {
                     $objector->individualStatus = 1;
                     $questioner->individualStatus = 1;
-                }
-                else{
+                } else {
                     $objector->individualStatus = 0;
                     $questioner->individualStatus = 0;
                 }
@@ -331,19 +438,18 @@ class api extends Controller
             } else if (($basketOriginal->basketStatus == 'Active' || $objectorPerson->isPresent == 1) && /*todo true or accepted*/
                 $request['data']['judge'] != 'accepted'
             ) {
-              //return 'there';
+                //return 'there';
                 $basketOriginal->basketStatus = 'Volunteer';
                 $basketOriginal->save();
                 $volunteerRequest = collect(['data' => ['basket' => $basketOriginal, 'ticket' => 'volunteerRespondUserTicket']])->toJson();
-                if($objectorPerson->accessibility == 1){
+                if ($objectorPerson->accessibility == 1) {
                     $objector->individualStatus = 1;
                     $questioner->individualStatus = 1;
-                }
-                else{
+                } else {
                     $objector->individualStatus = 0;
                     $questioner->individualStatus = 0;
                 }
-                
+
                 $objector->save();
                 $questioner->save();
                 $this->forceuserexit($objector->participantID);
@@ -355,7 +461,7 @@ class api extends Controller
                     //echo 'Caught response: ' . $e->getResponse()->getStatusCode();
                 }
             } else {
-              //return 'here';
+                //return 'here';
                 $objector->finalScore += $basketOriginal->basketScore;
                 $objector->save();
                 $basketOriginal->basketStatus = 'deActive';
@@ -380,10 +486,10 @@ class api extends Controller
     {
         $b = Basket::where('basketID', 'istIzZX')->firstOrFail();
         $volunteerRequest = collect(['data' => ['basketsArray' => [
-               ['basket' => $b, "respondentlist" => ['1234567', '1OLuRvU', '38V4LNL']]
-              ,['basket' => $b, "respondentlist" => ['38V4LNL']]
-              ,['basket' => $b, "respondentlist" => ['3jQCyvA']] ]]
-              ,"ticket" => "volunteerRespondUserTicket"])->toJson();
+            ['basket' => $b, "respondentlist" => ['1234567', '1OLuRvU', '38V4LNL']]
+            , ['basket' => $b, "respondentlist" => ['38V4LNL']]
+            , ['basket' => $b, "respondentlist" => ['3jQCyvA']]]]
+            , "ticket" => "volunteerRespondUserTicket"])->toJson();
         //return $volunteerRequest;
         $request = $request->json()->all();
         $volunteerBaskets = $request['data']['basketsArray'];
@@ -497,7 +603,7 @@ class api extends Controller
         $client = new client();
         try {
             $response = $client->request('post', 'http://sign.intellexa.me/logout/' /*force exit*/, ['json' => $student]);
-        // Todo return redirect('http://sign.intellexa.me/force_logout/');
+            // Todo return redirect('http://sign.intellexa.me/force_logout/');
         } catch (\Exception $e) {
         }
         //ready for sending to enter and exit system
@@ -588,10 +694,10 @@ class api extends Controller
 
     */
 
-/*
-    public function questionPlatform()
-    {
+    /*
+        public function questionPlatform()
+        {
 
-    }
-*/
+        }
+    */
 }
