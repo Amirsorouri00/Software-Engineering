@@ -24,13 +24,13 @@ class SendtoQuestionpart
         $temp->put('basketsArray', $event->list);
         $listforsend->put('data', $temp);
         $listforsend->put('ticket', 'justforfun');
-       $redis->publish('log', $listforsend);
+      // $redis->publish('log', $listforsend);
        try {
-         $response = $client->post('http://77.244.214.149:2000/getPartBaskets', [
+         $response = $client->post('http://77.244.214.149:3000/getPartBaskets', [
              'json' => $listforsend
          ]);
        } catch (Exception $e) {
-$redis->publish('log', 'error:send basket to question part');
+//$redis->publish('log', 'error:send basket to question part');
        }
 
 

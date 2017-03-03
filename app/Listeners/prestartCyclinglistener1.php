@@ -74,14 +74,14 @@ class prestartCyclinglistener1
             $flist->put('users', $userscollect);
             $redis = \Redis::connection();
             $redis->publish('message', $flist);
-            $redis->publish('log',$flist);
+           // $redis->publish('log',$flist);
             /// telegram send
             $Qusers = $user->where('QorR', 1);//Todo where is telegram user
             $userscollect = collect();
             if(!$telTemplist->isEmpty()) {
             try {
                 $client = new Client();
-                $response = $client->request('POST', 'http://51.254.79.197:9002/turns', [
+                $response = $client->request('POST', 'http://51.254.79.208:9000/turns', [
                     'body' => $telegramQ
                 ]);
             } catch (\Exception $e) {

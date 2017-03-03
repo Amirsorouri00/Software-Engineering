@@ -52,6 +52,8 @@ Route::group(['middleware' => ['web']], function () {
 
     Route::get('/main/{userid}', function ($userid) {
         //return $request;
+      //  session(['userid2' => $userid]);
+       // return session()->all();
         $api = new \App\Http\Controllers\api();
                 $student = Studentinfo::where('participantID', $userid)->firstOrFail();
         $exitPersonRequest = collect(['data' => ['person' => $student, 'classID' => '1'],
@@ -70,10 +72,17 @@ Route::group(['middleware' => ['web']], function () {
         $teacher = Studentinfo::where('participantID', $request->json)->firstOrFail();
         $teacher->individualStatus = 0;
         $teacher->save();
+
         return 'yeeeeeeeeeees';
       }catch(\Exception $e){
         return 'noooooooooooooooo';
       }
+
+    });
+
+    /* Android Exit */
+    //  
+    Route::post('/androidVolunteerExit', function(Request $request){
 
     });
 

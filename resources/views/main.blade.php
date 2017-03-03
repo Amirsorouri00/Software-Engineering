@@ -196,6 +196,10 @@
     </div>
 
     <!--</div>-->
+ <form id="questionpart" action="http://77.244.214.149:3000/getClient" method="post">
+       
+       <input type="hidden" name="userid" value="{{$info[0]->participantID}}">
+    </form>
 
     <script>
         $('.message .close')

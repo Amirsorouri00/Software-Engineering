@@ -276,7 +276,10 @@
 	})
 	c.on('redirect', function (data) {
 	    if (data == 1) {
-	        window.location = "http://77.244.214.149:2000/"+userID;//Todo send to question part with user id
+	       // window.location.href = "http://77.244.214.149:3000/"+userID;
+	        //window.location.replace("http://77.244.214.149:3000/"+userID);
+	        window.location = "http://77.244.214.149:3000/"+userID;//Todo send to question part with user id
+	   // document.getElementById("questionpart").submit();
 	    }
 	
 	

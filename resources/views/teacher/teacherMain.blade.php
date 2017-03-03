@@ -223,8 +223,10 @@
               <div class="thirteen wide column centered row">
                   <div class="ui grid centered" id="guestexam">
                       <div class="eight wide column centered">
-                          <form action="http://software:81/teacher Ent ertoGame/{{ $id }}" v-on="submit: onSubmitForm" method="post">
-                              <button  class="ui inverted massive fluid red button" type="submit" v-on="click: submit" name="button" v-attr = "disabled: errors">
+                          <form action="/teacherEntertoGame/{{ $id }}" method="post">
+                            <!--  v-on="submit: onSubmitForm" -->
+                              <button  class="ui inverted massive fluid red button" type="submit" >
+                              <!--v-on="click: submit" name="button" v-attr = "disabled: errors"-->
                                   Enter To Game
                               </button>
                           </form>

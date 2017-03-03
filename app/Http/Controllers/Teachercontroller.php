@@ -93,18 +93,25 @@ class Teachercontroller extends Controller
         } catch (Exception $e) {
             Debugbar::addException($e);
         }
-
         return redirect('/teacherlogin');  //??????????????
     }
 
 
 
-    public function teacherEntertoGame(Request $request, Studentinfo $studentinfo){
+    public function teacherEntertoGame(Request $request, $studentid){
         //dd('amir');
-        $studentinfo->individualStatus = 0;
-        $studentinfo->save();
+        try{
+            $studentinfo = Studentinfo::where('participantID', $studentid)->firstOrFail();
+            $studentinfo->individualStatus = 0;
+            $studentinfo->QorR = 1;
+            $studentinfo->save();
+            return redirect()->route('client', $studentinfo->participantID);
+        }
+        catch(Exception $e){
+            return "something went Wrong";
+        }
         //dd($studentinfo, 'there');
         //return view('teacher.teacherStart', ['id' => $studentinfo->participantID]);
-        return redirect('/teacherlogin');
+        //return redirect('/teacherlogin');
     }
 }
