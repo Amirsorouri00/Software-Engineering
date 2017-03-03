@@ -147,7 +147,7 @@ class api extends Controller
             session([$person->personalID => $request->data->token]);
             \Session::save();
             $se = session(9327303);
-            $redis->publish('log', var_dump($se));
+            //$redis->publish('log', var_dump($se));
             $student = new Studentinfo();
             $student->roundNumber = 0;
             $student->individualStatus = 0;
@@ -271,8 +271,9 @@ class api extends Controller
             }
             //return $request['data'];
             $person->save();
-            session([$person->personalID => $request->data->token]);
-            $se = session($person->personalID);
+            //session([$person->personalID => $request->data->token]);
+           // $se = session($person->personalID);
+
             $student = new Studentinfo();
             $student->roundNumber = 0;
             $student->individualStatus = 0;
@@ -287,6 +288,8 @@ class api extends Controller
             }
             $student->examID = $exam[0]->examID;
             $student->save();
+            //$redis->publish('log','enter');
+            //$redis->publish('log',$student);
             $person->person()->save($student);
             if ($person->accessibility == 1) {
                 //return 'Hello teacher';
@@ -303,6 +306,7 @@ class api extends Controller
             return true;
             //todo mohsen
         } catch (Exception $e) {
+            $redis->publish('log',$e);
             echo $e;
         }
     }
@@ -311,6 +315,7 @@ class api extends Controller
     // Test: OK
     public function questionPartResult(Request $request)
     {
+        $redis= Redis::connection();
         /*$questionPartRequest = collect(['data' => ['basket' => 'sds'], "ticket" => "volunteerRespondUserTicket"])->toJson();*/
         $request = $request->json()->all();
         try {
@@ -348,9 +353,16 @@ class api extends Controller
                 $basketOriginal->save();
                 $client = new client();
                 try {
-                    $response = $client->request('POST', 'http://volunteer.intellexa.me/api/', ['json' => $basketOriginal]);//todo volunteery system
+                    $requesttoVolunteer=collect(['data'=>['basket'=>$basketOriginal],'ticket'=>'volunteerSendBasketTicket']);
+             $redis->publish('log','volunteerresponse:');
+         $redis->publish('log',$requesttoVolunteer->toJson());
+                    $response = $client->request('POST', 'http://volunteer.intellexa.me/api/', ['json' => $requesttoVolunteer]);//todo volunteery system
+                   
+                    $redis->publish('log',$response->getBody());
+
                     //todo mohsen redirect
                 } catch (\GuzzleHttp\Exception\ClientException $e) {
+                    $redis->publish('log',$e);
                     echo 'Caught response: ' . $e->getResponse()->getStatusCode();
                 }
             } else {
@@ -460,6 +472,8 @@ class api extends Controller
     {
 
           $redis = Redis::connection();
+          $redis->publish('log','getObjectedToScoreBasket:');
+          $redis->publish('log',$request);
           //$redis->publish('log',$request->getContent());
          // return 1;
                     //$client = new client();
@@ -487,7 +501,8 @@ class api extends Controller
                 $client = new client();
                 $response = $client->request('POST', 'http://judge.intellexa.me/rfj/', ['json' => $objectedrequest]);
                 $redis = Redis::connection();
-                $redis->publish('log',$response);
+                $redis->publish('log','judge:');
+                $redis->publish('log',$response->getBody());
             }
 
         } catch (Exception $e) {
@@ -581,7 +596,8 @@ class api extends Controller
     //Test: OK
     public function getVolunteersBasket(Request $request)
     {
-         $redis = Redis::connection();
+             $redis = Redis::connection();
+             $redis->publish('log','getVolunteerBasket:');
         $redis->publish('log',$request);
         $b = Basket::where('basketID', 'istIzZX')->firstOrFail();
         $volunteerRequest = collect(['data' => ['basketsArray' => [
@@ -645,7 +661,7 @@ class api extends Controller
         //$requestToQuestionPart = collect(['data' => $request])->toJson();
         try {
             $client = new client();
-            $response = $client->request('POST', '', ['json' => $request]);//todo link mohsen mahdi
+            $response = $client->request('POST', 'http://77.244.214.149:3000/getVolunteerBasket', ['json' => $request->toJson()]);//todo link mohsen mahdi
         } catch (\GuzzleHttp\Exception\ClientException $e) {
             echo 'Caught response: ' . $e->getResponse()->getStatusCode();
             echo 'unsuccessful post response recieved';
@@ -670,7 +686,17 @@ class api extends Controller
             echo 'Caught response: ' . $e->getResponse()->getStatusCode();
         }
     }
+    public function gotovolunteer (Request $request)
+    { $client = new client();
+        try {
+            $data= collect(['data'=>['userid'=>$request->userid],'ticket'=>'volunteerSendUserTicket']);
+     $response = $client->request('post', 'http://volunteer.intellexa.me/api/', ['json' => $data]);
+        } catch (\GuzzleHttp\Exception\ClientException $e) {
+            echo 'Caught response: ' . $e->getResponse()->getStatusCode();
+        }
+            return redirect('http://volunteer.intellexa.me/client/'.$request->userid);
 
+    }
     /*
     public function volunteerExitResult(Request $request)
     {

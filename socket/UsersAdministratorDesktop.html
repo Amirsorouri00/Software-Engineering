@@ -1,0 +1,45 @@
+
+[object Object]
+[object Object]
+exception 'ErrorException' with message 'Undefined offset: 0' in C:\Users\Administrator\Desktop\bitproject\vendor\laravel\framework\src\Illuminate\Support\Collection.php:1187
+Stack trace:
+#0 C:\Users\Administrator\Desktop\bitproject\vendor\laravel\framework\src\Illuminate\Support\Collection.php(1187): Illuminate\Foundation\Bootstrap\HandleExceptions->handleError(8, 'Undefined offse...', 'C:\\Users\\Admini...', 1187, Array)
+#1 C:\Users\Administrator\Desktop\bitproject\app\Http\Controllers\api.php(281): Illuminate\Support\Collection->offsetGet(0)
+#2 [internal function]: App\Http\Controllers\api->getEnteredPerson2(Object(Illuminate\Http\Request))
+#3 C:\Users\Administrator\Desktop\bitproject\vendor\laravel\framework\src\Illuminate\Routing\Controller.php(80): call_user_func_array(Array, Array)
+#4 C:\Users\Administrator\Desktop\bitproject\vendor\laravel\framework\src\Illuminate\Routing\ControllerDispatcher.php(146): Illuminate\Routing\Controller->callAction('getEnteredPerso...', Array)
+#5 C:\Users\Administrator\Desktop\bitproject\vendor\laravel\framework\src\Illuminate\Routing\ControllerDispatcher.php(94): Illuminate\Routing\ControllerDispatcher->call(Object(App\Http\Controllers\api), Object(Illuminate\Routing\Route), 'getEnteredPerso...')
+#6 [internal function]: Illuminate\Routing\ControllerDispatcher->Illuminate\Routing\{closure}(Object(Illuminate\Http\Request))
+#7 C:\Users\Administrator\Desktop\bitproject\vendor\laravel\framework\src\Illuminate\Routing\Pipeline.php(52): call_user_func(Object(Closure), Object(Illuminate\Http\Request))
+#8 [internal function]: Illuminate\Routing\Pipeline->Illuminate\Routing\{closure}(Object(Illuminate\Http\Request))
+#9 C:\Users\Administrator\Desktop\bitproject\vendor\laravel\framework\src\Illuminate\Pipeline\Pipeline.php(103): call_user_func(Object(Closure), Object(Illuminate\Http\Request))
+#10 C:\Users\Administrator\Desktop\bitproject\vendor\laravel\framework\src\Illuminate\Routing\ControllerDispatcher.php(96): Illuminate\Pipeline\Pipeline->then(Object(Closure))
+#11 C:\Users\Administrator\Desktop\bitproject\vendor\laravel\framework\src\Illuminate\Routing\ControllerDispatcher.php(54): Illuminate\Routing\ControllerDispatcher->callWithinStack(Object(App\Http\Controllers\api), Object(Illuminate\Routing\Route), Object(Illuminate\Http\Request), 'getEnteredPerso...')
+#12 C:\Users\Administrator\Desktop\bitproject\vendor\laravel\framework\src\Illuminate\Routing\Route.php(174): Illuminate\Routing\ControllerDispatcher->dispatch(Object(Illuminate\Routing\Route), Object(Illuminate\Http\Request), 'App\\Http\\Contro...', 'getEnteredPerso...')
+#13 C:\Users\Administrator\Desktop\bitproject\vendor\laravel\framework\src\Illuminate\Routing\Route.php(140): Illuminate\Routing\Route->runController(Object(Illuminate\Http\Request))
+#14 C:\Users\Administrator\Desktop\bitproject\vendor\laravel\framework\src\Illuminate\Routing\Router.php(724): Illuminate\Routing\Route->run(Object(Illuminate\Http\Request))
+#15 [internal function]: Illuminate\Routing\Router->Illuminate\Routing\{closure}(Object(Illuminate\Http\Request))
+#16 C:\Users\Administrator\Desktop\bitproject\vendor\laravel\framework\src\Illuminate\Routing\Pipeline.php(52): call_user_func(Object(Closure), Object(Illuminate\Http\Request))
+#17 [internal function]: Illuminate\Routing\Pipeline->Illuminate\Routing\{closure}(Object(Illuminate\Http\Request))
+#18 C:\Users\Administrator\Desktop\bitproject\vendor\laravel\framework\src\Illuminate\Pipeline\Pipeline.php(103): call_user_func(Object(Closure), Object(Illuminate\Http\Request))
+#19 C:\Users\Administrator\Desktop\bitproject\vendor\laravel\framework\src\Illuminate\Routing\Router.php(726): Illuminate\Pipeline\Pipeline->then(Object(Closure))
+#20 C:\Users\Administrator\Desktop\bitproject\vendor\laravel\framework\src\Illuminate\Routing\Router.php(699): Illuminate\Routing\Router->runRouteWithinStack(Object(Illuminate\Routing\Route), Object(Illuminate\Http\Request))
+#21 C:\Users\Administrator\Desktop\bitproject\vendor\laravel\framework\src\Illuminate\Routing\Router.php(675): Illuminate\Routing\Router->dispatchToRoute(Object(Illuminate\Http\Request))
+#22 C:\Users\Administrator\Desktop\bitproject\vendor\laravel\framework\src\Illuminate\Foundation\Http\Kernel.php(246): Illuminate\Routing\Router->dispatch(Object(Illuminate\Http\Request))
+#23 [internal function]: Illuminate\Foundation\Http\Kernel->Illuminate\Foundation\Http\{closure}(Object(Illuminate\Http\Request))
+#24 C:\Users\Administrator\Desktop\bitproject\vendor\laravel\framework\src\Illuminate\Routing\Pipeline.php(52): call_user_func(Object(Closure), Object(Illuminate\Http\Request))
+#25 C:\Users\Administrator\Desktop\bitproject\vendor\barryvdh\laravel-debugbar\src\Middleware\Debugbar.php(51): Illuminate\Routing\Pipeline->Illuminate\Routing\{closure}(Object(Illuminate\Http\Request))
+#26 [internal function]: Barryvdh\Debugbar\Middleware\Debugbar->handle(Object(Illuminate\Http\Request), Object(Closure))
+#27 C:\Users\Administrator\Desktop\bitproject\vendor\laravel\framework\src\Illuminate\Pipeline\Pipeline.php(136): call_user_func_array(Array, Array)
+#28 [internal function]: Illuminate\Pipeline\Pipeline->Illuminate\Pipeline\{closure}(Object(Illuminate\Http\Request))
+#29 C:\Users\Administrator\Desktop\bitproject\vendor\laravel\framework\src\Illuminate\Routing\Pipeline.php(32): call_user_func(Object(Closure), Object(Illuminate\Http\Request))
+#30 [internal function]: Illuminate\Routing\Pipeline->Illuminate\Routing\{closure}(Object(Illuminate\Http\Request))
+#31 C:\Users\Administrator\Desktop\bitproject\vendor\laravel\framework\src\Illuminate\Pipeline\Pipeline.php(103): call_user_func(Object(Closure), Object(Illuminate\Http\Request))
+#32 C:\Users\Administrator\Desktop\bitproject\vendor\laravel\framework\src\Illuminate\Foundation\Http\Kernel.php(132): Illuminate\Pipeline\Pipeline->then(Object(Closure))
+#33 C:\Users\Administrator\Desktop\bitproject\vendor\laravel\framework\src\Illuminate\Foundation\Http\Kernel.php(99): Illuminate\Foundation\Http\Kernel->sendRequestThroughRouter(Object(Illuminate\Http\Request))
+#34 C:\Users\Administrator\Desktop\bitproject\public\index.php(54): Illuminate\Foundation\Http\Kernel->handle(Object(Illuminate\Http\Request))
+#35 {main}
+[object Object]
+{"data":{"basket":{"id":2619,"basketID":"JNB4Abd","examID":"1","questionerID":"9326323","responderedID":"9326953","qPlatform":"web","rPlatform":"web","correctness":0,"questionID":40,"basketStatus":"Volunteer","basketScore":2,"flag":1}},"ticket":"volunteerSendBasketTicket"}
+volunteerresponse:
+[{"questionID":40,"responderedID":"9326953","correctness":0,"qPlatform":"web","rPlatform":"web","basketStatus":"Volunteer","flag":1,"basketID":"JNB4Abd","basketScore":2,"examID":"1","id":2619,"questionerID":"9326323"}]

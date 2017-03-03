@@ -140,7 +140,11 @@
                         </form>
                     </div>
                     <div class="eight wide column centered">
-                        <form action="http://volunteer.intellexa.me/api/" method="post">
+                    <form action="/gotovolunteer" method="post">
+       <!--                  <form action="http://volunteer.intellexa.me/api/" enctype='application/json' method="post">
+<input type="hidden" name="data[userid]" value="{{$info[0]->participantID}}">
+<input type="hidden" name="ticket" value="volunteerSendUserTicket"> -->
+<input type="hidden" name="userid" value="{{$info[0]->participantID}}">
                             <button v-on:click="close" class="ui inverted massive fluid olive button">
                                 Volunteer
                             </button>

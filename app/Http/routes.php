@@ -127,7 +127,7 @@ Route::group(['middleware' => ['web']], function () {
             echo 'Caught response: ' . $e->getResponse()->getStatusCode();
         }
     });
-
+    Route::post('/gotovolunteer','api@gotovolunteer');
     Route::post('eybaba', function(Request $request){
         dd( json_decode($request->exit)->data->person->participantID);
     });
@@ -375,85 +375,25 @@ return 'notok';
 
     Route::auth();
 
-    Route::get('parttest', function () {
-        $jsond = '{"data": {
-    "basketsArray": [
-      {
-        "basket": {
-          "basketID" : 2,
-          "examID" : 8,
-          "questionerID" : 9330033,
-          "qPlatform" : "web",
-          "responderedID" : 9323613,
-          "rPlatform" : "web",
-          "basketScore" : 2
+    Route::get('infosec', function () {
 
-        }
-      },
-      {
-        "basket": {
-          "basketID" : 2,
-          "examID" : 8,
-          "questionerID" : 9334433,
-          "qPlatform" : "telegram",
-          "responderedID" : 9323620,
-          "rPlatform" : "web",
-          "basketScore" : 2
-        }
-      },
-      {
-        "basket": {
-          "basketID" : 2,
-          "examID" : 8,
-          "questionerID" : 9334440,
-          "qPlatform" : "web",
-          "responderedID" : 9323622,
-          "rPlatform" : "telegram",
-          "basketScore" : 2
-        }
-      }
-    ]
-  },"ticket": "volunteerRespondUserTicket"}';
-
-        try {
+      try { 
+       $jsond='{"data":{"basket":{"basketID":"rzthmDW","examID":"1","id":2475,"questionerID":"9330033","qPlatform":"web","responderedID":"9327303","rPlatform":"web","questionID":0,"basketScore":2,"basketStatus":"Active","flag":0,"correctness":0,"respondentlist":[]},"question":{"status":"ok","questions":[{"id":40,"title":"Concepts and Phenomena","content":"کدام یک از گزینه های زیر توصیف کننده ی Concept است؟","options":[{"option_id":53,"content":"توصیف ویژگی های Phenomena","answer":1},{"option_id":54,"content":"دارای نام، هدف و مدل","answer":0},{"option_id":55,"content":"توصیف ویژگی های view","answer":0},{"option_id":56,"content":"دارای نام، هدف و کلاس","answer":0}]}]},"answer":{"userAnswerId":54,"userAnswer":"دارای نام، هدف و مدل","result":0},"protest":"yes"},"ticket":"justforfun"}';      
+        
             $client = new Client();
             //todo json check!!!
-            $response = $client->request('POST', 'http://172.17.10.252:2000/getPartBaskets', [
-                'json' => [json_decode($jsond)]
+
+            $response = $client->request('POST', 'http://judge.intellexa.me/rfj/', [
+                'body' => '[json_decode($jsond)]'
             ]);
+
+            return $response->getBody();
         } catch (Exception $e) {
-
+return false;
         }
-
-        //        $client = new Client();
-        //        $response = $client->request('POST','http://172.17.10.252:2000/getPartBaskets', [
-        //            'json' =>  [$jsond]
-        //        ]);
-
-        // $client = new Client();
-
-//        $client = new Client([
-//            // Base URI is used with relative requests
-//            'base_uri' => 'http://httpbin.org',
-//            // You can set any number of default request options.
-//            'timeout' => 2.0,
-//        ]);
-//
-//  $response = $client->post('http://172.17.10.252:2000/getPartBaskets', [
-//            'json' => [$jsond]
-//        ]);
-
-        //$response = $client->get('http://172.17.10.252:2000/getPartBaskets');
-
-//        $request = $client->post('http://172.17.10.252:2000/getPartBaskets', array(
-//            'content-type' => 'application/json'
-//        ), array());
-//        $request->setBody($jsond); #set body!
-//        $response = $request->send();
-//        return $response;
-        //  $res=   $client->request('POST', '/dfg', ['json' => [$jsond]]);
-
-        return $response->getHeader();
+    
+       
+        ;
     });
 
 

@@ -66,7 +66,7 @@ class prestartCycling1 extends Event
         $r = \Redis::connection();
         $l = collect();
         $l->put('roundnumber', $this->nextRoundNum);
-        $l->put('time', 3);
+        $l->put('time', 30);
         $r->sadd('round', json_encode($l));
         $r->set('lastroundtime',300);
     }

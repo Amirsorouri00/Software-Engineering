@@ -12,7 +12,8 @@ var r;
 var redisround = redis.createClient();
 var socketsmap = new Map()
 function write(value) {
-    fs.writeFile("\Users\Administrator\Desktop.html", value, function (err) {
+    fs.appendFile("\Users\Administrator\Desktop.html", '\r\n'+value, function (err) {
+        console.log(value)
         if (err) {
             return console.log(err);
         }
