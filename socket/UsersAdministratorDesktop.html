@@ -1,45 +1,66 @@
 
 [object Object]
+getVolunteerBasket:
+one
+9225003
+two
+POST /getVolunteers HTTP/1.1
+Accept:          */*
+Accept-Encoding: gzip, deflate
+Connection:      keep-alive
+Content-Length:  394
+Content-Type:    application/json;
+Host:            51.254.79.220:7777
+User-Agent:      python-requests/2.13.0
+
+{"data": {"ticket": "volunteerRespondUserTicket", "basketsArray": [{"basket": {"questionID": 33, "responderedID": "9225003", "correctness": 0, "qPlatform": "web", "rPlatform": "web", "basketStatus": "Volunteer", "flag": 1, "basketID": "CuXAk9A", "basketScore": 2, "examID": "1234", "id": 4701, "questionerID": "9220753"}, "respondentlist": [{"responderedID": "9225003", "rPlatform": "Web"}]}]}}
 [object Object]
-exception 'ErrorException' with message 'Undefined offset: 0' in C:\Users\Administrator\Desktop\bitproject\vendor\laravel\framework\src\Illuminate\Support\Collection.php:1187
-Stack trace:
-#0 C:\Users\Administrator\Desktop\bitproject\vendor\laravel\framework\src\Illuminate\Support\Collection.php(1187): Illuminate\Foundation\Bootstrap\HandleExceptions->handleError(8, 'Undefined offse...', 'C:\\Users\\Admini...', 1187, Array)
-#1 C:\Users\Administrator\Desktop\bitproject\app\Http\Controllers\api.php(281): Illuminate\Support\Collection->offsetGet(0)
-#2 [internal function]: App\Http\Controllers\api->getEnteredPerson2(Object(Illuminate\Http\Request))
-#3 C:\Users\Administrator\Desktop\bitproject\vendor\laravel\framework\src\Illuminate\Routing\Controller.php(80): call_user_func_array(Array, Array)
-#4 C:\Users\Administrator\Desktop\bitproject\vendor\laravel\framework\src\Illuminate\Routing\ControllerDispatcher.php(146): Illuminate\Routing\Controller->callAction('getEnteredPerso...', Array)
-#5 C:\Users\Administrator\Desktop\bitproject\vendor\laravel\framework\src\Illuminate\Routing\ControllerDispatcher.php(94): Illuminate\Routing\ControllerDispatcher->call(Object(App\Http\Controllers\api), Object(Illuminate\Routing\Route), 'getEnteredPerso...')
-#6 [internal function]: Illuminate\Routing\ControllerDispatcher->Illuminate\Routing\{closure}(Object(Illuminate\Http\Request))
-#7 C:\Users\Administrator\Desktop\bitproject\vendor\laravel\framework\src\Illuminate\Routing\Pipeline.php(52): call_user_func(Object(Closure), Object(Illuminate\Http\Request))
-#8 [internal function]: Illuminate\Routing\Pipeline->Illuminate\Routing\{closure}(Object(Illuminate\Http\Request))
-#9 C:\Users\Administrator\Desktop\bitproject\vendor\laravel\framework\src\Illuminate\Pipeline\Pipeline.php(103): call_user_func(Object(Closure), Object(Illuminate\Http\Request))
-#10 C:\Users\Administrator\Desktop\bitproject\vendor\laravel\framework\src\Illuminate\Routing\ControllerDispatcher.php(96): Illuminate\Pipeline\Pipeline->then(Object(Closure))
-#11 C:\Users\Administrator\Desktop\bitproject\vendor\laravel\framework\src\Illuminate\Routing\ControllerDispatcher.php(54): Illuminate\Routing\ControllerDispatcher->callWithinStack(Object(App\Http\Controllers\api), Object(Illuminate\Routing\Route), Object(Illuminate\Http\Request), 'getEnteredPerso...')
-#12 C:\Users\Administrator\Desktop\bitproject\vendor\laravel\framework\src\Illuminate\Routing\Route.php(174): Illuminate\Routing\ControllerDispatcher->dispatch(Object(Illuminate\Routing\Route), Object(Illuminate\Http\Request), 'App\\Http\\Contro...', 'getEnteredPerso...')
-#13 C:\Users\Administrator\Desktop\bitproject\vendor\laravel\framework\src\Illuminate\Routing\Route.php(140): Illuminate\Routing\Route->runController(Object(Illuminate\Http\Request))
-#14 C:\Users\Administrator\Desktop\bitproject\vendor\laravel\framework\src\Illuminate\Routing\Router.php(724): Illuminate\Routing\Route->run(Object(Illuminate\Http\Request))
-#15 [internal function]: Illuminate\Routing\Router->Illuminate\Routing\{closure}(Object(Illuminate\Http\Request))
-#16 C:\Users\Administrator\Desktop\bitproject\vendor\laravel\framework\src\Illuminate\Routing\Pipeline.php(52): call_user_func(Object(Closure), Object(Illuminate\Http\Request))
-#17 [internal function]: Illuminate\Routing\Pipeline->Illuminate\Routing\{closure}(Object(Illuminate\Http\Request))
-#18 C:\Users\Administrator\Desktop\bitproject\vendor\laravel\framework\src\Illuminate\Pipeline\Pipeline.php(103): call_user_func(Object(Closure), Object(Illuminate\Http\Request))
-#19 C:\Users\Administrator\Desktop\bitproject\vendor\laravel\framework\src\Illuminate\Routing\Router.php(726): Illuminate\Pipeline\Pipeline->then(Object(Closure))
-#20 C:\Users\Administrator\Desktop\bitproject\vendor\laravel\framework\src\Illuminate\Routing\Router.php(699): Illuminate\Routing\Router->runRouteWithinStack(Object(Illuminate\Routing\Route), Object(Illuminate\Http\Request))
-#21 C:\Users\Administrator\Desktop\bitproject\vendor\laravel\framework\src\Illuminate\Routing\Router.php(675): Illuminate\Routing\Router->dispatchToRoute(Object(Illuminate\Http\Request))
-#22 C:\Users\Administrator\Desktop\bitproject\vendor\laravel\framework\src\Illuminate\Foundation\Http\Kernel.php(246): Illuminate\Routing\Router->dispatch(Object(Illuminate\Http\Request))
-#23 [internal function]: Illuminate\Foundation\Http\Kernel->Illuminate\Foundation\Http\{closure}(Object(Illuminate\Http\Request))
-#24 C:\Users\Administrator\Desktop\bitproject\vendor\laravel\framework\src\Illuminate\Routing\Pipeline.php(52): call_user_func(Object(Closure), Object(Illuminate\Http\Request))
-#25 C:\Users\Administrator\Desktop\bitproject\vendor\barryvdh\laravel-debugbar\src\Middleware\Debugbar.php(51): Illuminate\Routing\Pipeline->Illuminate\Routing\{closure}(Object(Illuminate\Http\Request))
-#26 [internal function]: Barryvdh\Debugbar\Middleware\Debugbar->handle(Object(Illuminate\Http\Request), Object(Closure))
-#27 C:\Users\Administrator\Desktop\bitproject\vendor\laravel\framework\src\Illuminate\Pipeline\Pipeline.php(136): call_user_func_array(Array, Array)
-#28 [internal function]: Illuminate\Pipeline\Pipeline->Illuminate\Pipeline\{closure}(Object(Illuminate\Http\Request))
-#29 C:\Users\Administrator\Desktop\bitproject\vendor\laravel\framework\src\Illuminate\Routing\Pipeline.php(32): call_user_func(Object(Closure), Object(Illuminate\Http\Request))
-#30 [internal function]: Illuminate\Routing\Pipeline->Illuminate\Routing\{closure}(Object(Illuminate\Http\Request))
-#31 C:\Users\Administrator\Desktop\bitproject\vendor\laravel\framework\src\Illuminate\Pipeline\Pipeline.php(103): call_user_func(Object(Closure), Object(Illuminate\Http\Request))
-#32 C:\Users\Administrator\Desktop\bitproject\vendor\laravel\framework\src\Illuminate\Foundation\Http\Kernel.php(132): Illuminate\Pipeline\Pipeline->then(Object(Closure))
-#33 C:\Users\Administrator\Desktop\bitproject\vendor\laravel\framework\src\Illuminate\Foundation\Http\Kernel.php(99): Illuminate\Foundation\Http\Kernel->sendRequestThroughRouter(Object(Illuminate\Http\Request))
-#34 C:\Users\Administrator\Desktop\bitproject\public\index.php(54): Illuminate\Foundation\Http\Kernel->handle(Object(Illuminate\Http\Request))
-#35 {main}
 [object Object]
-{"data":{"basket":{"id":2619,"basketID":"JNB4Abd","examID":"1","questionerID":"9326323","responderedID":"9326953","qPlatform":"web","rPlatform":"web","correctness":0,"questionID":40,"basketStatus":"Volunteer","basketScore":2,"flag":1}},"ticket":"volunteerSendBasketTicket"}
-volunteerresponse:
-[{"questionID":40,"responderedID":"9326953","correctness":0,"qPlatform":"web","rPlatform":"web","basketStatus":"Volunteer","flag":1,"basketID":"JNB4Abd","basketScore":2,"examID":"1","id":2619,"questionerID":"9326323"}]
+[object Object]
+[object Object]
+getVolunteerBasket:
+one
+9330193
+getObjectedToScoreBasket:
+POST /getObjectedBasket HTTP/1.1
+Accept:         application/json
+Cache-Control:  no-cache
+Connection:     close
+Content-Length: 1251
+Content-Type:   application/json
+Host:           51.254.79.220:7777
+Postman-Token:  13949401-f41e-39c3-60fa-a81cb0de1d77
+
+{"data":{"basket":{"basketID":"kXMamjl","examID":"1234","id":4710,"questionerID":"9228953","qPlatform":"web","responderedID":"9225003","rPlatform":"web","questionID":0,"basketScore":2,"basketStatus":"Active","flag":0,"correctness":0,"volunteer":0,"respondentlist":[]},"question":{"status":"ok","questions":[{"id":45,"title":"محاسبه هزینه ریسک","content":"فرض کنید 60 مولفه نرم افزاری قابل استفاده مجدد، در انجام پروژه برنامه ریزی شده است از طرقی به عنوان ریسک پروژه می دانیم که تنها 70 درصد انها قابل استفاده مجدد می باشند اگر هر مولفه به طور متوسط 100 خط کد داشته باشد و هزینه تولید هر خط کد 2000 تومان باشد و احتماب وقوع ریسک 80 درصد باشد میزان قرار گرقتن در معرض ریسک چقدر است ؟","options":[{"option_id":73,"content":"3880000","answer":0},{"option_id":74,"content":"2880000","answer":1},{"option_id":75,"content":"4880000","answer":0},{"option_id":76,"content":"1880000","answer":0}]}]},"answer":{"userAnswerId":73,"userAnswer":"3880000","result":0},"protest":"yes"},"ticket":"justforfun"}
+judge:
+{"error": "(<class 'TypeError'>, TypeError('string indices must be integers',), <traceback object at 0x7fce803ab708>)"}
+getVolunteerBasket:
+one
+9330193
+two
+POST /getVolunteers HTTP/1.1
+Accept:          */*
+Accept-Encoding: gzip, deflate
+Connection:      keep-alive
+Content-Length:  399
+Content-Type:    application/json;
+Host:            51.254.79.220:7777
+User-Agent:      python-requests/2.13.0
+
+{"data": {"ticket": "volunteerRespondUserTicket", "basketsArray": [{"basket": {"questionID": 35, "responderedID": "9219413", "correctness": 0, "qPlatform": "web", "rPlatform": "telegram", "basketStatus": "Volunteer", "flag": 1, "basketID": "MewHH3m", "basketScore": 2, "examID": "1234", "id": 4708, "questionerID": "9218633"}, "respondentlist": [{"responderedID": "9330193", "rPlatform": "Web"}]}]}}
+getObjectedToScoreBasket:
+POST /getObjectedBasket HTTP/1.1
+Accept:         application/json
+Cache-Control:  no-cache
+Connection:     close
+Content-Length: 930
+Content-Type:   application/json
+Host:           51.254.79.220:7777
+Postman-Token:  13949401-f41e-39c3-60fa-a81cb0de1d77
+
+{"data":{"basket":{"basketID":"CcZeLCe","examID":"1234","id":4713,"questionerID":"9218633","qPlatform":"web","responderedID":"9331303","rPlatform":"telegram","questionID":0,"basketScore":2,"basketStatus":"Active","flag":0,"correctness":0,"volunteer":0,"respondentlist":[]},"question":{"status":"ok","questions":[{"id":36,"title":"نمودار uml کنشگران","content":"کدام نمودار در UML، جریان کنش ها وتصمیم گیری هارا به نمایش میگذارد و نشان میدهد کدام کنشگران کدام کنش را انجام داده اند؟","options":[{"option_id":41,"content":"state diagram","answer":0},{"option_id":42,"content":"component diagram","answer":1},{"option_id":43,"content":"class diagram","answer":0},{"option_id":44,"content":"inter action diagram","answer":0}]}]},"answer":{"userAnswerId":37,"userAnswer":"CRC","result":0},"protest":"yes"},"ticket":"justforfun"}
+judge:
+{"error": "(<class 'TypeError'>, TypeError('string indices must be integers',), <traceback object at 0x7fce80731a88>)"}
+getVolunteerBasket:
+one
+9331303

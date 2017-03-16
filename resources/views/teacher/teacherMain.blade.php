@@ -223,11 +223,11 @@
               <div class="thirteen wide column centered row">
                   <div class="ui grid centered" id="guestexam">
                       <div class="eight wide column centered">
-                          <form action="/teacherEntertoGame/{{ $id }}" method="post">
+                          <form action="/infosec" method="get">
                             <!--  v-on="submit: onSubmitForm" -->
                               <button  class="ui inverted massive fluid red button" type="submit" >
                               <!--v-on="click: submit" name="button" v-attr = "disabled: errors"-->
-                                  Enter To Game
+                                  Stop Game
                               </button>
                           </form>
                       </div>
@@ -241,12 +241,41 @@
                   </div>
               </div>
               <div class="thirteen wide column centered row">
+                  <div class="ui grid centered" id="guestexam">
+                      <div class="eight wide column centered">
+                          <form action="/teacherEntertoGame/{{ $id }}" method="post">
+                            <!--  v-on="submit: onSubmitForm" -->
+                              <button  class="ui inverted massive fluid olive button" type="submit" >
+                              <!--v-on="click: submit" name="button" v-attr = "disabled: errors"-->
+                                  Enter To Game
+                              </button>
+                          </form>
+                      </div>
+                      <div class="eight wide column centered">
+                          <form action="https://sign.intellexa.me/force_logout" v-on="submit: enterToGame" method="get">
+                              <button  class="ui inverted massive fluid red button" v-on="click: submit" v-attr = "disabled: notstarted">
+                                  Exit
+                              </button>
+                          </form>
+                      </div>
+                  </div>
+              </div>
+              <div class="thirteen wide column centered row">
                   <div class=" ui grid centered">
                       <div class="eight wide column centered">
                           <form action="/baskets" method="get">
                               <button class="ui inverted massive fluid blue button">
                                   Show Baskets
                               </button>
+                          </form>
+                      </div>
+                      <div class="eight wide column centered">
+                          <form action="http://judge.intellexa.me/list_2/" method="post" 
+                          target="_blank">
+                              <button  class="ui inverted massive fluid green button" v-on="click:  submit" v-attr = "disabled: notstarted">
+                                  Objection
+                              </button>
+                              <input type="hidden" value="{{ $objection }}" name="data">
                           </form>
                       </div>
                   </div>

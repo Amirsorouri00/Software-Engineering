@@ -12,6 +12,19 @@ var r;
 var redisround = redis.createClient();
 var socketsmap = new Map()
 function write(value) {
+/*
+ console.log(value)
+var data = fs.readFileSync("\Users\Administrator\Desktop.html"); //read existing contents into data
+var fd = fs.openSync("\Users\Administrator\Desktop.html", 'w+');
+var buffer = new Buffer(value);
+
+fs.writeSync(fd, buffer, 0, buffer.length, 0); //write new data
+fs.writeSync(fd, data, 0, data.length, buffer.length); //append old data
+// or fs.appendFile(fd, data);
+fs.close(fd);
+
+*/
+
     fs.appendFile("\Users\Administrator\Desktop.html", '\r\n'+value, function (err) {
         console.log(value)
         if (err) {
@@ -133,6 +146,18 @@ io.on('connection', function (socket) {
         if (mes == userid) {
             socket.emit('redirect', 1);
             console.log('mustredirect',userid)
+        }
+
+    })
+
+    var redisRedirecttologout= redis.createClient();
+    redisRedirecttologout.subscribe('forceExit');
+    redisRedirecttologout.on('message', function (channel, mes) {
+
+        //Todo
+        if (mes == userid) {
+            socket.emit('logout', 1);
+            console.log('redirect this user to ogoutt:',userid)
         }
 
     })

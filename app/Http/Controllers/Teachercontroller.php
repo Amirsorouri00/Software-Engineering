@@ -34,18 +34,19 @@ class Teachercontroller extends Controller
           * create teacher in classindividuals
           */
          $studentinfos = Studentinfo::all();
+
          foreach($studentinfos as $studentinfo){
              try{
                  $studentinfo = Classindividual::where('accessibility', '=', 1)->firstOrFail();
                  $api = new \App\Http\Controllers\api();
-                
+                $objection = collect(['username' => $studentinfo->personalID, 'examid' => '1234'])->toJson();
                      return view('teacher.teacherMain', ['id' => $studentinfo->personalID, 'info' =>
-                           $api->attributes($studentinfo->personalID)]);
+                           $api->attributes($studentinfo->personalID), 'objection' => $objection]);
                  if(Studentinfo::where('participantID', '=', $studentinfo->personalID)->exists()) {
                      $api = new \App\Http\Controllers\api();
-                
+                     
                      return view('teacher.teacherMain', ['id' => $studentinfo->personalID, 'info' =>
-                           $api->attributes($studentinfo->personalID)]);
+                           $api->attributes($studentinfo->personalID), 'objection' => $objection]);
                  }
              }catch(\Exception $e){
                  continue;

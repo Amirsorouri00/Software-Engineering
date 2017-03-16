@@ -23,6 +23,7 @@ use Symfony\Component\HttpFoundation\ParameterBag;
 use Illuminate\Http\Request;
 use App\Http\Requests;
 use GuzzleHttp\client;
+use Session;
 use GuzzleHttp\Pool;
 use GuzzleHttp\Psr7;
 
@@ -88,9 +89,10 @@ class api extends Controller
         $last = null;
         
         $Q = Studentinfo::all()->where('QorR', 1)->count();
+        $ostad = Classindividual::all()->where('accessibility', 1)->count();
         $R = Studentinfo::all()->where('QorR', 0)->count();
         try {
-            if ($Q == $R) {
+            if ($Q-$ostad == $R) {
                 $qor = rand(0, 1);
             }
             else if ($Q > $R) {
@@ -119,10 +121,19 @@ class api extends Controller
         try {
             if (Classindividual::where('personalID', $request->data->person->personalID)->exists()) {
                 $person = Classindividual::where('personalID', $request->data->person->personalID)->firstOrFail();
+                $student = Studentinfo::where('participantID', $request->data->person->personalID)->firstOrFail();
+                if($student->finalScore <= 5 && $student->roundNumber>3){
+                    //return redirect('https://sign.intellexa.me/force_logout');
+                    return 'you dont have permission to login';
+                }
 
                 if ($person->accessibility == 0) {
+                    $person->isPresent = 1;
+                    $person->save();
                     return redirect()->route('client', $person->personalID);
                 } else {
+                    $person->isPresent = 1;
+                    $person->save();
                     return redirect()->route('client2', $person->personalID);
                 }
             }
@@ -143,11 +154,13 @@ class api extends Controller
             } else {
                 $person->accessibility = 0;
             }
+            //$redis->publish('log', var_dump(session('step')));
             $person->save();
-            session([$person->personalID => $request->data->token]);
-            \Session::save();
-            $se = session(9327303);
-            //$redis->publish('log', var_dump($se));
+            //session(['step' => '1']);
+            //\Session::save();
+            // $request->session->put('step' , '1');
+            //$se = session(9327303);
+            
             $student = new Studentinfo();
             $student->roundNumber = 0;
             $student->individualStatus = 0;
@@ -155,7 +168,8 @@ class api extends Controller
             $student->finalScore = $exam[0]->average;
            /* if ($last == null) {
                 $student->QorR = 1;
-            } else*/ if ($qor == 0) {
+            } else*/ 
+            if ($qor == 0) {
                 $student->QorR = 0;
             } else {
                 $student->QorR = 1;
@@ -243,8 +257,16 @@ class api extends Controller
         //$redis->publish('log',$request['data']);
         
         try {
-            if (Classindividual::where('personalID', $request['data']['person']['personalID'])->exists()) {
+            if (Classindividual::where('personalID', $request['data']['person']['personalID'])
+                ->exists()) 
+            {
                 $person = Classindividual::where('personalID', $request['data']['person']['personalID'])->firstOrFail();
+                $student = Studentinfo::where('participantID', $request['data']['person']['personalID'])->firstOrFail();
+                if($student->finalScore <= 5 && $student->roundNumberInd>3){
+                    return false;
+                }
+                $person->isPresent = 1;
+                $person->save();
                 if ($person->accessibility == 0) {
                     //return redirect()->route('client', $person->personalID);
                     return true;
@@ -345,8 +367,7 @@ class api extends Controller
                     $questioner->individualStatus = 0;
                     $questioner->save();
                 }
-                $this->forceuserexit($responder->participantID);
-                $this->forceuserexit($questioner->participantID);
+                
                 $basketOriginal->basketStatus = 'Volunteer';
                 $basketOriginal->questionID = $request['data']['question']['questions'][0]['id'];
                 $basketOriginal->flag = 1;
@@ -354,12 +375,14 @@ class api extends Controller
                 $client = new client();
                 try {
                     $requesttoVolunteer=collect(['data'=>['basket'=>$basketOriginal],'ticket'=>'volunteerSendBasketTicket']);
-             $redis->publish('log','volunteerresponse:');
-         $redis->publish('log',$requesttoVolunteer->toJson());
+                    //$redis->publish('log','$response->getBody()');
+                    $this->forceuserexit($responder->participantID);
+                    $this->forceuserexit($questioner->participantID);
+             //$redis->publish('log','volunteerresponse:');
+        // $redis->publish('log',$requesttoVolunteer->toJson());
                     $response = $client->request('POST', 'http://volunteer.intellexa.me/api/', ['json' => $requesttoVolunteer]);//todo volunteery system
                    
-                    $redis->publish('log',$response->getBody());
-
+                    
                     //todo mohsen redirect
                 } catch (\GuzzleHttp\Exception\ClientException $e) {
                     $redis->publish('log',$e);
@@ -402,19 +425,22 @@ class api extends Controller
         /*$questionPartVolunteerRequest = collect(['data' => ['basket' => '', "respondentlist" => ['RS8DaLx', 'DqA02oI', 'pZu9C0T']]
             ,"ticket" => "volunteerRespondUserTicket"])->toJson();*/
         //todo redirect mohsen
+        $redis= Redis::connection();
+        $redis->publish('log',$request);
         $request = $request->json()->all();
-        dd($request);
+
+        //dd($request);
         try {
             $correctResponders = array();
-            $basketOriginal = Basket::where('basketID', '=', $request['data']['basket']['basketID'])->firstOrFail();
-            $respondersInfo = $request['data']['respondentlist'];
+            $basketOriginal = Basket::where('basketID', '=', $request['basketID'])->firstOrFail();
+            $respondersInfo = $request['respondentlist'];
 
             if ($basketOriginal->basketStatus == 'deActive') {
                 return 'deActive Basket Recieved.';
             } else {
                 $correctAnswerNumber = 0;
                 foreach ($respondersInfo as $responderInfo) {
-                    $responder = Studentinfo::where('participantID', '=', $responderInfo)->firstOrFail();
+                    $responder = Studentinfo::where('participantID', '=', $responderInfo['responderedID'])->firstOrFail();
                     if ($responderInfo['answer']['result'] == 1 /* True answer */) {
                         array_push($correctResponders, $responder);
                         $correctAnswerNumber++;
@@ -439,7 +465,7 @@ class api extends Controller
                     }
                 } else {
                     foreach ($respondersInfo as $responderInfo) {
-                        $responder = Studentinfo::where('participantID', '=', $responderInfo)->firstOrFail();
+                        $responder = Studentinfo::where('participantID', '=', $responderInfo['responderedID'])->firstOrFail();
                         $responderPerson = Classindividual::where('personalID',$responder->participantID)->firstOrFail();
                         if($responderPerson->accessibility == 1){
                             //do nothing
@@ -452,7 +478,7 @@ class api extends Controller
                     }
                     try {
                         $questioner = Studentinfo::where('participantID', '=', $basketOriginal->questionerID)->firstOrFail();
-                        $questioner->finalScore += Exam::all()->take(1)[0]->questionScore;
+                        $questioner->finalScore += $basketOriginal->basketScore;
                         $questioner->save();
                         $this->forceuserexit($questioner->participantID)->firstOrFail();
                     } catch (\Exception $e) {
@@ -475,12 +501,12 @@ class api extends Controller
           $redis->publish('log','getObjectedToScoreBasket:');
           $redis->publish('log',$request);
           //$redis->publish('log',$request->getContent());
-         // return 1;
+           // return 1;
                     //$client = new client();
                     //$response = $client->request('POST', 'http://judge.intellexa.me/rfj/', ['json' => $request]); 
                     //dd($response); 
                            // $redis->publish('log',$request);
-        //todo redirect or not me and mohsen with mahdi
+          //todo redirect or not me and mohsen with mahdi
         $objectedrequest=$request->getContent();
         $request = $request->json()->all();
         //return $request['data'];
@@ -517,22 +543,31 @@ class api extends Controller
     //Test: OK
     public function getObjectedToScoreBasketResult(Request $request)
     {
+        
+        //$redis = Redis::connection();
+        //$redis->publish('log', $request);
         $request = $request->json()->all();
+        //$redis->publish('log', $request['data']);
         //return $request['data'];
+        //return $request['data']['basket']['basketID'];
         try {
             $basketOriginal = Basket::where('basketID', '=', $request['data']['basket']['basketID'])->firstOrFail();
+
             $objector = Studentinfo::where('participantID', '=', $basketOriginal->responderedID)->firstOrFail();
+
             $objectorPerson = $objector->individuals();
+
             //return $basketOriginal->questionerID;
             $questioner = Studentinfo::where('participantID', '=', $basketOriginal->questionerID)->firstOrFail();
-            $questionerPerson = Classindividual::where('personalID', $questioner->participantID)->firstOrFail();
             //return 'here';
+            $questionerPerson = Classindividual::where('personalID', $questioner->participantID)->firstOrFail();
+           //return $request['data']['judge'];
 
             //echo '$objectorPerson';
             if (($basketOriginal->basketStatus == 'deActive' || $objectorPerson->isPresent == 0)) {
                 return json_encode('deActive basket or not a valid user recieved');
             } else if (($basketOriginal->basketStatus == 'Active' || $objectorPerson->isPresent == 1) && /*todo true or accepted*/
-                $request['data']['judge'] != 'accepted'
+                $request['data']['judge'] != 'True'
             ) {
                 //return 'there';
                 $basketOriginal->basketStatus = 'Volunteer';
@@ -596,18 +631,22 @@ class api extends Controller
     //Test: OK
     public function getVolunteersBasket(Request $request)
     {
-             $redis = Redis::connection();
-             $redis->publish('log','getVolunteerBasket:');
-        $redis->publish('log',$request);
-        $b = Basket::where('basketID', 'istIzZX')->firstOrFail();
-        $volunteerRequest = collect(['data' => ['basketsArray' => [
+
+        $redis = Redis::connection();
+        $redis->publish('log','getVolunteerBasket:');
+       //return $request['data'];
+        //$b = Basket::where('basketID', 'istIzZX')->firstOrFail();
+       /* $volunteerRequest = collect(['data' => ['basketsArray' => [
             ['basket' => $b, "respondentlist" => ['1234567', '1OLuRvU', '38V4LNL']]
-            , ['basket' => $b, "respondentlist" => ['38V4LNL']]
+            , ['bagsket' => $b, "respondentlist" => ['38V4LNL']]
             , ['basket' => $b, "respondentlist" => ['3jQCyvA']]]]
-            , "ticket" => "volunteerRespondUserTicket"])->toJson();
+            , "ticket" => "volunteerRespondUserTicket"])->toJson();*/
         //return $volunteerRequest;
-        $request = $request->json()->all();
+       // $request = $request->json()->all();
+         //return $request['data']['basketsArray'];
+        //return $request;
         $volunteerBaskets = $request['data']['basketsArray'];
+         //$redis->publish('log',$request['data']);
         //return $volunteerBaskets;
         $resultBaskets = collect();
        
@@ -619,15 +658,18 @@ class api extends Controller
                     return json_encode('deActive basket recieved');
                 }
                 $volunteers = $vBasket['respondentlist'];
+                $redis->publish('log', 'one');
                 //return $volunteers;
                 $cnt = 0;
                 foreach ($volunteers as $volunteer1) {
                     try {
-                        $volunteerInfo = Studentinfo::where('participantID', '=', $volunteer1)->firstOrFail();
+                        $redis->publish('log', $volunteer1['responderedID']);
+                        $volunteerInfo = Studentinfo::where('participantID', '=', $volunteer1['responderedID'])->firstOrFail();
                         $volunteer = $volunteerInfo->individuals();
                         $questionerInfo = Studentinfo::where('participantID', '=', $basketOriginal->questionerID)->firstOrFail();
                         $questioner = $questionerInfo->individuals();
                         if ($volunteer->isPresent == 1 && $volunteerInfo->individualStatus == 0 && $basketOriginal->basketStatus == 'Volunteer') {
+                            $redis->publish('log', 'two');
                             try {
                                 echo "oomad";
                                 $exam = Exam::where('examID', '=', $basketOriginal->examID)->firstOrFail();
@@ -660,8 +702,9 @@ class api extends Controller
         }
         //$requestToQuestionPart = collect(['data' => $request])->toJson();
         try {
+            $redis->publish('log', $request);
             $client = new client();
-            $response = $client->request('POST', 'http://77.244.214.149:3000/getVolunteerBasket', ['json' => $request->toJson()]);//todo link mohsen mahdi
+            $response = $client->request('POST', 'http://77.244.214.149:3000/getVolunteerBasket', ['json' => json_decode($request->getContent())]);//todo link mohsen mahdi
         } catch (\GuzzleHttp\Exception\ClientException $e) {
             echo 'Caught response: ' . $e->getResponse()->getStatusCode();
             echo 'unsuccessful post response recieved';
@@ -686,17 +729,7 @@ class api extends Controller
             echo 'Caught response: ' . $e->getResponse()->getStatusCode();
         }
     }
-    public function gotovolunteer (Request $request)
-    { $client = new client();
-        try {
-            $data= collect(['data'=>['userid'=>$request->userid],'ticket'=>'volunteerSendUserTicket']);
-     $response = $client->request('post', 'http://volunteer.intellexa.me/api/', ['json' => $data]);
-        } catch (\GuzzleHttp\Exception\ClientException $e) {
-            echo 'Caught response: ' . $e->getResponse()->getStatusCode();
-        }
-            return redirect('http://volunteer.intellexa.me/client/'.$request->userid);
 
-    }
     /*
     public function volunteerExitResult(Request $request)
     {
@@ -716,21 +749,96 @@ class api extends Controller
     }*/
 
     //Test: OK
-    public function userForceExit(Classindividual $person)
+    //Classindividual $person
+
+    public function userForceExit1(Request $request) 
+    {
+        //todo needtotest
+        $person = Classindividual::where('personalID', $request['data']['participantID'])
+            ->firstOrFail();
+
+        $person->isPresent = 0;
+        $person->save();
+        
+        //$person->personalID
+        $student = Studentinfo::where('participantID', '=', $request['data']['participantID'])->firstOrFail();
+        //return 'in the last function';
+        //todo need socket
+        $userForceExitRequest = collect(['data' => ['person' => $student, 'classID' => '1111111'],
+            "ticket" => "volunteerRespondUserTicket"])->toJson();
+        //return $userForceExitRequest;
+        $client = new client();
+        try {
+            $redis= Redis::connection();
+            $response = $client->request('post', 'http://sign.intellexa.me/logout/' /*force exit*/, ['json' => $userForceExitRequest]);
+            //dd($response);
+            return $response;
+            $redis->publish('forceExit', $student->participantID);
+            // Todo return redirect('http://sign.intellexa.me/force_logout/');
+        } catch (\Exception $e) {
+        }
+        //ready for sending to enter and exit system
+    }
+public function gotovolunteer (Request $request)
+    { $client = new client();
+        try {
+            $data= collect(['data'=>['userid'=>$request->userid],'ticket'=>'volunteerSendUserTicket']);
+     $response = $client->request('post', 'http://volunteer.intellexa.me/api/', ['json' => $data]);
+        } catch (\GuzzleHttp\Exception\ClientException $e) {
+            echo 'Caught response: ' . $e->getResponse()->getStatusCode();
+        }
+            return redirect('http://volunteer.intellexa.me/client/'.$request->userid);
+
+    }
+    public function userForceExit(Classindividual $person) 
     {
         //todo needtotest
         $person->isPresent = 0;
         $person->save();
-        $student = Studentinfo::where('participantID', '=', $person->personalID)->firstOrFail();
-        return 'in the last function';
+        $redis= Redis::connection();
+        $redis->publish('log', 'before reponse');
+        //$person->personalID
+        //return 'in the last function';
         //todo need socket
-        $userForceExitRequest = collect(['data' => ['person' => $student, 'classID' => '1111111'],
+        try{
+            $userForceExitRequest = collect(['data' => ['person' => $student, 'classID' => '1111111'],
             "ticket" => "volunteerRespondUserTicket"])->toJson();
+        //return $userForceExitRequest;
+         }catch(Exception $e){
+            $redis->publish('log', 'before reponse');
+        }
         $client = new client();
+       
         try {
-            $response = $client->request('post', 'http://sign.intellexa.me/logout/' /*force exit*/, ['json' => $student]);
+            
+            /*$response = $client->request('post', 'http://sign.intellexa.me/logout/' /*force exit*/ //['body' => $userForceExitRequest]);
+            //dd($response);
+            //return $response;
+            $redis->publish('log','$response->getBody()');
+            $student = Studentinfo::where('participantID', '=', $person->personalID)->firstOrFail(); 
+            sleep(5);
+            $redis->publish('log','here');
+                $redis->publish('forceExit', $student->participantID);
+            $platform = $student->platform;
+            $userForceExit = collect(['data' => ['participantID' => $student->participantID]])
+                ->toJson();
+            $androidUserForceExit = collect(['data' => ['participantID' => $student->participantID]]);
+                $response = $client->request('post', 'http://51.254.79.207:9000/telegramUserExit/' /*force exit*/, ['body' => $userForceExit]);
+                
+
+            /*if ($platform == 'web') {
+                sleep(5);
+                $redis->publish('forceExit', $student->participantID);
+            }
+            else */if($platform == 'telegram') {
+                $response = $client->request('post', 'http://51.254.79.207:9000/telegramUserExit/' /*force exit*/, ['body' => $userForceExit]);
+            }
+            else if($platform == 'android') {
+                $response = $client->request('post', 'http://54.67.65.222:3000/ForceExit/' /*force exit*/, ['json' => $androidUserForceExit]);
+            }
             // Todo return redirect('http://sign.intellexa.me/force_logout/');
         } catch (\Exception $e) {
+            $redis->publish('log',$e);
         }
         //ready for sending to enter and exit system
     }

@@ -80,10 +80,57 @@ Route::group(['middleware' => ['web']], function () {
 
     });
 
-    /* Android Exit */
-    //  
-    Route::post('/androidVolunteerExit', function(Request $request){
+    //Test: OK
+    Route::post('androidUserAttributes',function(Request $request){
+        $api = new \App\Http\Controllers\api();
+        //return $request['data']['participantID'];
+        $var = $api->attributes($request['data']['participantID']);
+        return $var;
+    });
 
+    //Test: OK
+    Route::post('telegramUserAttributes',function(Request $request){
+        $request = $request->json()->all();
+        $api = new \App\Http\Controllers\api();
+        $var = $api->attributes($request['data']['participantID']);
+        return $var;
+    });
+
+    /* Android Exit */ 
+    Route::post('/androidVolunteerExit', function(Request $request){
+        try{
+            //$redis->publish('log', $request);
+            //return $request['data']['participantID'];
+            $id = $request['data']['participantID'];
+            $student = Studentinfo::where('participantID', $id)->firstOrFail();
+            $person = $student->individuals();
+            $student->individualStatus = 1;
+            $student->save();
+            $person->isPresent = 0;
+            $person->save();
+            return $student;
+        }
+        catch(Exception $e){
+            //return $request['data'];
+            return 'not a valid person recieved';
+        }
+    });
+
+    Route::post('/telegramVolunteerExit', function(Request $request){
+        $request = $request->json()->all();
+        try{
+            $id = $request['data']['participantID'];
+            $student = Studentinfo::where('participantID', $id)->firstOrFail();
+            $person = $student->individuals();
+            $student->individualStatus = 1;
+            $student->save();
+            $person->isPresent = 0;
+            $person->save();
+            return 'ok';
+        }
+        catch(Exception $e){
+            return 'not a valid person recieved';
+        }
     });
 
     /*
@@ -128,10 +175,7 @@ Route::group(['middleware' => ['web']], function () {
         }
     });
     Route::post('/gotovolunteer','api@gotovolunteer');
-    Route::post('eybaba', function(Request $request){
-        dd( json_decode($request->exit)->data->person->participantID);
-    });
-
+ 
     /*
     * Teacher Routes Controller Amirsorouri00
     */
@@ -144,7 +188,11 @@ Route::group(['middleware' => ['web']], function () {
         $student = Studentinfo::where('participantID', $stdID)->firstOrFail();
         $exitPersonRequest = collect(['data' => ['person' => $student, 'classID' => '1'],
             "ticket" => "volunteerRespondUserTicket"])->toJson();
-        return view('main', ['exit' => $exitPersonRequest])->with('info', $api->attributes($stdID));
+        return view('main', ['exit' => $exitPersonRequest])->with('info', $api->attributes($stdID))->withHeaders([
+                'Cache-Control' => 'no-store, must-revalidate',
+                'Pragma' => 'no-cache',
+                'Expires' => '0',
+            ]);
         //return $stdID;
         return view('client', ['stdID' => $request->stdID]);
     }]);
@@ -161,12 +209,28 @@ Route::group(['middleware' => ['web']], function () {
         return view('teacher.teacherStart', ['id' => $studentinfo->personalID]);
     });*/
 
+    
+
+    Route::post('userForceExit', 'api@userForceExit1');
+
+
+
     Route::get('startgame/{stdID}', function ($stdID) {
         Event::fire(new \App\Events\prestartCycling());
         //dd('here');
         $api = new \App\Http\Controllers\api();
+        $objection = collect(['username' => $stdID, 'examid' => '1234'])->toJson();
+        return redirect()->back();
+        /*
         return view('teacher.teacherMain', ['id' => $stdID, 'info' =>
-                           $api->attributes($stdID)]);
+                           $api->attributes($stdID), 'objection' => $objection]);
+        */
+    });
+
+    //Route for Stopping the Game
+    Route::get('/infosec', function () {
+        Redis::flushall();
+        return redirect()->back();
     });
 
     /*
@@ -175,8 +239,9 @@ Route::group(['middleware' => ['web']], function () {
     Route::get('/teacher/{stdID}', ['as' => 'client2', function (Request $request, $stdID) {
         //dd($request->stdID);
         $api = new \App\Http\Controllers\api();
+        $objection = collect(['username' => $stdID, 'examid' => '1234'])->toJson();
         return view('teacher.teacherMain', ['id' => $stdID, 'info' =>
-                           $api->attributes($stdID)]);
+                           $api->attributes($stdID), 'objection' => $objection]);
         //return $stdID;
         return view('client', ['stdID' => $request->stdID]);
     }]);
@@ -375,26 +440,7 @@ return 'notok';
 
     Route::auth();
 
-    Route::get('infosec', function () {
-
-      try { 
-       $jsond='{"data":{"basket":{"basketID":"rzthmDW","examID":"1","id":2475,"questionerID":"9330033","qPlatform":"web","responderedID":"9327303","rPlatform":"web","questionID":0,"basketScore":2,"basketStatus":"Active","flag":0,"correctness":0,"respondentlist":[]},"question":{"status":"ok","questions":[{"id":40,"title":"Concepts and Phenomena","content":"کدام یک از گزینه های زیر توصیف کننده ی Concept است؟","options":[{"option_id":53,"content":"توصیف ویژگی های Phenomena","answer":1},{"option_id":54,"content":"دارای نام، هدف و مدل","answer":0},{"option_id":55,"content":"توصیف ویژگی های view","answer":0},{"option_id":56,"content":"دارای نام، هدف و کلاس","answer":0}]}]},"answer":{"userAnswerId":54,"userAnswer":"دارای نام، هدف و مدل","result":0},"protest":"yes"},"ticket":"justforfun"}';      
-        
-            $client = new Client();
-            //todo json check!!!
-
-            $response = $client->request('POST', 'http://judge.intellexa.me/rfj/', [
-                'body' => '[json_decode($jsond)]'
-            ]);
-
-            return $response->getBody();
-        } catch (Exception $e) {
-return false;
-        }
     
-       
-        ;
-    });
 
 
 });

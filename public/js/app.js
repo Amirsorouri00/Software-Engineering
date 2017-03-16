@@ -284,6 +284,17 @@
 	
 	
 	})
+	c.on('logout', function (data) {
+	    if (data == 1) {
+	       // window.location.href = "http://77.244.214.149:3000/"+userID;
+	        //window.location.replace("http://77.244.214.149:3000/"+userID);
+	        window.location = "https://sign.intellexa.me/force_logout";//Todo send to question part with user id
+	   // document.getElementById("questionpart").submit();
+	    }
+	
+	
+	})
+	
 	c.on('loading', function (data) {
 	
 	    if (data == 1) {

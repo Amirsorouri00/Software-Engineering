@@ -48,14 +48,16 @@ class prestartCycling1 extends Event
         foreach ($Qusers as $quser) {
      $quser->roundNumber =$this->nextRoundNum;
         $quser->roundNumberInd=$quser->roundNumberInd+1;
+            $quser->individualStatus=1; 
             $quser->save();
+           
         }
 
          foreach ($Rusers as $ruser) {
 
             $ruser->roundNumber = $this->nextRoundNum;
             $ruser->roundNumberInd=$ruser->roundNumberInd+1;
-              // $ruser->individualStatus = 1;//Todo
+             $ruser->individualStatus = 1;//Todo
             $ruser->save();
 
         }
